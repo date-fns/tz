@@ -76,6 +76,46 @@ describe("tzScan", () => {
       },
     ]);
   });
+
+  it("searches for huge timezone changes", () => {
+    const changes = tzScan("Pacific/Apia", {
+      start: new Date("2010-01-01T00:00:00Z"),
+      end: new Date("2012-12-31T00:00:00Z"),
+    });
+
+    expect(changes).toEqual([
+      {
+        date: new Date("2010-09-26T11:00:00.000Z"),
+        change: 1 * 60,
+        offset: -10 * 60,
+      },
+      {
+        date: new Date("2011-04-02T14:00:00.000Z"),
+        change: -1 * 60,
+        offset: -11 * 60,
+      },
+      {
+        date: new Date("2011-09-24T14:00:00.000Z"),
+        change: 1 * 60,
+        offset: -10 * 60,
+      },
+      {
+        date: new Date("2011-12-30T10:00:00.000Z"),
+        change: 24 * 60,
+        offset: 14 * 60,
+      },
+      {
+        date: new Date("2012-03-31T14:00:00.000Z"),
+        change: -1 * 60,
+        offset: 13 * 60,
+      },
+      {
+        date: new Date("2012-09-29T14:00:00.000Z"),
+        change: 1 * 60,
+        offset: 14 * 60,
+      },
+    ]);
+  });
 });
 
 describe("tzOffset", () => {
