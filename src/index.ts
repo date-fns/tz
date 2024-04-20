@@ -27,10 +27,9 @@ export function tzScan(tz: string, interval: Interval) {
     date.setUTCHours(date.getUTCHours() + 1);
 
     const values = formatToValues(format(date));
-    const projectedValues = projectValues(lastValues);
+    const offset = calcOffset(values, date);
 
-    if (!compareValues(values, projectedValues)) {
-      const offset = calcOffset(values, date);
+    if (offset != lastOffset) {
       changes.push({
         date: new Date(date),
         change: offset - lastOffset,
@@ -39,7 +38,7 @@ export function tzScan(tz: string, interval: Interval) {
     }
 
     lastValues = values;
-    lastOffset = calcOffset(lastValues, date);
+    lastOffset = offset;
   }
 
   return changes;
@@ -75,20 +74,4 @@ function formatToValues(formatResult: string): DateValues {
     ?.slice(1)
     .map(Number) as DateValues;
   return [year, month - 1, day, hours === 24 ? 0 : hours, minutes];
-}
-
-function projectValues(values: DateValues): DateValues {
-  const date = new Date(Date.UTC(...values));
-  date.setUTCHours(date.getUTCHours() + 1);
-  return [
-    date.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate(),
-    date.getUTCHours(),
-    date.getUTCMinutes(),
-  ];
-}
-
-function compareValues(a: DateValues, b: DateValues) {
-  return a.every((value, i) => value === b[i]);
 }
