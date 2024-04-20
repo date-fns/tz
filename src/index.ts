@@ -12,9 +12,9 @@ export function tzScan(tz: string, interval: Interval) {
   const endDate = new Date(interval.end);
   endDate.setUTCSeconds(0, 0);
 
-  const lastMonthTime = +endDate;
+  const endMonthTime = +endDate;
   let lastOffset = tzOffset(tz, monthDate);
-  while (+monthDate < lastMonthTime) {
+  while (+monthDate < endMonthTime) {
     // Month forward
     monthDate.setUTCMonth(monthDate.getUTCMonth() + 1);
 
@@ -25,9 +25,9 @@ export function tzScan(tz: string, interval: Interval) {
       const dayDate = new Date(monthDate);
       dayDate.setUTCMonth(dayDate.getUTCMonth() - 1);
 
-      const lastDayTime = +monthDate;
+      const endDayTime = +monthDate;
       lastOffset = tzOffset(tz, dayDate);
-      while (+dayDate < lastDayTime) {
+      while (+dayDate < endDayTime) {
         // Day forward
         dayDate.setUTCDate(dayDate.getUTCDate() + 1);
 
@@ -70,12 +70,18 @@ export function tzScan(tz: string, interval: Interval) {
 
 const formatCache: Record<string, Intl.DateTimeFormat["format"]> = {};
 
-export function tzOffset(tz: string, date: Date) {
+const offsetCache: Record<string, number> = {};
+
+export function tzOffset(tz: string, date: Date): number {
   const format = (formatCache[tz] ||= new Intl.DateTimeFormat("en-GB", {
     timeZone: tz,
     hour: "numeric",
     timeZoneName: "longOffset",
   }).format);
-  const [hours, minutes] = format(date).slice(6).split(":").map(Number);
-  return hours! * 60 + minutes!;
+
+  const offsetStr = format(date).slice(6);
+  if (offsetStr in offsetCache) return offsetCache[offsetStr]!;
+
+  const [hours, minutes] = offsetStr.split(":").map(Number);
+  return (offsetCache[offsetStr] = hours! * 60 + minutes!);
 }
