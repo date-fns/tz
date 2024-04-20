@@ -11,16 +11,6 @@ export function tzScan(tz: string, interval: Interval) {
   endDate.setUTCSeconds(0, 0);
   const endTime = +endDate;
 
-  const { format } = new Intl.DateTimeFormat("en-US", {
-    timeZone: tz,
-    hour: "numeric",
-    minute: "numeric",
-    day: "numeric",
-    month: "numeric",
-    year: "numeric",
-    hour12: false,
-  });
-
   let lastOffset = tzOffset(tz, date);
   while (+date < endTime) {
     date.setUTCHours(date.getUTCHours() + 1);
@@ -51,18 +41,4 @@ export function tzOffset(tz: string, date: Date) {
   }).format);
   const [hours, minutes] = format(date).slice(6).split(":").map(Number);
   return hours! * 60 + minutes!;
-}
-
-function calcOffset(values: DateValues, date: Date) {
-  return (Date.UTC(...values) - +date) / 60000;
-}
-
-type DateValues = [number, number, number, number, number];
-
-function formatToValues(formatResult: string): DateValues {
-  const [month, day, year, hours, minutes] = formatResult
-    .match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+)/)
-    ?.slice(1)
-    .map(Number) as DateValues;
-  return [year, month - 1, day, hours === 24 ? 0 : hours, minutes];
 }
