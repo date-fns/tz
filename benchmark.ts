@@ -8,11 +8,9 @@ const duration = {
   end: new Date("2020-12-31T00:00:00Z"),
 };
 
-bench
-  .add("tzScan", () => {
-    tzScan("America/New_York", duration);
-  })
-  .todo("unimplemented bench");
+bench.add("tzScan", () => {
+  tzScan("America/New_York", duration);
+});
 
 await bench.warmup();
 await bench.run();
