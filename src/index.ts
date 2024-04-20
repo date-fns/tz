@@ -1,6 +1,8 @@
 export class TZDate extends Date {
   timeZone: string | undefined;
 
+  internal: Date;
+
   constructor(timeZone?: string) {
     super();
     if (arguments.length < 2) this.setTime(Date.now());
@@ -8,11 +10,12 @@ export class TZDate extends Date {
     this.timeZone = timeZone;
 
     const offset = tzOffset(this.timeZone, this);
-    this.setUTCMinutes(this.getUTCMinutes() + offset);
+    this.internal = new Date(this.getTime());
+    this.internal.setUTCMinutes(this.internal.getUTCMinutes() + offset);
   }
 
   getDate() {
-    return this.getUTCDate();
+    return this.internal.getUTCDate();
   }
 
   getTimezoneOffset(): number {
