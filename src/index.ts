@@ -1,3 +1,25 @@
+export class TZDate extends Date {
+  timeZone: string | undefined;
+
+  constructor(timeZone?: string) {
+    super();
+    if (arguments.length < 2) this.setTime(Date.now());
+
+    this.timeZone = timeZone;
+
+    const offset = tzOffset(this.timeZone, this);
+    this.setUTCMinutes(this.getUTCMinutes() + offset);
+  }
+
+  getDate() {
+    return this.getUTCDate();
+  }
+
+  getTimezoneOffset(): number {
+    return tzOffset(this.timeZone, this);
+  }
+}
+
 export interface Interval {
   start: Date;
   end: Date;
@@ -78,8 +100,8 @@ const formatCache: Record<string, Intl.DateTimeFormat["format"]> = {};
 
 const offsetCache: Record<string, number> = {};
 
-export function tzOffset(tz: string, date: Date): number {
-  const format = (formatCache[tz] ||= new Intl.DateTimeFormat("en-GB", {
+export function tzOffset(tz: string | undefined, date: Date): number {
+  const format = (formatCache[tz!] ||= new Intl.DateTimeFormat("en-GB", {
     timeZone: tz,
     hour: "numeric",
     timeZoneName: "longOffset",

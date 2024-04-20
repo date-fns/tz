@@ -1,9 +1,9 @@
 test:
-	@npx vitest run
+	@env TZ=Asia/Singapore npx vitest run
 .PHONY: test
 
 test-watch:
-	@npx vitest
+	@env TZ=Asia/Singapore npx vitest
 
 types:
 	@npx tsc --noEmit

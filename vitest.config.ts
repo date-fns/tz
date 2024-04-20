@@ -5,7 +5,8 @@ export default defineConfig({
     include: ["src/**/tests.ts"],
     isolate: false,
     sequence: {
-      concurrent: true,
+      // It will speed up the tests but won't work with Sinon
+      // concurrent: true,
     },
   },
 });

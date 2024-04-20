@@ -1,5 +1,39 @@
-import { describe, expect, it } from "vitest";
-import { tzOffset, tzScan } from ".";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { TZDate, tzOffset, tzScan } from ".";
+import FakeTimers from "@sinonjs/fake-timers";
+
+describe("TZDate", () => {
+  let timers: FakeTimers.InstalledClock;
+  const now = new Date(1987, 1, 11);
+  beforeEach(() => {
+    timers = FakeTimers.install({ now });
+    if (now.getUTCHours() !== 16)
+      throw new Error("The tests must run with TZ=Asia/Singapore");
+  });
+
+  afterEach(() => {
+    timers.uninstall();
+  });
+
+  describe("constructor", () => {
+    it("creates a new date", () => {
+      const date = new TZDate();
+      expect(date.getDate()).toBe(11);
+    });
+
+    it("creates a new date within the given timezone", () => {
+      const date = new TZDate("America/New_York");
+      expect(date.getDate()).toBe(10);
+    });
+  });
+
+  describe("getDate", () => {
+    it("returns the date in the timezone", () => {
+      const date = new TZDate("America/New_York");
+      expect(date.getDate()).toBe(10);
+    });
+  });
+});
 
 describe("tzScan", () => {
   it("searches for DST changes in the given period", () => {
@@ -144,5 +178,9 @@ describe("tzOffset", () => {
     expect(tzOffset("America/New_York", new Date("2020-01-15T05:00:00Z"))).toBe(
       -5 * 60
     );
+  });
+
+  it("returns the local timezone offset when the timezone is undefined", () => {
+    expect(tzOffset(undefined, new Date("2020-01-15T05:00:00Z"))).toBe(8 * 60);
   });
 });
