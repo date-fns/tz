@@ -9,7 +9,7 @@ const duration = {
 };
 
 bench
-  .add("tzScane", () => {
+  .add("tzScan", () => {
     tzScan("America/New_York", duration);
   })
   .todo("unimplemented bench");
