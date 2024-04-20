@@ -21,13 +21,11 @@ export function tzScan(tz: string, interval: Interval) {
     hour12: false,
   });
 
-  let lastValues = formatToValues(format(date));
-  let lastOffset = calcOffset(lastValues, date);
+  let lastOffset = tzOffset(tz, date);
   while (+date < endTime) {
     date.setUTCHours(date.getUTCHours() + 1);
 
-    const values = formatToValues(format(date));
-    const offset = calcOffset(values, date);
+    const offset = tzOffset(tz, date);
 
     if (offset != lastOffset) {
       changes.push({
@@ -37,7 +35,6 @@ export function tzScan(tz: string, interval: Interval) {
       });
     }
 
-    lastValues = values;
     lastOffset = offset;
   }
 
