@@ -3,8 +3,14 @@ export interface Interval {
   end: Date;
 }
 
-export function tzScan(tz: string, interval: Interval) {
-  const changes: any[] = [];
+export interface Change {
+  date: Date;
+  change: number;
+  offset: number;
+}
+
+export function tzScan(tz: string, interval: Interval): Change[] {
+  const changes: Change[] = [];
 
   const monthDate = new Date(interval.start);
   monthDate.setUTCSeconds(0, 0);
