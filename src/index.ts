@@ -3,14 +3,15 @@ export class TZDate extends Date {
 
   internal: Date;
 
-  constructor(timeZone?: string) {
+  constructor(timeZone?: string, time?: number) {
     super();
     if (arguments.length < 2) this.setTime(Date.now());
 
     this.timeZone = timeZone;
 
     const offset = tzOffset(this.timeZone, this);
-    this.internal = new Date(this.getTime());
+    this.internal = new Date(+this);
+    time && this.internal.setTime(time);
     this.internal.setUTCMinutes(this.internal.getUTCMinutes() + offset);
   }
 
@@ -18,8 +19,16 @@ export class TZDate extends Date {
     return this.internal.getUTCDate();
   }
 
+  getHours(): number {
+    return this.internal.getUTCHours();
+  }
+
   getTimezoneOffset(): number {
     return tzOffset(this.timeZone, this);
+  }
+
+  withTimeZone(timeZone: string) {
+    return new TZDate(timeZone, +this);
   }
 }
 

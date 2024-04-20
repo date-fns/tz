@@ -24,13 +24,48 @@ describe("TZDate", () => {
     it("creates a new date within the given timezone", () => {
       const date = new TZDate("America/New_York");
       expect(date.getDate()).toBe(10);
+      expect(date.getHours()).toBe(11);
+    });
+  });
+
+  describe("withTimeZone", () => {
+    it("returns a new date with the given timezone", () => {
+      const date = new TZDate("America/New_York");
+      expect(date.getDate()).toBe(10);
+      expect(date.getHours()).toBe(11);
+
+      const newDate = date.withTimeZone("Asia/Tokyo");
+
+      expect(newDate.getDate()).toBe(11);
+      expect(newDate.getHours()).toBe(1);
     });
   });
 
   describe("getDate", () => {
     it("returns the date in the timezone", () => {
-      const date = new TZDate("America/New_York");
-      expect(date.getDate()).toBe(10);
+      expect(new TZDate("America/New_York").getDate()).toBe(10);
+      expect(new TZDate("Asia/Singapore").getDate()).toBe(11);
+    });
+  });
+
+  describe("getUTCDate", () => {
+    it("returns the date in the UTC timezone", () => {
+      expect(new TZDate("America/New_York").getUTCDate()).toBe(10);
+      expect(new TZDate("Asia/Singapore").getUTCDate()).toBe(10);
+    });
+  });
+
+  describe("getHours", () => {
+    it("returns the hours in the timezone", () => {
+      expect(new TZDate("America/New_York").getHours()).toBe(11);
+      expect(new TZDate("Asia/Singapore").getHours()).toBe(0);
+    });
+  });
+
+  describe("getUTCHours", () => {
+    it("returns the hours in the UTC timezone", () => {
+      expect(new TZDate("America/New_York").getUTCHours()).toBe(16);
+      expect(new TZDate("Asia/Singapore").getUTCHours()).toBe(16);
     });
   });
 });
