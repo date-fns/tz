@@ -1,5 +1,5 @@
 import { Bench } from "tinybench";
-import { tzScan } from "./src/index.js";
+import { tzOffset, tzScan } from "./src/index.js";
 
 const bench = new Bench({ time: 3000 });
 
@@ -10,6 +10,10 @@ const duration = {
 
 bench.add("tzScan", () => {
   tzScan("America/New_York", duration);
+});
+
+bench.add("tzOffset", () => {
+  tzOffset("America/New_York", duration.start);
 });
 
 await bench.warmup();

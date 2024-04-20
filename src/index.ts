@@ -45,21 +45,13 @@ export function tzScan(tz: string, interval: Interval) {
 }
 
 export function tzOffset(tz: string, date: Date) {
-  const { format } = new Intl.DateTimeFormat("en-US", {
+  const { format } = new Intl.DateTimeFormat("en-GB", {
     timeZone: tz,
     hour: "numeric",
-    minute: "numeric",
-    day: "numeric",
-    month: "numeric",
-    year: "numeric",
-    hour12: false,
+    timeZoneName: "longOffset",
   });
-
-  const _date = new Date(date);
-  _date.setUTCSeconds(0, 0);
-
-  const values = formatToValues(format(_date));
-  return calcOffset(values, _date);
+  const [hours, minutes] = format(date).slice(6).split(":").map(Number);
+  return hours! * 60 + minutes!;
 }
 
 function calcOffset(values: DateValues, date: Date) {
