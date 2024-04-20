@@ -44,12 +44,14 @@ export function tzScan(tz: string, interval: Interval) {
   return changes;
 }
 
+const formatCache: Record<string, Intl.DateTimeFormat["format"]> = {};
+
 export function tzOffset(tz: string, date: Date) {
-  const { format } = new Intl.DateTimeFormat("en-GB", {
+  const format = (formatCache[tz] ||= new Intl.DateTimeFormat("en-GB", {
     timeZone: tz,
     hour: "numeric",
     timeZoneName: "longOffset",
-  });
+  }).format);
   const [hours, minutes] = format(date).slice(6).split(":").map(Number);
   return hours! * 60 + minutes!;
 }
