@@ -5,6 +5,8 @@ export class TZDate extends Date {
    * Representation of the date values in the timezone. It is skewed by
    * the timezone offset.
    */
+  // @ts-expect-error: this.sync() sets the value but TypeScript doesn't know
+  // about it.
   private internal: Date;
 
   constructor(timeZone?: string, time?: number) {
