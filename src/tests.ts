@@ -3,8 +3,9 @@ import { TZDate, tzOffset, tzScan } from ".";
 import FakeTimers from "@sinonjs/fake-timers";
 
 describe("TZDate", () => {
+  const defaultMs = 456;
   let timers: FakeTimers.InstalledClock;
-  const now = new Date(1987, 1, 11, 0, 0, 0, 456);
+  const now = new Date(1987, 1, 11, 0, 0, 0, defaultMs);
   beforeEach(() => {
     timers = FakeTimers.install({ now });
     if (now.getUTCHours() !== 16)
@@ -64,7 +65,14 @@ describe("TZDate", () => {
   });
 
   describe("getFullYear", () => {
-    it.todo("returns the full year in the timezone");
+    it("returns the full year in the timezone", () => {
+      expect(
+        new TZDate("America/New_York", +new Date(2020, 0, 1, 0)).getFullYear()
+      ).toBe(2019);
+      expect(
+        new TZDate("Asia/Singapore", +new Date(2020, 0, 1, 0)).getFullYear()
+      ).toBe(2020);
+    });
   });
 
   describe("getUTCFullYear", () => {
@@ -86,11 +94,17 @@ describe("TZDate", () => {
   });
 
   describe("getMilliseconds", () => {
-    it.todo("returns the milliseconds in the timezone");
+    it("returns the milliseconds in the timezone", () => {
+      expect(new TZDate("America/New_York").getMilliseconds()).toBe(456);
+      expect(new TZDate("Asia/Singapore").getMilliseconds()).toBe(456);
+    });
   });
 
   describe("getUTCMilliseconds", () => {
-    it.todo("returns the milliseconds in the UTC timezone");
+    it("returns the milliseconds in the UTC timezone", () => {
+      expect(new TZDate("America/New_York").getUTCMilliseconds()).toBe(456);
+      expect(new TZDate("Asia/Singapore").getUTCMilliseconds()).toBe(456);
+    });
   });
 
   describe("getMinutes", () => {
@@ -102,7 +116,14 @@ describe("TZDate", () => {
   });
 
   describe("getMonth", () => {
-    it.todo("returns the month in the timezone");
+    it("returns the month in the timezone", () => {
+      expect(
+        new TZDate("America/New_York", +new Date(2020, 0, 1, 0)).getMonth()
+      ).toBe(11);
+      expect(
+        new TZDate("Asia/Singapore", +new Date(2020, 0, 1, 0)).getMonth()
+      ).toBe(0);
+    });
   });
 
   describe("getUTCMonth", () => {
@@ -118,7 +139,10 @@ describe("TZDate", () => {
   });
 
   describe("getTime", () => {
-    it.todo("returns the time in the timezone");
+    it("returns the time in the timezone", () => {
+      expect(new TZDate("America/New_York").getTime()).toBe(+now);
+      expect(new TZDate("Asia/Singapore").getTime()).toBe(+now);
+    });
   });
 
   describe("getTimezoneOffset", () => {
@@ -157,7 +181,42 @@ describe("TZDate", () => {
   });
 
   describe("setMilliseconds", () => {
-    it.todo("sets the milliseconds in the timezone");
+    it("sets the milliseconds in the timezone", () => {
+      {
+        const date = new TZDate("America/New_York");
+        date.setMilliseconds(987);
+        expect(date.getMilliseconds()).toBe(987);
+      }
+      {
+        const date = new TZDate("Asia/Singapore");
+        date.setMilliseconds(987);
+        expect(date.getMilliseconds()).toBe(987);
+      }
+    });
+
+    it("returns milliseconds after setting", () => {
+      const date = new TZDate("America/New_York");
+      expect(date.setMilliseconds(987)).toBe(987);
+    });
+
+    it("allows to overflow the seconds into the future", () => {
+      {
+        const date = new TZDate(
+          "America/New_York",
+          +new Date(2020, 0, 1, 13 /* 13 = New York (-5) + Singapore (+8) */)
+        );
+        // 2020-01-01 -> 2020-05-01
+        const days = 31 + 29 + 31 + 30;
+        const ms = days * 24 * 60 * 60 * 1000;
+        date.setMilliseconds(ms);
+        expect(date.getMonth()).toBe(4);
+        expect(date.getDate()).toBe(1);
+        expect(date.getHours()).toBe(1);
+      }
+      {
+        // [TODO] More timezones
+      }
+    });
   });
 
   describe("setUTCMilliseconds", () => {

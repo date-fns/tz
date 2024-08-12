@@ -1,34 +1,53 @@
 export class TZDate extends Date {
   timeZone: string | undefined;
 
-  internal: Date;
+  /**
+   * Representation of the date values in the timezone. It is skewed by
+   * the timezone offset.
+   */
+  private internal: Date;
 
   constructor(timeZone?: string, time?: number) {
     super();
-    if (arguments.length < 2) this.setTime(Date.now());
-
+    this.setTime(time ?? Date.now());
     this.timeZone = timeZone;
-
-    const offset = tzOffset(this.timeZone, this);
-    this.internal = new Date(+this);
-    time && this.internal.setTime(time);
-    this.internal.setUTCMinutes(this.internal.getUTCMinutes() + offset);
+    this.sync();
   }
 
   getDate() {
     return this.internal.getUTCDate();
   }
 
+  getFullYear(): number {
+    return this.internal.getUTCFullYear();
+  }
+
   getHours(): number {
     return this.internal.getUTCHours();
+  }
+
+  getMonth(): number {
+    return this.internal.getUTCMonth();
   }
 
   getTimezoneOffset(): number {
     return tzOffset(this.timeZone, this);
   }
 
+  setMilliseconds(ms: number): number {
+    this.setUTCMilliseconds(ms);
+    this.sync();
+    return this.internal.getUTCMilliseconds();
+  }
+
   withTimeZone(timeZone: string) {
     return new TZDate(timeZone, +this);
+  }
+
+  private sync() {
+    this.internal = new Date(+this);
+    const offset = tzOffset(this.timeZone, this);
+    this.internal.setUTCMinutes(this.internal.getUTCMinutes() + offset);
   }
 }
 
