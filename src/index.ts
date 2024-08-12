@@ -37,25 +37,79 @@ export class TZDate extends Date {
   }
 
   setMilliseconds(ms: number): number {
-    this.setUTCMilliseconds(ms);
+    Date.prototype.setUTCMilliseconds.call(this, ms);
     this.sync();
     return this.internal.getUTCMilliseconds();
   }
+
+  setUTCMilliseconds(ms: number): number {
+    return this.setMilliseconds(ms);
+  }
+
+  //#region time zone
 
   withTimeZone(timeZone: string) {
     return new TZDate(timeZone, +this);
   }
 
   getTimezoneOffset(): number {
-    return tzOffset(this.timeZone, this);
+    return -tzOffset(this.timeZone, this);
+  }
+
+  //#endregion
+
+  //#region representation
+
+  toISOString(): string {
+    const offset = this.getTimezoneOffset();
+    const [sign, hours, minutes] = this.tzComponents();
+    const tz = `${sign}${hours}:${minutes}`;
+    return this.internal.toISOString().slice(0, -1) + tz;
+  }
+
+  toString(): string {
+    // "Tue Aug 13 2024 07:50:19 GMT+0800 (Singapore Standard Time)";
+    return `${this.toDateString()} ${this.toTimeString()}`;
+  }
+
+  toDateString(): string {
+    // toUTCString returns RFC 7231 ("Mon, 12 Aug 2024 23:36:08 GMT")
+    const [day, date, month, year] = this.internal.toUTCString().split(" ");
+    // "Tue Aug 13 2024"
+    return `${day?.slice(0, -1) /* Remove "," */} ${month} ${date} ${year}`;
+  }
+
+  toTimeString(): string {
+    // toUTCString returns RFC 7231 ("Mon, 12 Aug 2024 23:36:08 GMT")
+    const time = this.internal.toUTCString().split(" ")[4];
+    const [sign, hours, minutes] = this.tzComponents();
+    // "07:42:23 GMT+0800 (Singapore Standard Time)"
+    return `${time} GMT${sign}${hours}${minutes} (${tzName(
+      this.timeZone,
+      this
+    )})`;
+  }
+
+  //#endregion
+
+  //#region private
+
+  private tzComponents(): [string, string, string] {
+    const offset = this.getTimezoneOffset();
+    const sign = offset > 0 ? "-" : "+";
+    const hours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, "0");
+    const minutes = String(Math.abs(offset) % 60).padStart(2, "0");
+    return [sign, hours, minutes];
   }
 
   private sync() {
     this.internal = new Date(+this);
     this.internal.setUTCMinutes(
-      this.internal.getUTCMinutes() + this.getTimezoneOffset()
+      this.internal.getUTCMinutes() - this.getTimezoneOffset()
     );
   }
+
+  //#endregion
 }
 
 export interface Interval {
@@ -134,12 +188,12 @@ export function tzScan(tz: string, interval: Interval): Change[] {
   return changes;
 }
 
-const formatCache: Record<string, Intl.DateTimeFormat["format"]> = {};
+const offsetFormatCache: Record<string, Intl.DateTimeFormat["format"]> = {};
 
 const offsetCache: Record<string, number> = {};
 
 export function tzOffset(tz: string | undefined, date: Date): number {
-  const format = (formatCache[tz!] ||= new Intl.DateTimeFormat("en-GB", {
+  const format = (offsetFormatCache[tz!] ||= new Intl.DateTimeFormat("en-GB", {
     timeZone: tz,
     hour: "numeric",
     timeZoneName: "longOffset",
@@ -150,4 +204,13 @@ export function tzOffset(tz: string | undefined, date: Date): number {
 
   const [hours, minutes] = offsetStr.split(":").map(Number);
   return (offsetCache[offsetStr] = hours! * 60 + minutes!);
+}
+
+function tzName(tz: string | undefined, date: Date): string {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: tz,
+    timeZoneName: "long",
+  })
+    .format(date)
+    .slice(12);
 }

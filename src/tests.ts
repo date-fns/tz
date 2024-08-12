@@ -32,13 +32,30 @@ describe("TZDate", () => {
   describe("time", () => {
     describe("getTime", () => {
       it("returns the time in the timezone", () => {
-        expect(new TZDate("America/New_York").getTime()).toBe(+now);
-        expect(new TZDate("Asia/Singapore").getTime()).toBe(+now);
+        const nativeDate = new Date(2020, 0, 1);
+        expect(new TZDate("America/New_York", +nativeDate).getTime()).toBe(
+          +nativeDate
+        );
+        expect(new TZDate("Asia/Singapore", +nativeDate).getTime()).toBe(
+          +nativeDate
+        );
       });
     });
 
     describe("setTime", () => {
       it.todo("sets the time in the timezone");
+    });
+
+    describe("valueOf", () => {
+      it("returns the primitive value of the date", () => {
+        const nativeDate = new Date(2020, 0, 1);
+        expect(new TZDate("America/New_York", +nativeDate).valueOf()).toBe(
+          +nativeDate
+        );
+        expect(new TZDate("Asia/Singapore", +nativeDate).valueOf()).toBe(
+          +nativeDate
+        );
+      });
     });
   });
 
@@ -48,6 +65,9 @@ describe("TZDate", () => {
         expect(
           new TZDate("America/New_York", +new Date(2020, 0, 1, 0)).getFullYear()
         ).toBe(2019);
+        expect(tzDate("America/New_York", 2020, 0, 1, 0).getFullYear()).toBe(
+          2020
+        );
         expect(
           new TZDate("Asia/Singapore", +new Date(2020, 0, 1, 0)).getFullYear()
         ).toBe(2020);
@@ -184,11 +204,17 @@ describe("TZDate", () => {
 
   describe("seconds", () => {
     describe("getSeconds", () => {
-      it.todo("returns the seconds in the timezone");
+      it("returns the seconds in the timezone", () => {
+        expect(new TZDate("America/New_York").getSeconds()).toBe(0);
+        expect(new TZDate("Asia/Singapore").getSeconds()).toBe(0);
+      });
     });
 
     describe("getUTCSeconds", () => {
-      it.todo("returns the seconds in the UTC timezone");
+      it("returns the seconds in the UTC timezone", () => {
+        expect(new TZDate("America/New_York").getUTCSeconds()).toBe(0);
+        expect(new TZDate("Asia/Singapore").getUTCSeconds()).toBe(0);
+      });
     });
 
     describe("setSeconds", () => {
@@ -236,11 +262,7 @@ describe("TZDate", () => {
 
       it("allows to overflow the seconds into the future", () => {
         {
-          const nativeDate = new Date(2020, 0, 1);
-          // Sets the date to midnight in New York
-          // 13 = New York (-5) -> Singapore (+8)
-          nativeDate.setHours(13);
-          const date = new TZDate("America/New_York", +nativeDate);
+          const date = tzDate("America/New_York", 2020, 0, 1);
           // 2020-01-01 -> 2020-05-01
           const days = 31 + 29 + 31 + 30;
           const ms = days * 24 * 60 * 60 * 1000;
@@ -250,11 +272,7 @@ describe("TZDate", () => {
           expect(date.getHours()).toBe(1);
         }
         {
-          const nativeDate = new Date(2015, 7 /* August */, 1);
-          // Sets the date to midnight Pyongyang:
-          // -1 = Singapore (+8) <- Pyongyang (+9)
-          nativeDate.setHours(-1);
-          const date = new TZDate("Asia/Pyongyang", +nativeDate);
+          const date = tzDate("Asia/Pyongyang", 2015, 7 /* August */, 1);
           // 2015-08-01 -> 2015-09-01
           const ms = 31 * 24 * 60 * 60 * 1000;
           date.setMilliseconds(ms);
@@ -267,11 +285,7 @@ describe("TZDate", () => {
 
       it("allows to overflow the seconds into the past", () => {
         {
-          const nativeDate = new Date(2020, 4, 1);
-          // Sets the date to midnight in New York:
-          // 12 = New York (-4) -> Singapore (+8)
-          nativeDate.setHours(12);
-          const date = new TZDate("America/New_York", +nativeDate);
+          const date = tzDate("America/New_York", 2020, 4, 1);
           // 2020-01-01 <- 2020-05-01
           const days = 31 + 29 + 31 + 30;
           const ms = -days * 24 * 60 * 60 * 1000;
@@ -281,11 +295,7 @@ describe("TZDate", () => {
           expect(date.getHours()).toBe(23);
         }
         {
-          const nativeDate = new Date(2015, 8 /* September */, 1);
-          // Sets the date to midnight Pyongyang:
-          // -0.5 = Singapore (+8) <- Pyongyang (+8.5)
-          nativeDate.setMinutes(-30);
-          const date = new TZDate("Asia/Pyongyang", +nativeDate);
+          const date = tzDate("Asia/Pyongyang", 2015, 8 /* September */, 1);
           // 2015-08-01 <- 2015-09-01
           const ms = -31 * 24 * 60 * 60 * 1000;
           date.setMilliseconds(ms);
@@ -298,7 +308,17 @@ describe("TZDate", () => {
     });
 
     describe("setUTCMilliseconds", () => {
-      it.todo("sets the milliseconds in the UTC timezone");
+      it("works the same as setMilliseconds", () => {
+        const date = tzDate("America/New_York", 2020, 0, 1);
+        // 2020-01-01 -> 2020-05-01
+        const days = 31 + 29 + 31 + 30;
+        const ms = days * 24 * 60 * 60 * 1000;
+        const result = date.setUTCMilliseconds(ms);
+        expect(result).toBe(0);
+        expect(date.getMonth()).toBe(4);
+        expect(date.getDate()).toBe(1);
+        expect(date.getHours()).toBe(1);
+      });
     });
   });
 
@@ -318,8 +338,8 @@ describe("TZDate", () => {
 
     describe("getTimezoneOffset", () => {
       it("returns the timezone offset", () => {
-        expect(new TZDate("America/New_York").getTimezoneOffset()).toBe(-300);
-        expect(new TZDate("Asia/Singapore").getTimezoneOffset()).toBe(480);
+        expect(new TZDate("America/New_York").getTimezoneOffset()).toBe(300);
+        expect(new TZDate("Asia/Singapore").getTimezoneOffset()).toBe(-480);
       });
     });
   });
@@ -339,24 +359,46 @@ describe("TZDate", () => {
       );
     });
 
-    describe("toDateString", () => {
-      it.todo("returns formatted date portion of the in the timezone");
-    });
-
     describe("toISOString", () => {
-      it.todo("returns ISO 8601 formatted date in UTC");
+      it("returns ISO 8601 formatted date in the timezone", () => {
+        expect(tzDate("America/New_York", 2020, 0, 1).toISOString()).toBe(
+          "2020-01-01T00:00:00.000-05:00"
+        );
+        expect(tzDate("Asia/Singapore", 2020, 0, 1).toISOString()).toBe(
+          "2020-01-01T00:00:00.000+08:00"
+        );
+        expect(tzDate("Asia/Kolkata", 2020, 0, 1).toISOString()).toBe(
+          "2020-01-01T00:00:00.000+05:30"
+        );
+        expect(tzDate("Asia/Pyongyang", 2015, 7, 1).toISOString()).toBe(
+          "2015-08-01T00:00:00.000+09:00"
+        );
+        expect(tzDate("Asia/Pyongyang", 2015, 8, 1).toISOString()).toBe(
+          "2015-09-01T00:00:00.000+08:30"
+        );
+      });
     });
 
     describe("toJSON", () => {
-      it.todo("returns ISO 8601 formatted date in UTC");
-    });
-
-    describe("toLocaleDateString", () => {
-      it.todo("returns localized date portion of the in the timezone");
+      it("works the same as toISOString", () => {
+        expect(tzDate("America/New_York", 2020, 0, 1).toJSON()).toBe(
+          "2020-01-01T00:00:00.000-05:00"
+        );
+        expect(tzDate("Asia/Pyongyang", 2015, 7, 1).toJSON()).toBe(
+          "2015-08-01T00:00:00.000+09:00"
+        );
+        expect(tzDate("Asia/Pyongyang", 2015, 8, 1).toJSON()).toBe(
+          "2015-09-01T00:00:00.000+08:30"
+        );
+      });
     });
 
     describe("toLocaleString", () => {
       it.todo("returns localized date and time in the timezone");
+    });
+
+    describe("toLocaleDateString", () => {
+      it.todo("returns localized date portion of the in the timezone");
     });
 
     describe("toLocaleTimeString", () => {
@@ -364,19 +406,46 @@ describe("TZDate", () => {
     });
 
     describe("toString", () => {
-      it.todo("returns string representation of the date in the timezone");
+      it("returns string representation of the date in the timezone", () => {
+        expect(tzDate("America/New_York", 2020, 0, 1).toString()).toBe(
+          "Wed Jan 01 2020 00:00:00 GMT-0500 (Eastern Standard Time)"
+        );
+        expect(
+          new TZDate("America/New_York", +new Date(2020, 0, 1)).toString()
+        ).toBe("Tue Dec 31 2019 11:00:00 GMT-0500 (Eastern Standard Time)");
+        expect(tzDate("America/New_York", 2020, 5, 1).toString()).toBe(
+          "Mon Jun 01 2020 00:00:00 GMT-0400 (Eastern Daylight Time)"
+        );
+      });
+    });
+
+    describe("toDateString", () => {
+      it("returns formatted date portion of the in the timezone", () => {
+        expect(tzDate("America/New_York", 2020, 0, 1).toDateString()).toBe(
+          "Wed Jan 01 2020"
+        );
+        expect(
+          new TZDate("America/New_York", +new Date(2020, 0, 1)).toDateString()
+        ).toBe("Tue Dec 31 2019");
+      });
     });
 
     describe("toTimeString", () => {
-      it.todo("returns formatted time portion of the in the timezone");
+      it("returns formatted time portion of the in the timezone", () => {
+        expect(tzDate("America/New_York", 2020, 0, 1).toTimeString()).toBe(
+          "00:00:00 GMT-0500 (Eastern Standard Time)"
+        );
+        expect(
+          new TZDate("America/New_York", +new Date(2020, 0, 1)).toTimeString()
+        ).toBe("11:00:00 GMT-0500 (Eastern Standard Time)");
+        expect(tzDate("America/New_York", 2020, 5, 1).toTimeString()).toBe(
+          "00:00:00 GMT-0400 (Eastern Daylight Time)"
+        );
+      });
     });
 
     describe("toUTCString", () => {
       it.todo("returns string representation of the date in UTC");
-    });
-
-    describe("valueOf", () => {
-      it.todo("returns the primitive value of the date");
     });
   });
 });
@@ -530,3 +599,29 @@ describe("tzOffset", () => {
     expect(tzOffset(undefined, new Date("2020-01-15T05:00:00Z"))).toBe(8 * 60);
   });
 });
+
+function tzDate(
+  timeZone: string,
+  year: number,
+  month: number,
+  day: number,
+  hours = 0,
+  minutes = 0,
+  seconds = 0,
+  milliseconds = 0
+): TZDate {
+  const nativeDate = new Date(
+    year,
+    month,
+    day,
+    hours,
+    minutes,
+    seconds,
+    milliseconds
+  );
+  const offset = tzOffset(timeZone, nativeDate);
+  nativeDate.setMinutes(localOffset - offset);
+  return new TZDate(timeZone, +nativeDate);
+}
+
+const localOffset = 8 * 60;
