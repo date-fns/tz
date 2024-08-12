@@ -29,284 +29,306 @@ describe("TZDate", () => {
     });
   });
 
-  describe("withTimeZone", () => {
-    it("returns a new date with the given timezone", () => {
-      const date = new TZDate("America/New_York");
-      expect(date.getDate()).toBe(10);
-      expect(date.getHours()).toBe(11);
+  describe("time", () => {
+    describe("getTime", () => {
+      it("returns the time in the timezone", () => {
+        expect(new TZDate("America/New_York").getTime()).toBe(+now);
+        expect(new TZDate("Asia/Singapore").getTime()).toBe(+now);
+      });
+    });
 
-      const newDate = date.withTimeZone("Asia/Tokyo");
-
-      expect(newDate.getDate()).toBe(11);
-      expect(newDate.getHours()).toBe(1);
+    describe("setTime", () => {
+      it.todo("sets the time in the timezone");
     });
   });
 
-  describe("getDate", () => {
-    it("returns the date in the timezone", () => {
-      expect(new TZDate("America/New_York").getDate()).toBe(10);
-      expect(new TZDate("Asia/Singapore").getDate()).toBe(11);
+  describe("year", () => {
+    describe("getFullYear", () => {
+      it("returns the full year in the timezone", () => {
+        expect(
+          new TZDate("America/New_York", +new Date(2020, 0, 1, 0)).getFullYear()
+        ).toBe(2019);
+        expect(
+          new TZDate("Asia/Singapore", +new Date(2020, 0, 1, 0)).getFullYear()
+        ).toBe(2020);
+      });
+    });
+
+    describe("getUTCFullYear", () => {
+      it.todo("returns the full year in the UTC timezone");
+    });
+
+    describe("setFullYear", () => {
+      it.todo("sets the full year in the timezone");
+    });
+
+    describe("setUTCFullYear", () => {
+      it.todo("sets the full year in the UTC timezone");
+    });
+
+    describe("getYear", () => {
+      it.todo("returns the year in the timezone");
+    });
+
+    describe("setYear", () => {
+      it.todo("sets the year in the timezone");
     });
   });
 
-  describe("getUTCDate", () => {
-    it("returns the date in the UTC timezone", () => {
-      expect(new TZDate("America/New_York").getUTCDate()).toBe(10);
-      expect(new TZDate("Asia/Singapore").getUTCDate()).toBe(10);
+  describe("month", () => {
+    describe("getMonth", () => {
+      it("returns the month in the timezone", () => {
+        expect(
+          new TZDate("America/New_York", +new Date(2020, 0, 1, 0)).getMonth()
+        ).toBe(11);
+        expect(
+          new TZDate("Asia/Singapore", +new Date(2020, 0, 1, 0)).getMonth()
+        ).toBe(0);
+      });
+    });
+
+    describe("getUTCMonth", () => {
+      it.todo("returns the month in the UTC timezone");
+    });
+
+    describe("setMonth", () => {
+      it.todo("sets the month in the timezone");
+    });
+
+    describe("setUTCMonth", () => {
+      it.todo("sets the month in the UTC timezone");
     });
   });
 
-  describe("getDay", () => {
-    it.todo("returns the day in the timezone");
-  });
+  describe("date", () => {
+    describe("getDate", () => {
+      it("returns the date in the timezone", () => {
+        expect(new TZDate("America/New_York").getDate()).toBe(10);
+        expect(new TZDate("Asia/Singapore").getDate()).toBe(11);
+      });
+    });
 
-  describe("getUTCDay", () => {
-    it.todo("returns the day in the UTC timezone");
-  });
+    describe("getUTCDate", () => {
+      it("returns the date in the UTC timezone", () => {
+        expect(new TZDate("America/New_York").getUTCDate()).toBe(10);
+        expect(new TZDate("Asia/Singapore").getUTCDate()).toBe(10);
+      });
+    });
 
-  describe("getFullYear", () => {
-    it("returns the full year in the timezone", () => {
-      expect(
-        new TZDate("America/New_York", +new Date(2020, 0, 1, 0)).getFullYear()
-      ).toBe(2019);
-      expect(
-        new TZDate("Asia/Singapore", +new Date(2020, 0, 1, 0)).getFullYear()
-      ).toBe(2020);
+    describe("setDate", () => {
+      it.todo("sets the date in the timezone");
+    });
+
+    describe("setUTCDate", () => {
+      it.todo("sets the date in the UTC timezone");
     });
   });
 
-  describe("getUTCFullYear", () => {
-    it.todo("returns the full year in the UTC timezone");
-  });
+  describe("day", () => {
+    describe("getDay", () => {
+      it.todo("returns the day in the timezone");
+    });
 
-  describe("getHours", () => {
-    it("returns the hours in the timezone", () => {
-      expect(new TZDate("America/New_York").getHours()).toBe(11);
-      expect(new TZDate("Asia/Singapore").getHours()).toBe(0);
+    describe("getUTCDay", () => {
+      it.todo("returns the day in the UTC timezone");
     });
   });
 
-  describe("getUTCHours", () => {
-    it("returns the hours in the UTC timezone", () => {
-      expect(new TZDate("America/New_York").getUTCHours()).toBe(16);
-      expect(new TZDate("Asia/Singapore").getUTCHours()).toBe(16);
+  describe("hours", () => {
+    describe("getHours", () => {
+      it("returns the hours in the timezone", () => {
+        expect(new TZDate("America/New_York").getHours()).toBe(11);
+        expect(new TZDate("Asia/Singapore").getHours()).toBe(0);
+      });
+    });
+
+    describe("getUTCHours", () => {
+      it("returns the hours in the UTC timezone", () => {
+        expect(new TZDate("America/New_York").getUTCHours()).toBe(16);
+        expect(new TZDate("Asia/Singapore").getUTCHours()).toBe(16);
+      });
+    });
+
+    describe("setHours", () => {
+      it.todo("sets the hours in the timezone");
+    });
+
+    describe("setUTCHours", () => {
+      it.todo("sets the hours in the UTC timezone");
     });
   });
 
-  describe("getMilliseconds", () => {
-    it("returns the milliseconds in the timezone", () => {
-      expect(new TZDate("America/New_York").getMilliseconds()).toBe(456);
-      expect(new TZDate("Asia/Singapore").getMilliseconds()).toBe(456);
+  describe("minutes", () => {
+    describe("getMinutes", () => {
+      it.todo("returns the minutes in the timezone");
+    });
+
+    describe("getUTCMinutes", () => {
+      it.todo("returns the minutes in the UTC timezone");
+    });
+
+    describe("setMinutes", () => {
+      it.todo("sets the minutes in the timezone");
+    });
+
+    describe("setUTCMinutes", () => {
+      it.todo("sets the minutes in the UTC timezone");
     });
   });
 
-  describe("getUTCMilliseconds", () => {
-    it("returns the milliseconds in the UTC timezone", () => {
-      expect(new TZDate("America/New_York").getUTCMilliseconds()).toBe(456);
-      expect(new TZDate("Asia/Singapore").getUTCMilliseconds()).toBe(456);
+  describe("seconds", () => {
+    describe("getSeconds", () => {
+      it.todo("returns the seconds in the timezone");
+    });
+
+    describe("getUTCSeconds", () => {
+      it.todo("returns the seconds in the UTC timezone");
+    });
+
+    describe("setSeconds", () => {
+      it.todo("sets the seconds in the timezone");
+    });
+
+    describe("setUTCSeconds", () => {
+      it.todo("sets the seconds in the UTC timezone");
     });
   });
 
-  describe("getMinutes", () => {
-    it.todo("returns the minutes in the timezone");
-  });
-
-  describe("getUTCMinutes", () => {
-    it.todo("returns the minutes in the UTC timezone");
-  });
-
-  describe("getMonth", () => {
-    it("returns the month in the timezone", () => {
-      expect(
-        new TZDate("America/New_York", +new Date(2020, 0, 1, 0)).getMonth()
-      ).toBe(11);
-      expect(
-        new TZDate("Asia/Singapore", +new Date(2020, 0, 1, 0)).getMonth()
-      ).toBe(0);
+  describe("milliseconds", () => {
+    describe("getMilliseconds", () => {
+      it("returns the milliseconds in the timezone", () => {
+        expect(new TZDate("America/New_York").getMilliseconds()).toBe(456);
+        expect(new TZDate("Asia/Singapore").getMilliseconds()).toBe(456);
+      });
     });
-  });
 
-  describe("getUTCMonth", () => {
-    it.todo("returns the month in the UTC timezone");
-  });
-
-  describe("getSeconds", () => {
-    it.todo("returns the seconds in the timezone");
-  });
-
-  describe("getUTCSeconds", () => {
-    it.todo("returns the seconds in the UTC timezone");
-  });
-
-  describe("getTime", () => {
-    it("returns the time in the timezone", () => {
-      expect(new TZDate("America/New_York").getTime()).toBe(+now);
-      expect(new TZDate("Asia/Singapore").getTime()).toBe(+now);
+    describe("getUTCMilliseconds", () => {
+      it("returns the milliseconds in the UTC timezone", () => {
+        expect(new TZDate("America/New_York").getUTCMilliseconds()).toBe(456);
+        expect(new TZDate("Asia/Singapore").getUTCMilliseconds()).toBe(456);
+      });
     });
-  });
 
-  describe("getTimezoneOffset", () => {
-    it("returns the timezone offset", () => {
-      expect(new TZDate("America/New_York").getTimezoneOffset()).toBe(-300);
-      expect(new TZDate("Asia/Singapore").getTimezoneOffset()).toBe(480);
-    });
-  });
+    describe("setMilliseconds", () => {
+      it("sets the milliseconds in the timezone", () => {
+        {
+          const date = new TZDate("America/New_York");
+          date.setMilliseconds(987);
+          expect(date.getMilliseconds()).toBe(987);
+        }
+        {
+          const date = new TZDate("Asia/Singapore");
+          date.setMilliseconds(987);
+          expect(date.getMilliseconds()).toBe(987);
+        }
+      });
 
-  describe("getYear", () => {
-    it.todo("returns the year in the timezone");
-  });
-
-  describe("setDate", () => {
-    it.todo("sets the date in the timezone");
-  });
-
-  describe("setUTCDate", () => {
-    it.todo("sets the date in the UTC timezone");
-  });
-
-  describe("setFullYear", () => {
-    it.todo("sets the full year in the timezone");
-  });
-
-  describe("setUTCFullYear", () => {
-    it.todo("sets the full year in the UTC timezone");
-  });
-
-  describe("setHours", () => {
-    it.todo("sets the hours in the timezone");
-  });
-
-  describe("setUTCHours", () => {
-    it.todo("sets the hours in the UTC timezone");
-  });
-
-  describe("setMilliseconds", () => {
-    it("sets the milliseconds in the timezone", () => {
-      {
+      it("returns milliseconds after setting", () => {
         const date = new TZDate("America/New_York");
-        date.setMilliseconds(987);
-        expect(date.getMilliseconds()).toBe(987);
-      }
-      {
-        const date = new TZDate("Asia/Singapore");
-        date.setMilliseconds(987);
-        expect(date.getMilliseconds()).toBe(987);
-      }
+        expect(date.setMilliseconds(987)).toBe(987);
+      });
+
+      it("allows to overflow the seconds into the future", () => {
+        {
+          const date = new TZDate(
+            "America/New_York",
+            +new Date(2020, 0, 1, 13 /* 13 = New York (-5) + Singapore (+8) */)
+          );
+          // 2020-01-01 -> 2020-05-01
+          const days = 31 + 29 + 31 + 30;
+          const ms = days * 24 * 60 * 60 * 1000;
+          date.setMilliseconds(ms);
+          expect(date.getMonth()).toBe(4);
+          expect(date.getDate()).toBe(1);
+          expect(date.getHours()).toBe(1);
+        }
+        {
+          // [TODO] More timezones
+        }
+      });
     });
 
-    it("returns milliseconds after setting", () => {
-      const date = new TZDate("America/New_York");
-      expect(date.setMilliseconds(987)).toBe(987);
-    });
-
-    it("allows to overflow the seconds into the future", () => {
-      {
-        const date = new TZDate(
-          "America/New_York",
-          +new Date(2020, 0, 1, 13 /* 13 = New York (-5) + Singapore (+8) */)
-        );
-        // 2020-01-01 -> 2020-05-01
-        const days = 31 + 29 + 31 + 30;
-        const ms = days * 24 * 60 * 60 * 1000;
-        date.setMilliseconds(ms);
-        expect(date.getMonth()).toBe(4);
-        expect(date.getDate()).toBe(1);
-        expect(date.getHours()).toBe(1);
-      }
-      {
-        // [TODO] More timezones
-      }
+    describe("setUTCMilliseconds", () => {
+      it.todo("sets the milliseconds in the UTC timezone");
     });
   });
 
-  describe("setUTCMilliseconds", () => {
-    it.todo("sets the milliseconds in the UTC timezone");
+  describe("time zone", () => {
+    describe("withTimeZone", () => {
+      it("returns a new date with the given timezone", () => {
+        const date = new TZDate("America/New_York");
+        expect(date.getDate()).toBe(10);
+        expect(date.getHours()).toBe(11);
+
+        const newDate = date.withTimeZone("Asia/Tokyo");
+
+        expect(newDate.getDate()).toBe(11);
+        expect(newDate.getHours()).toBe(1);
+      });
+    });
+
+    describe("getTimezoneOffset", () => {
+      it("returns the timezone offset", () => {
+        expect(new TZDate("America/New_York").getTimezoneOffset()).toBe(-300);
+        expect(new TZDate("Asia/Singapore").getTimezoneOffset()).toBe(480);
+      });
+    });
   });
 
-  describe("setMinutes", () => {
-    it.todo("sets the minutes in the timezone");
-  });
+  describe("representation", () => {
+    describe("[Symbol.toPrimitive]", () => {
+      it.todo(
+        "returns string representation of the date when the hint is 'string'"
+      );
 
-  describe("setUTCMinutes", () => {
-    it.todo("sets the minutes in the UTC timezone");
-  });
+      it.todo(
+        "returns string representation of the date when the hint is 'default'"
+      );
 
-  describe("setMonth", () => {
-    it.todo("sets the month in the timezone");
-  });
+      it.todo(
+        "returns number representation of the date when the hint is 'number'"
+      );
+    });
 
-  describe("setUTCMonth", () => {
-    it.todo("sets the month in the UTC timezone");
-  });
+    describe("toDateString", () => {
+      it.todo("returns formatted date portion of the in the timezone");
+    });
 
-  describe("setSeconds", () => {
-    it.todo("sets the seconds in the timezone");
-  });
+    describe("toISOString", () => {
+      it.todo("returns ISO 8601 formatted date in UTC");
+    });
 
-  describe("setUTCSeconds", () => {
-    it.todo("sets the seconds in the UTC timezone");
-  });
+    describe("toJSON", () => {
+      it.todo("returns ISO 8601 formatted date in UTC");
+    });
 
-  describe("setTime", () => {
-    it.todo("sets the time in the timezone");
-  });
+    describe("toLocaleDateString", () => {
+      it.todo("returns localized date portion of the in the timezone");
+    });
 
-  describe("setYear", () => {
-    it.todo("sets the year in the timezone");
-  });
+    describe("toLocaleString", () => {
+      it.todo("returns localized date and time in the timezone");
+    });
 
-  describe("[Symbol.toPrimitive]", () => {
-    it.todo(
-      "returns string representation of the date when the hint is 'string'"
-    );
+    describe("toLocaleTimeString", () => {
+      it.todo("returns localized time portion of the in the timezone");
+    });
 
-    it.todo(
-      "returns string representation of the date when the hint is 'default'"
-    );
+    describe("toString", () => {
+      it.todo("returns string representation of the date in the timezone");
+    });
 
-    it.todo(
-      "returns number representation of the date when the hint is 'number'"
-    );
-  });
+    describe("toTimeString", () => {
+      it.todo("returns formatted time portion of the in the timezone");
+    });
 
-  describe("toDateString", () => {
-    it.todo("returns formatted date portion of the in the timezone");
-  });
+    describe("toUTCString", () => {
+      it.todo("returns string representation of the date in UTC");
+    });
 
-  describe("toISOString", () => {
-    it.todo("returns ISO 8601 formatted date in UTC");
-  });
-
-  describe("toJSON", () => {
-    it.todo("returns ISO 8601 formatted date in UTC");
-  });
-
-  describe("toLocaleDateString", () => {
-    it.todo("returns localized date portion of the in the timezone");
-  });
-
-  describe("toLocaleString", () => {
-    it.todo("returns localized date and time in the timezone");
-  });
-
-  describe("toLocaleTimeString", () => {
-    it.todo("returns localized time portion of the in the timezone");
-  });
-
-  describe("toString", () => {
-    it.todo("returns string representation of the date in the timezone");
-  });
-
-  describe("toTimeString", () => {
-    it.todo("returns formatted time portion of the in the timezone");
-  });
-
-  describe("toUTCString", () => {
-    it.todo("returns string representation of the date in UTC");
-  });
-
-  describe("valueOf", () => {
-    it.todo("returns the primitive value of the date");
+    describe("valueOf", () => {
+      it.todo("returns the primitive value of the date");
+    });
   });
 });
 

@@ -47,8 +47,8 @@ export class TZDate extends Date {
   }
 
   private sync() {
-    this.internal = new Date(+this);
     const offset = tzOffset(this.timeZone, this);
+    this.internal = new Date(+this);
     this.internal.setUTCMinutes(this.internal.getUTCMinutes() + offset);
   }
 }
