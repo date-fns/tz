@@ -160,11 +160,17 @@ describe("TZDate", () => {
 
   describe("minutes", () => {
     describe("getMinutes", () => {
-      it.todo("returns the minutes in the timezone");
+      it("returns the minutes in the timezone", () => {
+        expect(new TZDate("America/New_York").getMinutes()).toBe(0);
+        expect(new TZDate("Asia/Kolkata").getMinutes()).toBe(30);
+      });
     });
 
     describe("getUTCMinutes", () => {
-      it.todo("returns the minutes in the UTC timezone");
+      it("returns the minutes in the UTC timezone", () => {
+        expect(new TZDate("America/New_York").getUTCMinutes()).toBe(0);
+        expect(new TZDate("Asia/Kolkata").getUTCMinutes()).toBe(0);
+      });
     });
 
     describe("setMinutes", () => {
@@ -230,10 +236,11 @@ describe("TZDate", () => {
 
       it("allows to overflow the seconds into the future", () => {
         {
-          const date = new TZDate(
-            "America/New_York",
-            +new Date(2020, 0, 1, 13 /* 13 = New York (-5) + Singapore (+8) */)
-          );
+          const nativeDate = new Date(2020, 0, 1);
+          // Sets the date to midnight in New York
+          // 13 = New York (-5) -> Singapore (+8)
+          nativeDate.setHours(13);
+          const date = new TZDate("America/New_York", +nativeDate);
           // 2020-01-01 -> 2020-05-01
           const days = 31 + 29 + 31 + 30;
           const ms = days * 24 * 60 * 60 * 1000;
@@ -243,7 +250,49 @@ describe("TZDate", () => {
           expect(date.getHours()).toBe(1);
         }
         {
-          // [TODO] More timezones
+          const nativeDate = new Date(2015, 7 /* August */, 1);
+          // Sets the date to midnight Pyongyang:
+          // -1 = Singapore (+8) <- Pyongyang (+9)
+          nativeDate.setHours(-1);
+          const date = new TZDate("Asia/Pyongyang", +nativeDate);
+          // 2015-08-01 -> 2015-09-01
+          const ms = 31 * 24 * 60 * 60 * 1000;
+          date.setMilliseconds(ms);
+          expect(date.getMonth()).toBe(7);
+          expect(date.getDate()).toBe(31);
+          expect(date.getHours()).toBe(23);
+          expect(date.getMinutes()).toBe(30);
+        }
+      });
+
+      it("allows to overflow the seconds into the past", () => {
+        {
+          const nativeDate = new Date(2020, 4, 1);
+          // Sets the date to midnight in New York:
+          // 12 = New York (-4) -> Singapore (+8)
+          nativeDate.setHours(12);
+          const date = new TZDate("America/New_York", +nativeDate);
+          // 2020-01-01 <- 2020-05-01
+          const days = 31 + 29 + 31 + 30;
+          const ms = -days * 24 * 60 * 60 * 1000;
+          date.setMilliseconds(ms);
+          expect(date.getMonth()).toBe(11);
+          expect(date.getDate()).toBe(31);
+          expect(date.getHours()).toBe(23);
+        }
+        {
+          const nativeDate = new Date(2015, 8 /* September */, 1);
+          // Sets the date to midnight Pyongyang:
+          // -0.5 = Singapore (+8) <- Pyongyang (+8.5)
+          nativeDate.setMinutes(-30);
+          const date = new TZDate("Asia/Pyongyang", +nativeDate);
+          // 2015-08-01 <- 2015-09-01
+          const ms = -31 * 24 * 60 * 60 * 1000;
+          date.setMilliseconds(ms);
+          expect(date.getMonth()).toBe(7);
+          expect(date.getDate()).toBe(1);
+          expect(date.getHours()).toBe(0);
+          expect(date.getMinutes()).toBe(30);
         }
       });
     });

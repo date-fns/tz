@@ -16,24 +16,24 @@ export class TZDate extends Date {
     this.sync();
   }
 
-  getDate() {
-    return this.internal.getUTCDate();
-  }
-
   getFullYear(): number {
     return this.internal.getUTCFullYear();
-  }
-
-  getHours(): number {
-    return this.internal.getUTCHours();
   }
 
   getMonth(): number {
     return this.internal.getUTCMonth();
   }
 
-  getTimezoneOffset(): number {
-    return tzOffset(this.timeZone, this);
+  getDate() {
+    return this.internal.getUTCDate();
+  }
+
+  getHours(): number {
+    return this.internal.getUTCHours();
+  }
+
+  getMinutes(): number {
+    return this.internal.getUTCMinutes();
   }
 
   setMilliseconds(ms: number): number {
@@ -46,10 +46,15 @@ export class TZDate extends Date {
     return new TZDate(timeZone, +this);
   }
 
+  getTimezoneOffset(): number {
+    return tzOffset(this.timeZone, this);
+  }
+
   private sync() {
-    const offset = tzOffset(this.timeZone, this);
     this.internal = new Date(+this);
-    this.internal.setUTCMinutes(this.internal.getUTCMinutes() + offset);
+    this.internal.setUTCMinutes(
+      this.internal.getUTCMinutes() + this.getTimezoneOffset()
+    );
   }
 }
 
