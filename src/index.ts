@@ -90,6 +90,36 @@ export class TZDate extends Date {
     )})`;
   }
 
+  toLocaleString(
+    locales?: Intl.LocalesArgument,
+    options?: Intl.DateTimeFormatOptions
+  ): string {
+    return Date.prototype.toLocaleString.call(this, locales, {
+      ...options,
+      timeZone: options?.timeZone || this.timeZone,
+    });
+  }
+
+  toLocaleDateString(
+    locales?: Intl.LocalesArgument,
+    options?: Omit<Intl.DateTimeFormatOptions, "timeStyle">
+  ): string {
+    return Date.prototype.toLocaleDateString.call(this, locales, {
+      ...options,
+      timeZone: options?.timeZone || this.timeZone,
+    });
+  }
+
+  toLocaleTimeString(
+    locales?: Intl.LocalesArgument,
+    options?: Omit<Intl.DateTimeFormatOptions, "dateStyle">
+  ): string {
+    return Date.prototype.toLocaleTimeString.call(this, locales, {
+      ...options,
+      timeZone: options?.timeZone || this.timeZone,
+    });
+  }
+
   //#endregion
 
   //#region private
