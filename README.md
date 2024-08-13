@@ -10,6 +10,7 @@ Here's the core `TZDate` class progress:
 - [ ] All functions are time-zone-aware
 - [ ] The DST hour is correctly handled
 - [ ] UTCDate-like mini/complete versions
+- [ ] Optimize the build size
 
 Overall library progress:
 

@@ -5,24 +5,69 @@ export class TZDate extends Date {
    * Representation of the date values in the timezone. It is skewed by
    * the timezone offset.
    */
-  // @ts-expect-error: this.sync() sets the value but TypeScript doesn't know
-  // about it.
+
   private internal: Date;
 
   constructor(timeZone?: string, time?: number) {
     super();
     this.setTime(time ?? Date.now());
     this.timeZone = timeZone;
-    this.sync();
+    this.internal = new Date();
+    this.syncToInternal();
   }
+
+  //#region year
 
   getFullYear(): number {
     return this.internal.getUTCFullYear();
   }
 
+  setFullYear(year: number, month?: number, date?: number): number {
+    const args = arguments;
+    // @ts-expect-error: arguments aren't properly typed in TypeScript:
+    // https://github.com/microsoft/TypeScript/issues/57164
+    this.fixInternalDST(() =>
+      Date.prototype.setUTCFullYear.apply(this.internal, args)
+    );
+    this.syncFromInternal();
+    return +this;
+  }
+
+  setUTCFullYear(year: number, month?: number, date?: number): number {
+    const args = arguments;
+    // @ts-expect-error: arguments aren't properly typed in TypeScript:
+    // https://github.com/microsoft/TypeScript/issues/57164
+    this.fixUTCDST(() => Date.prototype.setUTCFullYear.apply(this, args));
+    this.syncToInternal();
+    return +this;
+  }
+
+  //#endregion
+
+  //#region month
+
   getMonth(): number {
     return this.internal.getUTCMonth();
   }
+
+  setMonth(month: number, date?: number): number {
+    // @ts-expect-error: arguments aren't properly typed in TypeScript:
+    // https://github.com/microsoft/TypeScript/issues/57164
+    Date.prototype.setUTCMonth.apply(this.internal, arguments);
+    this.syncFromInternal();
+    return +this;
+  }
+
+  setUTCMonth(month: number, date?: number): number {
+    const args = arguments;
+    // @ts-expect-error: arguments aren't properly typed in TypeScript:
+    // https://github.com/microsoft/TypeScript/issues/57164
+    this.fixUTCDST(() => Date.prototype.setUTCMonth.apply(this, args));
+    this.syncToInternal();
+    return +this;
+  }
+
+  //#endregion
 
   getDate() {
     return this.internal.getUTCDate();
@@ -38,8 +83,8 @@ export class TZDate extends Date {
 
   setMilliseconds(ms: number): number {
     Date.prototype.setUTCMilliseconds.call(this, ms);
-    this.sync();
-    return this.internal.getUTCMilliseconds();
+    this.syncToInternal();
+    return +this;
   }
 
   setUTCMilliseconds(ms: number): number {
@@ -61,7 +106,6 @@ export class TZDate extends Date {
   //#region representation
 
   toISOString(): string {
-    const offset = this.getTimezoneOffset();
     const [sign, hours, minutes] = this.tzComponents();
     const tz = `${sign}${hours}:${minutes}`;
     return this.internal.toISOString().slice(0, -1) + tz;
@@ -132,11 +176,39 @@ export class TZDate extends Date {
     return [sign, hours, minutes];
   }
 
-  private sync() {
-    this.internal = new Date(+this);
+  private syncToInternal() {
+    this.internal.setTime(+this);
     this.internal.setUTCMinutes(
       this.internal.getUTCMinutes() - this.getTimezoneOffset()
     );
+  }
+
+  private syncFromInternal() {
+    this.setTime(+this.internal);
+    this.setUTCMinutes(this.getUTCMinutes() + this.getTimezoneOffset());
+  }
+
+  private fixInternalDST(update: Function) {
+    const offset = tzOffset(this.timeZone, this.internal);
+    const localOffset = -this.internal.getTimezoneOffset();
+    update();
+    const newOffset = tzOffset(this.timeZone, this.internal);
+    const newLocalOffset = -this.internal.getTimezoneOffset();
+    console.log(
+      `TZ: ${offset} -> ${newOffset} / Local: ${localOffset} -> ${newLocalOffset}`
+    );
+    // const diff = newOffset - newOffset;
+    // if (diff)
+    //   Date.prototype.setUTCMinutes.call(this, this.getUTCMinutes() - diff);
+  }
+
+  private fixUTCDST(update: Function) {
+    const offset = tzOffset(this.timeZone, this);
+    update();
+    const newOffset = tzOffset(this.timeZone, this);
+    const diff = newOffset - offset;
+    if (diff)
+      Date.prototype.setUTCMinutes.call(this, this.getUTCMinutes() - diff);
   }
 
   //#endregion
