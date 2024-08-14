@@ -6,6 +6,7 @@ Here's the core `TZDate` class progress:
 
 - [x] PoC with underlying algorithms
 - [x] Add all `Date` methods
+- [ ] Make date-fns work with `TZDate`
 - [ ] Static methods
 - [ ] All functions are time-zone-aware
 - [ ] The DST hour is correctly handled
