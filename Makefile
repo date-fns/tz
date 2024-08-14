@@ -21,7 +21,6 @@ build: prepare-build
 	@node copy.mjs
 	@rm -rf lib/types.*js
 	@make build-mts
-	@rm lib/types.d.mts
 	
 build-mts:
 	@find lib -name '*.d.ts' | while read file; do \
