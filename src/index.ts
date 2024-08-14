@@ -67,17 +67,101 @@ export class TZDate extends Date {
 
   //#endregion
 
+  //#region date
+
   getDate() {
     return this.internal.getUTCDate();
   }
+
+  setDate(date: number): number {
+    Date.prototype.setUTCDate.call(this.internal, date);
+    this.syncFromInternal();
+    return +this;
+  }
+
+  setUTCDate(date: number): number {
+    this.fixDST(() => Date.prototype.setUTCDate.call(this, date));
+    this.syncToInternal();
+    return +this;
+  }
+
+  //#endregion
+
+  //#region hours
 
   getHours(): number {
     return this.internal.getUTCHours();
   }
 
+  setHours(hours: number, min?: number, sec?: number, ms?: number): number {
+    const args = arguments;
+    // @ts-expect-error: arguments aren't properly typed in TypeScript:
+    // https://github.com/microsoft/TypeScript/issues/57164
+    Date.prototype.setUTCHours.apply(this.internal, args);
+    this.syncFromInternal();
+    return +this;
+  }
+
+  setUTCHours(hours: number, min?: number, sec?: number, ms?: number): number {
+    const args = arguments;
+    // @ts-expect-error: arguments aren't properly typed in TypeScript:
+    // https://github.com/microsoft/TypeScript/issues/57164
+    Date.prototype.setUTCHours.apply(this, args);
+    this.syncToInternal();
+    return +this;
+  }
+
+  //#endregion
+
+  //#region minutes
+
   getMinutes(): number {
     return this.internal.getUTCMinutes();
   }
+
+  setMinutes(min: number, sec?: number, ms?: number): number {
+    const args = arguments;
+    // @ts-expect-error: arguments aren't properly typed in TypeScript:
+    // https://github.com/microsoft/TypeScript/issues/57164
+    Date.prototype.setUTCMinutes.apply(this.internal, args);
+    this.syncFromInternal();
+    return +this;
+  }
+
+  setUTCMinutes(min: number, sec?: number, ms?: number): number {
+    const args = arguments;
+    // @ts-expect-error: arguments aren't properly typed in TypeScript:
+    // https://github.com/microsoft/TypeScript/issues/57164
+    Date.prototype.setUTCMinutes.apply(this, args);
+    this.syncToInternal();
+    return +this;
+  }
+
+  //#endregion
+
+  //#region seconds
+
+  setSeconds(sec: number, ms?: number): number {
+    const args = arguments;
+    // @ts-expect-error: arguments aren't properly typed in TypeScript:
+    // https://github.com/microsoft/TypeScript/issues/57164
+    Date.prototype.setUTCSeconds.apply(this.internal, args);
+    this.syncFromInternal();
+    return +this;
+  }
+
+  setUTCSeconds(sec: number, ms?: number): number {
+    const args = arguments;
+    // @ts-expect-error: arguments aren't properly typed in TypeScript:
+    // https://github.com/microsoft/TypeScript/issues/57164
+    Date.prototype.setUTCSeconds.apply(this, args);
+    this.syncToInternal();
+    return +this;
+  }
+
+  //#endregion
+
+  //#region milliseconds
 
   setMilliseconds(ms: number): number {
     Date.prototype.setUTCMilliseconds.call(this, ms);
@@ -86,8 +170,12 @@ export class TZDate extends Date {
   }
 
   setUTCMilliseconds(ms: number): number {
-    return this.setMilliseconds(ms);
+    Date.prototype.setUTCMilliseconds.call(this, ms);
+    this.syncToInternal();
+    return +this;
   }
+
+  //#endregion
 
   //#region time zone
 

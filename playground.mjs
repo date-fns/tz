@@ -58,14 +58,67 @@ handle("setUTCMonth", -18, -60);
 
 console.log();
 console.log("************************************");
-console.log("************ setUTCDate ****&*******");
+console.log("************ setUTCDate ************");
 console.log("************************************");
 console.log();
 
 handle("setUTCDate", 11);
 
-handle("setUTCDate", 1045);
+handle("setUTCDate", 945);
 handle("setUTCDate", -60);
+
+console.log();
+console.log("------------------------------------");
+console.log("--------------- time ---------------");
+console.log("------------------------------------");
+console.log();
+
+console.log();
+console.log("************************************");
+console.log("************ setUTCHours ***********");
+console.log("************************************");
+console.log();
+
+handle("setUTCHours", 12);
+handle("setUTCHours", 12, 34, 56, 789);
+
+handle("setUTCHours", 30, 120, 120, 30000);
+handle("setUTCHours", -30, -120, -120, -30000);
+
+console.log();
+console.log("************************************");
+console.log("*********** setUTCMinutes **********");
+console.log("************************************");
+console.log();
+
+handle("setUTCMinutes", 34);
+handle("setUTCMinutes", 34, 56, 789);
+
+handle("setUTCMinutes", 120, 120, 30000);
+handle("setUTCMinutes", -120, -120, -30000);
+
+console.log();
+console.log("************************************");
+console.log("*********** setUTCSeconds **********");
+console.log("************************************");
+console.log();
+
+handle("setUTCSeconds", 56);
+handle("setUTCSeconds", 56, 789);
+
+handle("setUTCSeconds", 120, 30000);
+handle("setUTCSeconds", -120, -30000);
+
+console.log();
+console.log("************************************");
+console.log("******** setUTCMilliseconds ********");
+console.log("************************************");
+console.log();
+
+handle("setUTCMilliseconds", 789);
+
+handle("setUTCMilliseconds", 30000);
+handle("setUTCMilliseconds", -30000);
 
 function print(date) {
   console.log(`${format(date)} / ${date.toISOString()} (UTC)`);

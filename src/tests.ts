@@ -121,19 +121,6 @@ describe("TZDate", () => {
         expect(date.setFullYear(2020)).toBe(+date);
       });
 
-      it("allows to set the month", () => {
-        {
-          const date = tzDate("Asia/Singapore", 2020, 0, 1);
-          date.setFullYear(2021, 1);
-          expect(date.toISOString()).toBe("2021-02-01T00:00:00.000+08:00");
-        }
-        {
-          const date = tzDate("America/New_York", 2020, 0, 1);
-          date.setFullYear(2021, 1);
-          expect(date.toISOString()).toBe("2021-02-01T00:00:00.000-05:00");
-        }
-      });
-
       it("allows to set the month and date", () => {
         {
           const date = tzDate("Asia/Singapore", 2020, 0, 1);
@@ -147,33 +134,7 @@ describe("TZDate", () => {
         }
       });
 
-      it("allows to overflow the month into the future", () => {
-        {
-          const date = tzDate("Asia/Singapore", 2020, 0, 1);
-          date.setFullYear(2021, 15);
-          expect(date.toISOString()).toBe("2022-04-01T00:00:00.000+08:00");
-        }
-        {
-          const date = tzDate("America/New_York", 2020, 0, 1);
-          date.setFullYear(2021, 15);
-          expect(date.toISOString()).toBe("2022-04-01T00:00:00.000-04:00");
-        }
-      });
-
-      it("allows to overflow the month into the past", () => {
-        {
-          const date = tzDate("Asia/Singapore", 2020, 0, 1);
-          date.setFullYear(2021, -18);
-          expect(date.toISOString()).toBe("2019-07-01T00:00:00.000+08:00");
-        }
-        {
-          const date = tzDate("America/New_York", 2020, 0, 1);
-          date.setFullYear(2021, -18);
-          expect(date.toISOString()).toBe("2019-07-01T00:00:00.000-04:00");
-        }
-      });
-
-      it("allows to overflow the month and date into the future", () => {
+      it("allows to overflow into the future", () => {
         {
           const date = tzDate("Asia/Singapore", 2020, 0, 1);
           date.setFullYear(2021, 15, 45);
@@ -186,7 +147,7 @@ describe("TZDate", () => {
         }
       });
 
-      it("allows to overflow the month and date into the past", () => {
+      it("allows to overflow into the past", () => {
         {
           const date = tzDate("Asia/Singapore", 2020, 0, 1);
           date.setFullYear(2021, -15, -15);
@@ -223,23 +184,6 @@ describe("TZDate", () => {
         expect(date.setUTCFullYear(2020)).toBe(+date);
       });
 
-      it("allows to set the month", () => {
-        {
-          // 2019-12-31 16:00:00 (UTC) -> ...
-          const date = tzDate("Asia/Singapore", 2020, 0, 1);
-          // ... -> 2020-01-31 16:00:00 (UTC) -> ...
-          date.setUTCFullYear(2020, 0);
-          expect(date.toISOString()).toBe("2020-02-01T00:00:00.000+08:00");
-        }
-        {
-          // 2020-01-01 05:00:00 (UTC) -> ...
-          const date = tzDate("America/New_York", 2020, 0, 1);
-          // ... -> 2020-01-01 05:00:00 (UTC) -> ...
-          date.setUTCFullYear(2020, 0);
-          expect(date.toISOString()).toBe("2020-01-01T00:00:00.000-05:00");
-        }
-      });
-
       it("allows to set the month and date", () => {
         {
           // 2019-12-31 16:00:00 (UTC) -> ...
@@ -257,41 +201,7 @@ describe("TZDate", () => {
         }
       });
 
-      it("allows to overflow the month into the future", () => {
-        {
-          // 2019-12-31 16:00:00 (UTC) -> ...
-          const date = tzDate("Asia/Singapore", 2020, 0, 1);
-          // ... -> 2024-01-31 16:00:00 (UTC) -> ...
-          date.setUTCFullYear(2020, 48);
-          expect(date.toISOString()).toBe("2024-02-01T00:00:00.000+08:00");
-        }
-        {
-          // 2020-01-01 05:00:00 (UTC) -> ...
-          const date = tzDate("America/New_York", 2020, 0, 1);
-          // ... -> 2024-01-01 05:00:00 (UTC) -> ...
-          date.setUTCFullYear(2020, 48);
-          expect(date.toISOString()).toBe("2024-01-01T00:00:00.000-05:00");
-        }
-      });
-
-      it("allows to overflow the month into the past", () => {
-        {
-          // 2019-12-31 16:00:00 (UTC) -> ...
-          const date = tzDate("Asia/Singapore", 2020, 0, 1);
-          // ... -> 2021-03-31 16:00:00 (UTC) -> ...
-          date.setUTCFullYear(2020, -8);
-          expect(date.toISOString()).toBe("2019-06-01T00:00:00.000+08:00");
-        }
-        {
-          // 2020-01-01 05:00:00 (UTC) -> ...
-          const date = tzDate("America/New_York", 2020, 0, 1);
-          // ... -> 2019-05-31 16:00:00 (UTC) -> ...
-          date.setUTCFullYear(2020, -8);
-          expect(date.toISOString()).toBe("2019-05-01T00:00:00.000-04:00");
-        }
-      });
-
-      it("allows to overflow the month and date into the future", () => {
+      it("allows to overflow into the future", () => {
         {
           // 2019-12-31 16:00:00 (UTC) -> ...
           const date = tzDate("Asia/Singapore", 2020, 0, 1);
@@ -308,7 +218,7 @@ describe("TZDate", () => {
         }
       });
 
-      it("allows to overflow the month and date into the past", () => {
+      it("allows to overflow into the past", () => {
         {
           // 2019-12-31 16:00:00 (UTC) -> ...
           const date = tzDate("Asia/Singapore", 2020, 0, 1);
@@ -374,33 +284,7 @@ describe("TZDate", () => {
         }
       });
 
-      it("allows to overflow the month into the future", () => {
-        {
-          const date = tzDate("Asia/Singapore", 2020, 0, 1);
-          date.setMonth(15);
-          expect(date.toISOString()).toBe("2021-04-01T00:00:00.000+08:00");
-        }
-        {
-          const date = tzDate("America/New_York", 2020, 0, 1);
-          date.setMonth(15);
-          expect(date.toISOString()).toBe("2021-04-01T00:00:00.000-04:00");
-        }
-      });
-
-      it("allows to overflow the month into the past", () => {
-        {
-          const date = tzDate("Asia/Singapore", 2020, 0, 1);
-          date.setMonth(-18);
-          expect(date.toISOString()).toBe("2018-07-01T00:00:00.000+08:00");
-        }
-        {
-          const date = tzDate("America/New_York", 2020, 0, 1);
-          date.setMonth(-18);
-          expect(date.toISOString()).toBe("2018-07-01T00:00:00.000-04:00");
-        }
-      });
-
-      it("allows to overflow the month and date into the future", () => {
+      it("allows to overflow into the future", () => {
         {
           const date = tzDate("Asia/Singapore", 2020, 0, 1);
           date.setMonth(15, 45);
@@ -413,7 +297,7 @@ describe("TZDate", () => {
         }
       });
 
-      it("allows to overflow the month and date into the past", () => {
+      it("allows to overflow into the past", () => {
         {
           const date = tzDate("Asia/Singapore", 2020, 0, 1);
           date.setMonth(-15, -150);
@@ -467,41 +351,7 @@ describe("TZDate", () => {
         }
       });
 
-      it("allows to overflow the month into the future", () => {
-        {
-          // 2019-12-31 16:00:00 (UTC) -> ...
-          const date = tzDate("Asia/Singapore", 2020, 0, 1);
-          // ... -> 2023-01-31 16:00:00 (UTC) -> ...
-          date.setUTCMonth(48);
-          expect(date.toISOString()).toBe("2023-02-01T00:00:00.000+08:00");
-        }
-        {
-          // 2020-01-01 05:00:00 (UTC) -> ...
-          const date = tzDate("America/New_York", 2020, 0, 1);
-          // ... -> 2024-01-01 05:00:00 (UTC) -> ...
-          date.setUTCMonth(48);
-          expect(date.toISOString()).toBe("2024-01-01T00:00:00.000-05:00");
-        }
-      });
-
-      it("allows to overflow the month into the past", () => {
-        {
-          // 2019-12-31 16:00:00 (UTC) -> ...
-          const date = tzDate("Asia/Singapore", 2020, 0, 1);
-          // ... -> 2017-07-31 16:00:00 (UTC) -> ...
-          date.setUTCMonth(-18);
-          expect(date.toISOString()).toBe("2017-08-01T00:00:00.000+08:00");
-        }
-        {
-          // 2020-01-01 05:00:00 (UTC) -> ...
-          const date = tzDate("America/New_York", 2020, 0, 1);
-          // ... -> 2018-07-01 05:00:00 (UTC) -> ...
-          date.setUTCMonth(-18);
-          expect(date.toISOString()).toBe("2018-07-01T00:00:00.000-04:00");
-        }
-      });
-
-      it("allows to overflow the month and date into the future", () => {
+      it("allows to overflow into the future", () => {
         {
           // 2019-12-31 16:00:00 (UTC) -> ...
           const date = tzDate("Asia/Singapore", 2020, 0, 1);
@@ -518,7 +368,7 @@ describe("TZDate", () => {
         }
       });
 
-      it("allows to overflow the month and date into the past", () => {
+      it("allows to overflow into the past", () => {
         {
           // 2019-12-31 16:00:00 (UTC) -> ...
           const date = tzDate("Asia/Singapore", 2020, 0, 1);
@@ -557,11 +407,107 @@ describe("TZDate", () => {
     });
 
     describe("setDate", () => {
-      it.todo("sets the date in the timezone");
+      it("sets the date in the timezone", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setDate(2);
+          expect(date.toISOString()).toBe("2020-01-02T00:00:00.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setDate(2);
+          expect(date.toISOString()).toBe("2020-01-02T00:00:00.000-05:00");
+        }
+      });
+
+      it("returns the timestamp after setting", () => {
+        const date = new TZDate("America/New_York");
+        expect(date.setDate(2)).toBe(+date);
+      });
+
+      it("allows to overflow the month into the future", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setDate(92);
+          expect(date.toISOString()).toBe("2020-04-01T00:00:00.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setDate(92);
+          expect(date.toISOString()).toBe("2020-04-01T00:00:00.000-04:00");
+        }
+      });
+
+      it("allows to overflow the month into the past", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setDate(-15);
+          expect(date.toISOString()).toBe("2019-12-16T00:00:00.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setDate(-15);
+          expect(date.toISOString()).toBe("2019-12-16T00:00:00.000-05:00");
+        }
+      });
     });
 
     describe("setUTCDate", () => {
-      it.todo("sets the date in the UTC timezone");
+      it("sets the date in the UTC timezone", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-11 16:00:00 (UTC) ->
+          date.setUTCDate(11);
+          expect(date.toISOString()).toBe("2019-12-12T00:00:00.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-11 05:00:00 (UTC) ->
+          date.setUTCDate(11);
+          expect(date.toISOString()).toBe("2020-01-11T00:00:00.000-05:00");
+        }
+      });
+
+      it("returns the timestamp after setting", () => {
+        const date = new TZDate("America/New_York");
+        expect(date.setUTCDate(2)).toBe(+date);
+      });
+
+      it("allows to overflow into the future", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2022-07-02 16:00:00 (UTC) ->
+          date.setUTCDate(945);
+          expect(date.toISOString()).toBe("2022-07-03T00:00:00.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2022-08-02 05:00:00 (UTC) ->
+          date.setUTCDate(945);
+          expect(date.toISOString()).toBe("2022-08-02T00:00:00.000-04:00");
+        }
+      });
+
+      it("allows to overflow into the past", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-10-01 16:00:00 (UTC) ->
+          date.setUTCDate(-60);
+          expect(date.toISOString()).toBe("2019-10-02T00:00:00.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2019-11-01 05:00:00 (UTC) ->
+          date.setUTCDate(-60);
+          expect(date.toISOString()).toBe("2019-11-01T00:00:00.000-04:00");
+        }
+      });
     });
   });
 
@@ -595,11 +541,145 @@ describe("TZDate", () => {
     });
 
     describe("setHours", () => {
-      it.todo("sets the hours in the timezone");
+      it("sets the hours in the timezone", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setHours(14);
+          expect(date.toISOString()).toBe("2020-01-01T14:00:00.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setDate(14);
+          expect(date.toISOString()).toBe("2020-01-14T00:00:00.000-05:00");
+        }
+      });
+
+      it("returns the timestamp after setting", () => {
+        const date = new TZDate("America/New_York");
+        expect(date.setHours(14)).toBe(+date);
+      });
+
+      it("allows to set hours, minutes, seconds and milliseconds", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setHours(14, 30, 45, 987);
+          expect(date.toISOString()).toBe("2020-01-01T14:30:45.987+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setHours(14, 30, 45, 987);
+          expect(date.toISOString()).toBe("2020-01-01T14:30:45.987-05:00");
+        }
+      });
+
+      it("allows to overflow the date into the future", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setHours(30, 120, 120, 30000);
+          // 30 hours + 120 minutes (2 hours) + 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 1 day + 08:02:30
+          expect(date.toISOString()).toBe("2020-01-02T08:02:30.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setHours(30, 120, 120, 30000);
+          // 30 hours + 120 minutes (2 hours) + 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 1 day + 08:02:30
+          expect(date.toISOString()).toBe("2020-01-02T08:02:30.000-05:00");
+        }
+      });
+
+      it("allows to overflow the date into the past", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setHours(-30, -120, -120, -30000);
+          // 30 hours + 120 minutes (2 hours) + 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 1 day + 08:02:30
+          expect(date.toISOString()).toBe("2019-12-30T15:57:30.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setHours(-30, -120, -120, -30000);
+          // 30 hours + 120 minutes (2 hours) + 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 1 day + 08:02:30
+          expect(date.toISOString()).toBe("2019-12-30T15:57:30.000-05:00");
+        }
+      });
     });
 
     describe("setUTCHours", () => {
-      it.todo("sets the hours in the UTC timezone");
+      it("sets the hours in the UTC timezone", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31 12:00:00 (UTC) ->
+          date.setUTCHours(12);
+          expect(date.toISOString()).toBe("2019-12-31T20:00:00.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01 12:00:00 (UTC) ->
+          date.setUTCHours(12);
+          expect(date.toISOString()).toBe("2020-01-01T07:00:00.000-05:00");
+        }
+      });
+
+      it("returns the timestamp after setting", () => {
+        const date = new TZDate("America/New_York");
+        expect(date.setUTCHours(14)).toBe(+date);
+      });
+
+      it("allows to set hours, minutes, seconds and milliseconds", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31T12:34:56.789Z (UTC) ->
+          date.setUTCHours(12, 34, 56, 789);
+          expect(date.toISOString()).toBe("2019-12-31T20:34:56.789+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01T12:34:56.789Z (UTC) ->
+          date.setUTCHours(12, 34, 56, 789);
+          expect(date.toISOString()).toBe("2020-01-01T07:34:56.789-05:00");
+        }
+      });
+
+      it("allows to overflow the date into the future", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2020-01-01 08:02:30 (UTC) ->
+          date.setUTCHours(30, 120, 120, 30000);
+          expect(date.toISOString()).toBe("2020-01-01T16:02:30.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-02 08:02:30 (UTC) ->
+          date.setUTCHours(30, 120, 120, 30000);
+          expect(date.toISOString()).toBe("2020-01-02T03:02:30.000-05:00");
+        }
+      });
+
+      it("allows to overflow the date into the past", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-29 15:57:30 (UTC) ->
+          date.setUTCHours(-30, -120, -120, -30000);
+          expect(date.toISOString()).toBe("2019-12-29T23:57:30.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2019-12-30 15:57:30 (UTC) ->
+          date.setUTCHours(-30, -120, -120, -30000);
+          expect(date.toISOString()).toBe("2019-12-30T10:57:30.000-05:00");
+        }
+      });
     });
   });
 
@@ -623,11 +703,145 @@ describe("TZDate", () => {
     });
 
     describe("setMinutes", () => {
-      it.todo("sets the minutes in the timezone");
+      it("sets the minutes in the timezone", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setMinutes(30);
+          expect(date.toISOString()).toBe("2020-01-01T00:30:00.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setMinutes(30);
+          expect(date.toISOString()).toBe("2020-01-01T00:30:00.000-05:00");
+        }
+      });
+
+      it("returns the timestamp after setting", () => {
+        const date = new TZDate("America/New_York");
+        expect(date.setMinutes(30)).toBe(+date);
+      });
+
+      it("allows to set minutes, seconds and milliseconds", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setMinutes(30, 45, 987);
+          expect(date.toISOString()).toBe("2020-01-01T00:30:45.987+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setMinutes(30, 45, 987);
+          expect(date.toISOString()).toBe("2020-01-01T00:30:45.987-05:00");
+        }
+      });
+
+      it("allows to overflow the hours into the future", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setMinutes(120, 120, 30000);
+          // 120 minutes (2 hours) + 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 02:02:30
+          expect(date.toISOString()).toBe("2020-01-01T02:02:30.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setMinutes(120, 120, 30000);
+          // 120 minutes (2 hours) + 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 02:02:30
+          expect(date.toISOString()).toBe("2020-01-01T02:02:30.000-05:00");
+        }
+      });
+
+      it("allows to overflow the hours into the past", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setMinutes(-120, -120, -30000);
+          // 120 minutes (2 hours) + 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 02:02:30
+          expect(date.toISOString()).toBe("2019-12-31T21:57:30.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setMinutes(-120, -120, -30000);
+          // 120 minutes (2 hours) + 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 02:02:30
+          expect(date.toISOString()).toBe("2019-12-31T21:57:30.000-05:00");
+        }
+      });
     });
 
     describe("setUTCMinutes", () => {
-      it.todo("sets the minutes in the UTC timezone");
+      it("sets the minutes in the UTC timezone", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31 16:34:00 (UTC) ->
+          date.setUTCMinutes(34);
+          expect(date.toISOString()).toBe("2020-01-01T00:34:00.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01 05:34:00 (UTC) ->
+          date.setUTCMinutes(34);
+          expect(date.toISOString()).toBe("2020-01-01T00:34:00.000-05:00");
+        }
+      });
+
+      it("returns the timestamp after setting", () => {
+        const date = new TZDate("America/New_York");
+        expect(date.setUTCMinutes(30)).toBe(+date);
+      });
+
+      it("allows to set minutes, seconds and milliseconds", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31 16:34:56 (UTC) ->
+          date.setUTCMinutes(34, 56, 789);
+          expect(date.toISOString()).toBe("2020-01-01T00:34:56.789+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01 05:34:56 (UTC) ->
+          date.setUTCMinutes(34, 56, 789);
+          expect(date.toISOString()).toBe("2020-01-01T00:34:56.789-05:00");
+        }
+      });
+
+      it("allows to overflow the hours into the future", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31 18:02:30 (UTC) ->
+          date.setUTCMinutes(120, 120, 30000);
+          expect(date.toISOString()).toBe("2020-01-01T02:02:30.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01 07:02:30 (UTC) ->
+          date.setUTCMinutes(120, 120, 30000);
+          expect(date.toISOString()).toBe("2020-01-01T02:02:30.000-05:00");
+        }
+      });
+
+      it("allows to overflow the hours into the past", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31 13:57:30 (UTC) ->
+          date.setUTCMinutes(-120, -120, -30000);
+          expect(date.toISOString()).toBe("2019-12-31T21:57:30.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01 02:57:30 (UTC) ->
+          date.setUTCMinutes(-120, -120, -30000);
+          expect(date.toISOString()).toBe("2019-12-31T21:57:30.000-05:00");
+        }
+      });
     });
   });
 
@@ -651,11 +865,145 @@ describe("TZDate", () => {
     });
 
     describe("setSeconds", () => {
-      it.todo("sets the seconds in the timezone");
+      it("sets the seconds in the timezone", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setSeconds(56);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:56.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setSeconds(56);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:56.000-05:00");
+        }
+      });
+
+      it("returns the timestamp after setting", () => {
+        const date = new TZDate("America/New_York");
+        expect(date.setSeconds(56)).toBe(+date);
+      });
+
+      it("allows to set seconds and milliseconds", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setSeconds(56, 987);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:56.987+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setSeconds(56, 987);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:56.987-05:00");
+        }
+      });
+
+      it("allows to overflow the minutes into the future", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setSeconds(120, 30000);
+          // 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 02:30
+          expect(date.toISOString()).toBe("2020-01-01T00:02:30.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setSeconds(120, 30000);
+          // 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 02:30
+          expect(date.toISOString()).toBe("2020-01-01T00:02:30.000-05:00");
+        }
+      });
+
+      it("allows to overflow the minutes into the past", () => {
+        {
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setSeconds(-120, -30000);
+          // 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 02:30
+          expect(date.toISOString()).toBe("2019-12-31T23:57:30.000+08:00");
+        }
+        {
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setSeconds(-120, -30000);
+          // 120 seconds (2 minutes) + 30000 ms (30 seconds)
+          // = 02:30
+          expect(date.toISOString()).toBe("2019-12-31T23:57:30.000-05:00");
+        }
+      });
     });
 
     describe("setUTCSeconds", () => {
-      it.todo("sets the seconds in the UTC timezone");
+      it("sets the seconds in the UTC timezone", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31 16:00:56 (UTC) ->
+          date.setUTCSeconds(56);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:56.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01 05:00:56 (UTC) ->
+          date.setUTCSeconds(56);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:56.000-05:00");
+        }
+      });
+
+      it("returns the timestamp after setting", () => {
+        const date = new TZDate("America/New_York");
+        expect(date.setUTCSeconds(56)).toBe(+date);
+      });
+
+      it("allows to set seconds and milliseconds", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31 16:00:56 (UTC) ->
+          date.setUTCSeconds(56, 789);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:56.789+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01 05:00:56 (UTC) ->
+          date.setUTCSeconds(56, 789);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:56.789-05:00");
+        }
+      });
+
+      it("allows to overflow the minutes into the future", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31 16:02:30 (UTC) ->
+          date.setUTCSeconds(120, 30000);
+          expect(date.toISOString()).toBe("2020-01-01T00:02:30.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01 05:02:30 (UTC) ->
+          date.setUTCSeconds(120, 30000);
+          expect(date.toISOString()).toBe("2020-01-01T00:02:30.000-05:00");
+        }
+      });
+
+      it("allows to overflow the minutes into the past", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31 15:57:30 (UTC) ->
+          date.setUTCSeconds(-120, -30000);
+          expect(date.toISOString()).toBe("2019-12-31T23:57:30.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01 04:57:30 (UTC) ->
+          date.setUTCSeconds(-120, -30000);
+          expect(date.toISOString()).toBe("2019-12-31T23:57:30.000-05:00");
+        }
+      });
     });
   });
 
@@ -681,68 +1029,104 @@ describe("TZDate", () => {
     describe("setMilliseconds", () => {
       it("sets the milliseconds in the timezone", () => {
         {
-          const date = new TZDate("America/New_York");
-          date.setMilliseconds(987);
-          expect(date.getMilliseconds()).toBe(987);
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setMilliseconds(789);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:00.789+08:00");
         }
         {
-          const date = new TZDate("Asia/Singapore");
-          date.setMilliseconds(987);
-          expect(date.getMilliseconds()).toBe(987);
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setMilliseconds(789);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:00.789-05:00");
         }
       });
 
       it("returns the timestamp after setting", () => {
         const date = new TZDate("America/New_York");
-        expect(date.setMilliseconds(987)).toBe(+date);
+        expect(date.setMilliseconds(789)).toBe(+date);
       });
 
       it("allows to overflow the seconds into the future", () => {
         {
-          const date = tzDate("America/New_York", 2020, 0, 1);
-          // 2020-01-01 -> 2020-05-01
-          const days = 31 + 29 + 31 + 30;
-          const ms = days * 24 * 60 * 60 * 1000;
-          date.setMilliseconds(ms);
-          expect(date.toISOString()).toBe("2020-05-01T01:00:00.000-04:00");
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setMilliseconds(1000);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:01.000+08:00");
         }
         {
-          const date = tzDate("Asia/Pyongyang", 2015, 7 /* August */, 1);
-          // 2015-08-01 -> 2015-09-01
-          const ms = 31 * 24 * 60 * 60 * 1000;
-          date.setMilliseconds(ms);
-          expect(date.toISOString()).toBe("2015-08-31T23:30:00.000+08:30");
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setMilliseconds(1000);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:01.000-05:00");
         }
       });
 
       it("allows to overflow the seconds into the past", () => {
         {
-          const date = tzDate("America/New_York", 2020, 4, 1);
-          // 2020-01-01 <- 2020-05-01
-          const days = 31 + 29 + 31 + 30;
-          const ms = -days * 24 * 60 * 60 * 1000;
-          date.setMilliseconds(ms);
-          expect(date.toISOString()).toBe("2019-12-31T23:00:00.000-05:00");
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          date.setMilliseconds(-1000);
+          expect(date.toISOString()).toBe("2019-12-31T23:59:59.000+08:00");
         }
         {
-          const date = tzDate("Asia/Pyongyang", 2015, 8 /* September */, 1);
-          // 2015-08-01 <- 2015-09-01
-          const ms = -31 * 24 * 60 * 60 * 1000;
-          date.setMilliseconds(ms);
-          expect(date.toISOString()).toBe("2015-08-01T00:30:00.000+09:00");
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          date.setMilliseconds(-1000);
+          expect(date.toISOString()).toBe("2019-12-31T23:59:59.000-05:00");
         }
       });
     });
 
     describe("setUTCMilliseconds", () => {
-      it("works the same as setMilliseconds", () => {
-        const date = tzDate("America/New_York", 2020, 0, 1);
-        // 2020-01-01 -> 2020-05-01
-        const days = 31 + 29 + 31 + 30;
-        const ms = days * 24 * 60 * 60 * 1000;
-        const result = date.setUTCMilliseconds(ms);
-        expect(result).toBe(+date);
-        expect(date.toISOString()).toBe("2020-05-01T01:00:00.000-04:00");
+      it("sets the milliseconds in the UTC timezone", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31 16:00:00 (UTC) ->
+          date.setUTCMilliseconds(789);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:00.789+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01 05:00:00 (UTC) ->
+          date.setUTCMilliseconds(789);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:00.789-05:00");
+        }
+      });
+
+      it("returns the timestamp after setting", () => {
+        const date = new TZDate("America/New_York");
+        expect(date.setUTCMilliseconds(789)).toBe(+date);
+      });
+
+      it("allows to overflow the seconds into the future", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2019-12-31 16:00:30 (UTC) ->
+          date.setUTCMilliseconds(30000);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:30.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2019-12-31 15:59:30 (UTC) ->
+          date.setUTCMilliseconds(30000);
+          expect(date.toISOString()).toBe("2020-01-01T00:00:30.000-05:00");
+        }
+      });
+
+      it("allows to overflow the seconds into the past", () => {
+        {
+          // 2019-12-31 16:00:00 (UTC) -> ...
+          const date = tzDate("Asia/Singapore", 2020, 0, 1);
+          // ... -> 2020-01-01 04:59:30 (UTC) ->
+          date.setUTCMilliseconds(-30000);
+          expect(date.toISOString()).toBe("2019-12-31T23:59:30.000+08:00");
+        }
+        {
+          // 2020-01-01 05:00:00 (UTC) -> ...
+          const date = tzDate("America/New_York", 2020, 0, 1);
+          // ... -> 2020-01-01 04:59:30 (UTC) ->
+          date.setUTCMilliseconds(-30000);
+          expect(date.toISOString()).toBe("2019-12-31T23:59:30.000-05:00");
+        }
       });
     });
   });
