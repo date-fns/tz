@@ -26,9 +26,7 @@ export class TZDate extends Date {
     const args = arguments;
     // @ts-expect-error: arguments aren't properly typed in TypeScript:
     // https://github.com/microsoft/TypeScript/issues/57164
-    this.fixInternalDST(() =>
-      Date.prototype.setUTCFullYear.apply(this.internal, args)
-    );
+    Date.prototype.setUTCFullYear.apply(this.internal, args);
     this.syncFromInternal();
     return +this;
   }
@@ -37,7 +35,7 @@ export class TZDate extends Date {
     const args = arguments;
     // @ts-expect-error: arguments aren't properly typed in TypeScript:
     // https://github.com/microsoft/TypeScript/issues/57164
-    this.fixUTCDST(() => Date.prototype.setUTCFullYear.apply(this, args));
+    this.fixDST(() => Date.prototype.setUTCFullYear.apply(this, args));
     this.syncToInternal();
     return +this;
   }
@@ -62,7 +60,7 @@ export class TZDate extends Date {
     const args = arguments;
     // @ts-expect-error: arguments aren't properly typed in TypeScript:
     // https://github.com/microsoft/TypeScript/issues/57164
-    this.fixUTCDST(() => Date.prototype.setUTCMonth.apply(this, args));
+    this.fixDST(() => Date.prototype.setUTCMonth.apply(this, args));
     this.syncToInternal();
     return +this;
   }
@@ -188,21 +186,7 @@ export class TZDate extends Date {
     this.setUTCMinutes(this.getUTCMinutes() + this.getTimezoneOffset());
   }
 
-  private fixInternalDST(update: Function) {
-    const offset = tzOffset(this.timeZone, this.internal);
-    const localOffset = -this.internal.getTimezoneOffset();
-    update();
-    const newOffset = tzOffset(this.timeZone, this.internal);
-    const newLocalOffset = -this.internal.getTimezoneOffset();
-    console.log(
-      `TZ: ${offset} -> ${newOffset} / Local: ${localOffset} -> ${newLocalOffset}`
-    );
-    // const diff = newOffset - newOffset;
-    // if (diff)
-    //   Date.prototype.setUTCMinutes.call(this, this.getUTCMinutes() - diff);
-  }
-
-  private fixUTCDST(update: Function) {
+  private fixDST(update: Function) {
     const offset = tzOffset(this.timeZone, this);
     update();
     const newOffset = tzOffset(this.timeZone, this);

@@ -1,6 +1,6 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { TZDate, tzOffset, tzScan } from ".";
 import FakeTimers from "@sinonjs/fake-timers";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { TZDate, tzOffset, tzScan } from ".";
 
 describe("TZDate", () => {
   let timers: FakeTimers.InstalledClock;
@@ -13,9 +13,7 @@ describe("TZDate", () => {
     });
   }
 
-  afterEach(() => {
-    timers?.uninstall();
-  });
+  afterEach(() => timers?.uninstall());
 
   describe("constructor", () => {
     fakeNow();
@@ -825,8 +823,11 @@ describe("TZDate", () => {
           "Wed Jan 01 2020 00:00:00 GMT-0500 (Eastern Standard Time)"
         );
         expect(
-          new TZDate("America/New_York", +new Date(2020, 0, 1)).toString()
-        ).toBe("Tue Dec 31 2019 11:00:00 GMT-0500 (Eastern Standard Time)");
+          new TZDate(
+            "America/New_York",
+            +new Date("2020-01-01T00:00:00.000Z")
+          ).toString()
+        ).toBe("Tue Dec 31 2019 19:00:00 GMT-0500 (Eastern Standard Time)");
         expect(tzDate("America/New_York", 2020, 5, 1).toString()).toBe(
           "Mon Jun 01 2020 00:00:00 GMT-0400 (Eastern Daylight Time)"
         );
@@ -853,8 +854,11 @@ describe("TZDate", () => {
           "00:00:00 GMT-0500 (Eastern Standard Time)"
         );
         expect(
-          new TZDate("America/New_York", +new Date(2020, 0, 1)).toTimeString()
-        ).toBe("11:00:00 GMT-0500 (Eastern Standard Time)");
+          new TZDate(
+            "America/New_York",
+            +new Date("2020-01-01T00:00:00.000Z")
+          ).toTimeString()
+        ).toBe("19:00:00 GMT-0500 (Eastern Standard Time)");
         expect(tzDate("America/New_York", 2020, 5, 1).toTimeString()).toBe(
           "00:00:00 GMT-0400 (Eastern Daylight Time)"
         );
@@ -884,8 +888,11 @@ describe("TZDate", () => {
           "1/1/2020, 12:00:00 AM"
         );
         expect(
-          new TZDate("America/New_York", +new Date(2020, 0, 1)).toLocaleString()
-        ).toBe("12/31/2019, 11:00:00 AM");
+          new TZDate(
+            "America/New_York",
+            +new Date("2020-01-01T00:00:00.000Z")
+          ).toLocaleString()
+        ).toBe("12/31/2019, 7:00:00 PM");
         expect(
           tzDate("America/New_York", 2020, 5, 1).toLocaleString("es-ES", {
             dateStyle: "full",
@@ -895,7 +902,7 @@ describe("TZDate", () => {
         expect(
           new TZDate(
             "America/New_York",
-            +new Date(2020, 0, 1, 10)
+            +new Date("2020-01-01T02:00:00.000Z")
           ).toLocaleString("es-ES", {
             dateStyle: "full",
             timeStyle: "full",
@@ -906,7 +913,7 @@ describe("TZDate", () => {
         expect(
           new TZDate(
             "America/New_York",
-            +new Date(2020, 0, 1, 10)
+            +new Date("2020-01-01T02:00:00.000Z")
           ).toLocaleString("es-ES", {
             dateStyle: "full",
             timeStyle: "full",
@@ -924,7 +931,7 @@ describe("TZDate", () => {
         expect(
           new TZDate(
             "America/New_York",
-            +new Date(2020, 0, 1)
+            +new Date("2020-01-01T00:00:00.000Z")
           ).toLocaleDateString()
         ).toBe("12/31/2019");
         expect(
@@ -935,7 +942,7 @@ describe("TZDate", () => {
         expect(
           new TZDate(
             "America/New_York",
-            +new Date(2020, 0, 1, 10)
+            +new Date("2020-01-01T02:00:00.000Z")
           ).toLocaleDateString("es-ES", {
             dateStyle: "full",
           })
@@ -962,7 +969,7 @@ describe("TZDate", () => {
             "America/New_York",
             +new Date("2020-02-11T00:00:00.000Z")
           ).toLocaleTimeString()
-        ).toBe("11:00:00 AM");
+        ).toBe("7:00:00 PM");
         expect(
           tzDate("America/New_York", 2020, 5, 1).toLocaleTimeString("es-ES", {
             timeStyle: "full",
@@ -971,20 +978,20 @@ describe("TZDate", () => {
         expect(
           new TZDate(
             "America/New_York",
-            +new Date(2020, 0, 1, 10)
+            +new Date("2020-01-01T00:00:00.000Z")
           ).toLocaleTimeString("es-ES", {
             timeStyle: "full",
           })
-        ).toBe("21:00:00 (hora estándar oriental)");
+        ).toBe("19:00:00 (hora estándar oriental)");
         expect(
           new TZDate(
             "America/New_York",
-            +new Date(2020, 0, 1, 10)
+            +new Date("2020-01-01T00:00:00.000Z")
           ).toLocaleTimeString("es-ES", {
             timeStyle: "full",
             timeZone: "Asia/Singapore",
           })
-        ).toBe("10:00:00 (hora de Singapur)");
+        ).toBe("8:00:00 (hora de Singapur)");
       });
     });
   });
