@@ -513,11 +513,21 @@ describe("TZDate", () => {
 
   describe("day", () => {
     describe("getDay", () => {
-      it.todo("returns the day in the timezone");
+      it("returns the day in the timezone", () => {
+        const date = new Date("2020-01-01T00:00:00.000Z");
+        expect(new TZDate("America/New_York", +date).getDay()).toBe(2);
+        expect(new TZDate("Asia/Singapore", +date).getDay()).toBe(3);
+      });
     });
 
     describe("getUTCDay", () => {
-      it.todo("returns the day in the UTC timezone");
+      it("returns the day in the UTC timezone", () => {
+        expect(tzDate("America/New_York", 2020, 0, 1, 0).getUTCDay()).toBe(3);
+        expect(tzDate("Asia/Singapore", 2020, 0, 1, 0).getUTCDay()).toBe(2);
+        const date = new Date("2020-01-01T00:00:00.000Z");
+        expect(new TZDate("America/New_York", +date).getUTCDay()).toBe(3);
+        expect(new TZDate("Asia/Singapore", +date).getUTCDay()).toBe(3);
+      });
     });
   });
 
@@ -1154,17 +1164,33 @@ describe("TZDate", () => {
 
   describe("representation", () => {
     describe("[Symbol.toPrimitive]", () => {
-      it.todo(
-        "returns string representation of the date when the hint is 'string'"
-      );
+      it("returns string representation of the date when the hint is 'string'", () => {
+        expect(
+          tzDate("Asia/Singapore", 2020, 0, 1)[Symbol.toPrimitive]("string")
+        ).toBe("Wed Jan 01 2020 00:00:00 GMT+0800 (Singapore Standard Time)");
+        expect(
+          tzDate("America/New_York", 2020, 0, 1)[Symbol.toPrimitive]("string")
+        ).toBe("Wed Jan 01 2020 00:00:00 GMT-0500 (Eastern Standard Time)");
+      });
 
-      it.todo(
-        "returns string representation of the date when the hint is 'default'"
-      );
+      it("returns string representation of the date when the hint is 'default'", () => {
+        expect(
+          tzDate("Asia/Singapore", 2020, 0, 1)[Symbol.toPrimitive]("default")
+        ).toBe("Wed Jan 01 2020 00:00:00 GMT+0800 (Singapore Standard Time)");
+        expect(
+          tzDate("America/New_York", 2020, 0, 1)[Symbol.toPrimitive]("default")
+        ).toBe("Wed Jan 01 2020 00:00:00 GMT-0500 (Eastern Standard Time)");
+      });
 
-      it.todo(
-        "returns number representation of the date when the hint is 'number'"
-      );
+      it("returns number representation of the date when the hint is 'number'", () => {
+        const date = new Date("2020-01-01T00:00:00.000+08:00");
+        expect(
+          new TZDate("Asia/Singapore", +date)[Symbol.toPrimitive]("number")
+        ).toBe(+date);
+        expect(
+          new TZDate("America/New_York", +date)[Symbol.toPrimitive]("number")
+        ).toBe(+date);
+      });
     });
 
     describe("toISOString", () => {

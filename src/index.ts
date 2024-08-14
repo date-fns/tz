@@ -87,6 +87,14 @@ export class TZDate extends Date {
 
   //#endregion
 
+  //#region day
+
+  getDay() {
+    return this.internal.getUTCDay();
+  }
+
+  //#endregion
+
   //#region hours
 
   getHours(): number {
