@@ -1,6 +1,6 @@
 import FakeTimers from "@sinonjs/fake-timers";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { TZDate, tzOffset, tzScan } from ".";
+import { afterEach, describe, expect, it } from "vitest";
+import { constructFromSymbol, TZDate, tzOffset, tzScan } from ".";
 
 describe("TZDate", () => {
   const defaultDateStr = "1987-02-11T00:00:00.000Z";
@@ -1599,6 +1599,43 @@ describe("TZDate", () => {
           })
         ).toBe("8:00:00 (hora de Singapur)");
       });
+    });
+  });
+
+  describe('[Symbol.for("constructDateFrom")]', () => {
+    it("constructs a new date from value and the instance time zone", () => {
+      const dateStr = "2020-01-01T00:00:00.000Z";
+      const nativeDate = new Date(dateStr);
+      {
+        const date = new TZDate(defaultDateStr, "Asia/Singapore");
+        const result = date[constructFromSymbol](nativeDate);
+        expect(result.toISOString()).toBe("2020-01-01T08:00:00.000+08:00");
+      }
+      {
+        const date = new TZDate(defaultDateStr, "America/New_York");
+        const result = date[constructFromSymbol](nativeDate);
+        expect(result.toISOString()).toBe("2019-12-31T19:00:00.000-05:00");
+      }
+      {
+        const date = new TZDate(defaultDateStr, "Asia/Singapore");
+        const result = date[constructFromSymbol](+nativeDate);
+        expect(result.toISOString()).toBe("2020-01-01T08:00:00.000+08:00");
+      }
+      {
+        const date = new TZDate(defaultDateStr, "America/New_York");
+        const result = date[constructFromSymbol](+nativeDate);
+        expect(result.toISOString()).toBe("2019-12-31T19:00:00.000-05:00");
+      }
+      {
+        const date = new TZDate(defaultDateStr, "Asia/Singapore");
+        const result = date[constructFromSymbol](dateStr);
+        expect(result.toISOString()).toBe("2020-01-01T08:00:00.000+08:00");
+      }
+      {
+        const date = new TZDate(defaultDateStr, "America/New_York");
+        const result = date[constructFromSymbol](dateStr);
+        expect(result.toISOString()).toBe("2019-12-31T19:00:00.000-05:00");
+      }
     });
   });
 });

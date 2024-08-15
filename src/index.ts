@@ -1,3 +1,5 @@
+export const constructFromSymbol = Symbol.for("constructDateFrom");
+
 export class TZDate extends Date {
   //#region static
 
@@ -427,6 +429,14 @@ export class TZDate extends Date {
     const diff = newOffset - offset;
     if (diff)
       Date.prototype.setUTCMinutes.call(this, this.getUTCMinutes() - diff);
+  }
+
+  //#endregion
+
+  //#region date-fns integration
+
+  [constructFromSymbol](date: Date | number | string) {
+    return new TZDate(+new Date(date), this.timeZone);
   }
 
   //#endregion
