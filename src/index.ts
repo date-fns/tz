@@ -1,4 +1,15 @@
 export class TZDate extends Date {
+  //#region static
+
+  static TZ(tz: string, ...args: Parameters<typeof Date>) {
+    return new TZDate(...args, tz);
+  }
+
+  //#endregion
+
+  /**
+   * The current time zone of the date.
+   */
   timeZone: string | undefined;
 
   /**
@@ -8,10 +19,82 @@ export class TZDate extends Date {
 
   private internal: Date;
 
-  constructor(timeZone?: string, time?: number) {
+  constructor();
+
+  constructor(dateStr: string, timeZone?: string);
+
+  constructor(timestamp: number, timeZone?: string);
+
+  constructor(year: number, month: number, timeZone?: string);
+
+  constructor(year: number, month: number, date: number, timeZone?: string);
+
+  constructor(
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    timeZone?: string
+  );
+
+  constructor(
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    minutes: number,
+    timeZone?: string
+  );
+
+  constructor(
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    minutes: number,
+    seconds: number,
+    timeZone?: string
+  );
+
+  constructor(
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    minutes: number,
+    seconds: number,
+    milliseconds: number,
+    timeZone?: string
+  );
+
+  constructor(...args: any[]) {
     super();
-    this.setTime(time ?? Date.now());
-    this.timeZone = timeZone;
+
+    if (args.length > 1 && typeof args[args.length - 1] === "string") {
+      this.timeZone = args.pop();
+    }
+
+    if (!args.length) {
+      this.setTime(Date.now());
+    } else if (
+      typeof args[0] === "number" &&
+      (args.length === 1 || (args.length === 2 && typeof args[1] !== "number"))
+    ) {
+      this.setTime(args[0]);
+    } else if (typeof args[0] === "string") {
+      this.setTime(+new Date(args[0]));
+    } else {
+      this.setTime(+new Date(...(args as Parameters<typeof Date>)));
+      const offset = tzOffset(this.timeZone, this);
+      const localOffset = -new Date(
+        ...(args as Parameters<typeof Date>)
+      ).getTimezoneOffset();
+      Date.prototype.setMinutes.call(
+        this,
+        Date.prototype.getMinutes.call(this) + (localOffset - offset)
+      );
+    }
+
     this.internal = new Date();
     this.syncToInternal();
   }
@@ -188,7 +271,7 @@ export class TZDate extends Date {
   //#region time zone
 
   withTimeZone(timeZone: string) {
-    return new TZDate(timeZone, +this);
+    return new TZDate(+this, timeZone);
   }
 
   getTimezoneOffset(): number {
@@ -279,6 +362,7 @@ export class TZDate extends Date {
 
   private syncFromInternal() {
     this.setTime(+this.internal);
+    // [TODO] Shouldn't I use this.internal here?!
     this.setUTCMinutes(this.getUTCMinutes() + this.getTimezoneOffset());
   }
 
