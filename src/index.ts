@@ -1,24 +1,6 @@
 export class TZDate extends Date {
   //#region static
 
-  static TZ(tz: string, ...args: Parameters<typeof Date>) {
-    return new TZDate(...args, tz);
-  }
-
-  //#endregion
-
-  /**
-   * The current time zone of the date.
-   */
-  timeZone: string | undefined;
-
-  /**
-   * Representation of the date values in the timezone. It is skewed by
-   * the timezone offset.
-   */
-
-  private internal: Date;
-
   constructor();
 
   constructor(dateStr: string, timeZone?: string);
@@ -98,6 +80,78 @@ export class TZDate extends Date {
     this.internal = new Date();
     this.syncToInternal();
   }
+
+  static TZ(tz: string): TZDate;
+
+  static TZ(tz: string, timestamp: number): TZDate;
+
+  static TZ(tz: string, dateStr: string): TZDate;
+
+  static TZ(tz: string, year: number, month: number): TZDate;
+
+  static TZ(tz: string, year: number, month: number, date: number): TZDate;
+
+  static TZ(
+    tz: string,
+    year: number,
+    month: number,
+    date: number,
+    hours: number
+  ): TZDate;
+
+  static TZ(
+    tz: string,
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    minutes: number
+  ): TZDate;
+
+  static TZ(
+    tz: string,
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    minutes: number,
+    seconds: number
+  ): TZDate;
+
+  static TZ(
+    tz: string,
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    minutes: number,
+    seconds: number,
+    milliseconds: number
+  ): TZDate;
+
+  static TZ(tz: string, ...args: any[]) {
+    // @ts-expect-error: I'm struggling to type args, only using vanilla JS
+    // will help me here.
+    return args.length ? new TZDate(...args, tz) : new TZDate(Date.now(), tz);
+  }
+
+  //#endregion
+
+  //#region properties
+
+  /**
+   * The current time zone of the date.
+   */
+  timeZone: string | undefined;
+
+  /**
+   * Representation of the date values in the timezone. It is skewed by
+   * the timezone offset.
+   */
+
+  private internal: Date;
+
+  //#endregion
 
   //#region year
 

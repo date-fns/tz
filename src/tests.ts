@@ -13,96 +13,209 @@ describe("TZDate", () => {
     timers = FakeTimers.install({ now });
   }
 
-  function fakeNowBeforeEach(date = new Date(defaultDateStr)) {
-    beforeEach(() => fakeNow(date));
-  }
-
   afterEach(() => timers?.uninstall());
 
-  describe("constructor", () => {
-    it("creates a new date", () => {
-      fakeNow();
-      const date = new TZDate();
-      expect(+date).toBe(+now);
+  describe("static", () => {
+    describe("constructor", () => {
+      it("creates a new date", () => {
+        fakeNow();
+        const date = new TZDate();
+        expect(+date).toBe(+now);
+      });
+
+      it("creates a new date from a timestamp", () => {
+        expect(
+          new TZDate(+new Date(defaultDateStr), "Asia/Singapore").toISOString()
+        ).toBe("1987-02-11T08:00:00.000+08:00");
+        expect(
+          new TZDate(
+            +new Date(defaultDateStr),
+            "America/New_York"
+          ).toISOString()
+        ).toBe("1987-02-10T19:00:00.000-05:00");
+      });
+
+      it("creates a new date from a string", () => {
+        const dateStr = "2024-02-11T00:00:00.000Z";
+        expect(new TZDate(dateStr, "Asia/Singapore").toISOString()).toBe(
+          "2024-02-11T08:00:00.000+08:00"
+        );
+        expect(new TZDate("2024-02-11", "Asia/Singapore").toISOString()).toBe(
+          "2024-02-11T08:00:00.000+08:00"
+        );
+        expect(new TZDate(dateStr, "America/New_York").toISOString()).toBe(
+          "2024-02-10T19:00:00.000-05:00"
+        );
+        expect(new TZDate("2024-02-11", "America/New_York").toISOString()).toBe(
+          "2024-02-10T19:00:00.000-05:00"
+        );
+      });
+
+      it("creates a new date from date values", () => {
+        // Month
+        expect(new TZDate(2024, 1, "Asia/Singapore").toISOString()).toBe(
+          "2024-02-01T00:00:00.000+08:00"
+        );
+        expect(new TZDate(2024, 1, "America/New_York").toISOString()).toBe(
+          "2024-02-01T00:00:00.000-05:00"
+        );
+        // Date
+        expect(new TZDate(2024, 1, 11, "Asia/Singapore").toISOString()).toBe(
+          "2024-02-11T00:00:00.000+08:00"
+        );
+        expect(new TZDate(2024, 1, 11, "America/New_York").toISOString()).toBe(
+          "2024-02-11T00:00:00.000-05:00"
+        );
+        // Hours
+        expect(
+          new TZDate(2024, 1, 11, 12, "Asia/Singapore").toISOString()
+        ).toBe("2024-02-11T12:00:00.000+08:00");
+        expect(
+          new TZDate(2024, 1, 11, 12, "America/New_York").toISOString()
+        ).toBe("2024-02-11T12:00:00.000-05:00");
+        // Minutes
+        expect(
+          new TZDate(2024, 1, 11, 12, 30, "Asia/Singapore").toISOString()
+        ).toBe("2024-02-11T12:30:00.000+08:00");
+        expect(
+          new TZDate(2024, 1, 11, 12, 30, "America/New_York").toISOString()
+        ).toBe("2024-02-11T12:30:00.000-05:00");
+        // Seconds
+        expect(
+          new TZDate(2024, 1, 11, 12, 30, 45, "Asia/Singapore").toISOString()
+        ).toBe("2024-02-11T12:30:45.000+08:00");
+        expect(
+          new TZDate(2024, 1, 11, 12, 30, 45, "America/New_York").toISOString()
+        ).toBe("2024-02-11T12:30:45.000-05:00");
+        // Milliseconds
+        expect(
+          new TZDate(
+            2024,
+            1,
+            11,
+            12,
+            30,
+            45,
+            987,
+            "Asia/Singapore"
+          ).toISOString()
+        ).toBe("2024-02-11T12:30:45.987+08:00");
+        expect(
+          new TZDate(
+            2024,
+            1,
+            11,
+            12,
+            30,
+            45,
+            987,
+            "America/New_York"
+          ).toISOString()
+        ).toBe("2024-02-11T12:30:45.987-05:00");
+      });
     });
 
-    it("creates a new date from a timestamp", () => {
-      expect(new TZDate(defaultDateStr, "Asia/Singapore").toISOString()).toBe(
-        "1987-02-11T08:00:00.000+08:00"
-      );
-      expect(new TZDate(defaultDateStr, "America/New_York").toISOString()).toBe(
-        "1987-02-10T19:00:00.000-05:00"
-      );
+    describe("TZ", () => {
+      it("constructs now date in the timezone", () => {
+        fakeNow();
+        const date = TZDate.TZ("Asia/Singapore");
+      });
+
+      it("constructs a date in the timezone", () => {
+        // Timestamp
+        expect(
+          TZDate.TZ("Asia/Singapore", +new Date(defaultDateStr)).toISOString()
+        ).toBe("1987-02-11T08:00:00.000+08:00");
+        expect(
+          TZDate.TZ("America/New_York", +new Date(defaultDateStr)).toISOString()
+        ).toBe("1987-02-10T19:00:00.000-05:00");
+        // Date string
+        expect(TZDate.TZ("Asia/Singapore", defaultDateStr).toISOString()).toBe(
+          "1987-02-11T08:00:00.000+08:00"
+        );
+        expect(
+          TZDate.TZ("America/New_York", defaultDateStr).toISOString()
+        ).toBe("1987-02-10T19:00:00.000-05:00");
+        // Month
+        expect(TZDate.TZ("Asia/Singapore", 2024, 1).toISOString()).toBe(
+          "2024-02-01T00:00:00.000+08:00"
+        );
+        expect(TZDate.TZ("America/New_York", 2024, 1).toISOString()).toBe(
+          "2024-02-01T00:00:00.000-05:00"
+        );
+        // Date
+        expect(TZDate.TZ("Asia/Singapore", 2024, 1, 11).toISOString()).toBe(
+          "2024-02-11T00:00:00.000+08:00"
+        );
+        expect(TZDate.TZ("America/New_York", 2024, 1, 11).toISOString()).toBe(
+          "2024-02-11T00:00:00.000-05:00"
+        );
+        // Hours
+        expect(TZDate.TZ("Asia/Singapore", 2024, 1, 11, 12).toISOString()).toBe(
+          "2024-02-11T12:00:00.000+08:00"
+        );
+        expect(
+          TZDate.TZ("America/New_York", 2024, 1, 11, 12).toISOString()
+        ).toBe("2024-02-11T12:00:00.000-05:00");
+        // Minutes
+        expect(
+          TZDate.TZ("Asia/Singapore", 2024, 1, 11, 12, 30).toISOString()
+        ).toBe("2024-02-11T12:30:00.000+08:00");
+        expect(
+          TZDate.TZ("America/New_York", 2024, 1, 11, 12, 30).toISOString()
+        ).toBe("2024-02-11T12:30:00.000-05:00");
+        // Seconds
+        expect(
+          TZDate.TZ("Asia/Singapore", 2024, 1, 11, 12, 30, 45).toISOString()
+        ).toBe("2024-02-11T12:30:45.000+08:00");
+        expect(
+          TZDate.TZ("America/New_York", 2024, 1, 11, 12, 30, 45).toISOString()
+        ).toBe("2024-02-11T12:30:45.000-05:00");
+        // Milliseconds
+        expect(
+          TZDate.TZ(
+            "Asia/Singapore",
+            2024,
+            1,
+            11,
+            12,
+            30,
+            45,
+            987
+          ).toISOString()
+        ).toBe("2024-02-11T12:30:45.987+08:00");
+        expect(
+          TZDate.TZ(
+            "America/New_York",
+            2024,
+            1,
+            11,
+            12,
+            30,
+            45,
+            987
+          ).toISOString()
+        ).toBe("2024-02-11T12:30:45.987-05:00");
+      });
     });
 
-    it("creates a new date from a string", () => {
-      const dateStr = "2024-02-11T00:00:00.000Z";
-      expect(new TZDate(dateStr, "Asia/Singapore").toISOString()).toBe(
-        "2024-02-11T08:00:00.000+08:00"
-      );
-      expect(new TZDate("2024-02-11", "Asia/Singapore").toISOString()).toBe(
-        "2024-02-11T08:00:00.000+08:00"
-      );
-      expect(new TZDate(dateStr, "America/New_York").toISOString()).toBe(
-        "2024-02-10T19:00:00.000-05:00"
-      );
-      expect(new TZDate("2024-02-11", "America/New_York").toISOString()).toBe(
-        "2024-02-10T19:00:00.000-05:00"
-      );
+    describe("UTC", () => {
+      it("returns a timestamp in a date in UTC", () => {
+        expect(new Date(TZDate.UTC(2024, 1)).toISOString()).toBe(
+          "2024-02-01T00:00:00.000Z"
+        );
+      });
     });
 
-    it("creates a new date from date and time parts", () => {
-      // Month
-      expect(new TZDate(2024, 1, "Asia/Singapore").toISOString()).toBe(
-        "2024-02-01T00:00:00.000+08:00"
-      );
-      expect(new TZDate(2024, 1, "America/New_York").toISOString()).toBe(
-        "2024-02-01T00:00:00.000-05:00"
-      );
-      // Date
-      expect(new TZDate(2024, 1, 11, "Asia/Singapore").toISOString()).toBe(
-        "2024-02-11T00:00:00.000+08:00"
-      );
-      expect(new TZDate(2024, 1, 11, "America/New_York").toISOString()).toBe(
-        "2024-02-11T00:00:00.000-05:00"
-      );
-      // Hours
-      expect(new TZDate(2024, 1, 11, 12, "Asia/Singapore").toISOString()).toBe(
-        "2024-02-11T12:00:00.000+08:00"
-      );
-      expect(
-        new TZDate(2024, 1, 11, 12, "America/New_York").toISOString()
-      ).toBe("2024-02-11T12:00:00.000-05:00");
-      // Minutes
-      expect(
-        new TZDate(2024, 1, 11, 12, 30, "Asia/Singapore").toISOString()
-      ).toBe("2024-02-11T12:30:00.000+08:00");
-      expect(
-        new TZDate(2024, 1, 11, 12, 30, "America/New_York").toISOString()
-      ).toBe("2024-02-11T12:30:00.000-05:00");
-      // Seconds
-      expect(
-        new TZDate(2024, 1, 11, 12, 30, 45, "Asia/Singapore").toISOString()
-      ).toBe("2024-02-11T12:30:45.000+08:00");
-      expect(
-        new TZDate(2024, 1, 11, 12, 30, 45, "America/New_York").toISOString()
-      ).toBe("2024-02-11T12:30:45.000-05:00");
-      // Milliseconds
-      expect(
-        new TZDate(2024, 1, 11, 12, 30, 45, 987, "Asia/Singapore").toISOString()
-      ).toBe("2024-02-11T12:30:45.987+08:00");
-      expect(
-        new TZDate(
-          2024,
-          1,
-          11,
-          12,
-          30,
-          45,
-          987,
-          "America/New_York"
-        ).toISOString()
-      ).toBe("2024-02-11T12:30:45.987-05:00");
+    describe("parse", () => {
+      it("parses a date string to a timestamp", () => {
+        expect(
+          new Date(TZDate.parse("1987-02-11T00:00:00.000Z")).toISOString()
+        ).toBe("1987-02-11T00:00:00.000Z");
+        expect(
+          new Date(TZDate.parse("1987-02-11T00:00:00.000Z")).toISOString()
+        ).toBe("1987-02-11T00:00:00.000Z");
+      });
     });
   });
 
@@ -464,8 +577,6 @@ describe("TZDate", () => {
 
   describe("date", () => {
     describe("getDate", () => {
-      fakeNowBeforeEach();
-
       it("returns the date in the timezone", () => {
         expect(new TZDate(defaultDateStr, "America/New_York").getDate()).toBe(
           10
@@ -475,8 +586,6 @@ describe("TZDate", () => {
     });
 
     describe("getUTCDate", () => {
-      fakeNowBeforeEach();
-
       it("returns the date in the UTC timezone", () => {
         expect(
           new TZDate(defaultDateStr, "America/New_York").getUTCDate()
@@ -624,8 +733,6 @@ describe("TZDate", () => {
     });
 
     describe("getUTCHours", () => {
-      fakeNowBeforeEach(new Date("1987-02-10T09:00:00.000Z"));
-
       it("returns the hours in the UTC timezone", () => {
         const dateStr = "1987-02-10T09:00:00.000Z";
         expect(new TZDate(dateStr, "Asia/Singapore").getUTCHours()).toBe(9);
@@ -1231,8 +1338,6 @@ describe("TZDate", () => {
   });
 
   describe("time zone", () => {
-    fakeNowBeforeEach();
-
     describe("withTimeZone", () => {
       it("returns a new date with the given timezone", () => {
         const date = new TZDate(defaultDateStr, "America/New_York");
