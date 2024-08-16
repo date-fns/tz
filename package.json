@@ -56,6 +56,16 @@
         "types": "./date/mini.d.ts",
         "default": "./date/mini.js"
       }
+    },
+    "./tz": {
+      "require": {
+        "types": "./tz/index.d.cts",
+        "default": "./tz/index.cjs"
+      },
+      "import": {
+        "types": "./tz/index.d.ts",
+        "default": "./tz/index.js"
+      }
     }
   },
   "scripts": {
