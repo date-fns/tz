@@ -21,6 +21,8 @@ export class TZDate extends Date {
 
   constructor(dateStr: string, timeZone?: string);
 
+  constructor(date: Date, timeZone?: string);
+
   constructor(timestamp: number, timeZone?: string);
 
   constructor(year: number, month: number, timeZone?: string);
@@ -70,6 +72,8 @@ export class TZDate extends Date {
   static TZ(tz: string, timestamp: number): TZDate;
 
   static TZ(tz: string, dateStr: string): TZDate;
+
+  static TZ(tz: string, date: Date): TZDate;
 
   static TZ(tz: string, year: number, month: number): TZDate;
 

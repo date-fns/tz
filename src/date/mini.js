@@ -19,6 +19,8 @@ export class TZDateMini extends Date {
       this.setTime(args[0]);
     } else if (typeof args[0] === "string") {
       this.setTime(+new Date(args[0]));
+    } else if (args[0] instanceof Date) {
+      this.setTime(+args[0]);
     } else {
       this.setTime(+new Date(...args));
       const offset = tzOffset(this.timeZone, this);

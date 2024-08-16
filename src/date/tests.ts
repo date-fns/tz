@@ -52,6 +52,16 @@ describe("TZDate", () => {
         );
       });
 
+      it("creates a new date from a date instance", () => {
+        const nativeDate = new Date(defaultDateStr);
+        expect(new TZDate(nativeDate, "Asia/Singapore").toISOString()).toBe(
+          "1987-02-11T08:00:00.000+08:00"
+        );
+        expect(new TZDate(nativeDate, "America/New_York").toISOString()).toBe(
+          "1987-02-10T19:00:00.000-05:00"
+        );
+      });
+
       it("creates a new date from date values", () => {
         // Month
         expect(new TZDate(2024, 1, "Asia/Singapore").toISOString()).toBe(
@@ -120,6 +130,7 @@ describe("TZDate", () => {
       it("constructs now date in the timezone", () => {
         fakeNow();
         const date = TZDate.TZ("Asia/Singapore");
+        expect(date.toISOString()).toBe("1987-02-11T08:00:00.000+08:00");
       });
 
       it("constructs a date in the timezone", () => {
@@ -134,6 +145,10 @@ describe("TZDate", () => {
         expect(TZDate.TZ("Asia/Singapore", defaultDateStr).toISOString()).toBe(
           "1987-02-11T08:00:00.000+08:00"
         );
+        // Date
+        expect(
+          TZDate.TZ("Asia/Singapore", new Date(defaultDateStr)).toISOString()
+        ).toBe("1987-02-11T08:00:00.000+08:00");
         expect(
           TZDate.TZ("America/New_York", defaultDateStr).toISOString()
         ).toBe("1987-02-10T19:00:00.000-05:00");
