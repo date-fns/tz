@@ -1,4 +1,3 @@
-import { constructFromSymbol } from "../constants/index.ts";
 import { TZDateMini } from "./mini.js";
 
 /**
@@ -95,7 +94,7 @@ export class TZDate extends TZDateMini {
 
   //#region date-fns integration
 
-  [constructFromSymbol](date) {
+  [Symbol.for("constructDateFrom")](date) {
     return new TZDate(+new Date(date), this.timeZone);
   }
 
