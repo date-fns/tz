@@ -1,6 +1,6 @@
 {
   "name": "@date-fns/tz",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "date-fns timezone utils",
   "type": "module",
   "main": "index.cjs",
