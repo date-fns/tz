@@ -19,7 +19,10 @@
           "@babel/plugin-transform-modules-commonjs",
           { "strict": true, "noInterop": true }
         ],
-        ["babel-plugin-add-import-extension", { "extension": "js" }]
+        [
+          "babel-plugin-replace-import-extension",
+          { "extMapping": { ".js": ".cjs", ".ts": ".cjs" } }
+        ]
       ]
     },
 
@@ -31,7 +34,12 @@
         ]
       ],
 
-      "plugins": [["babel-plugin-add-import-extension", { "extension": "mjs" }]]
+      "plugins": [
+        [
+          "babel-plugin-replace-import-extension",
+          { "extMapping": { ".ts": ".js" } }
+        ]
+      ]
     }
   },
 

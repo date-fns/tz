@@ -16,15 +16,15 @@ test-types: install-attw build
 
 build: prepare-build
 	@npx tsc -p tsconfig.lib.json 
-	@env BABEL_ENV=esm npx babel src --config-file ./babel.config.lib.json --source-root src --out-dir lib --extensions .mjs,.ts --out-file-extension .mjs --quiet
-	@env BABEL_ENV=cjs npx babel src --config-file ./babel.config.lib.json --source-root src --out-dir lib --extensions .mjs,.ts --out-file-extension .js --quiet
+	@env BABEL_ENV=esm npx babel src --config-file ./babel.config.lib.json --source-root src --out-dir lib --extensions .js,.ts --out-file-extension .js --quiet
+	@env BABEL_ENV=cjs npx babel src --config-file ./babel.config.lib.json --source-root src --out-dir lib --extensions .js,.ts --out-file-extension .cjs --quiet
 	@node copy.mjs
-	@rm -rf lib/types.*js
-	@make build-mts
+	# @rm -rf lib/types.*js
+	@make build-cts
 	
-build-mts:
+build-cts:
 	@find lib -name '*.d.ts' | while read file; do \
-		new_file=$${file%.d.ts}.d.mts; \
+		new_file=$${file%.d.ts}.d.cts; \
 		cp $$file $$new_file; \
 	done
 
