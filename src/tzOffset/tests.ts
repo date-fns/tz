@@ -33,4 +33,9 @@ describe("tzOffset", () => {
     const date = new Date("2020-01-15T05:00:00Z");
     expect(tzOffset(undefined, date)).toBe(-date.getTimezoneOffset());
   });
+
+  it("returns 0 if the offset is 0", () => {
+    const date = new Date("2020-01-15T00:00:00Z");
+    expect(tzOffset("Europe/London", date)).toBe(0);
+  });
 });

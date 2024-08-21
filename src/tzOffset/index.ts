@@ -13,5 +13,5 @@ export function tzOffset(tz: string | undefined, date: Date): number {
   if (offsetStr in offsetCache) return offsetCache[offsetStr]!;
 
   const [hours, minutes] = offsetStr.split(":").map(Number);
-  return (offsetCache[offsetStr] = hours! * 60 + minutes!);
+  return (offsetCache[offsetStr] = hours! * 60 + (minutes || 0));
 }
