@@ -1,17 +1,39 @@
 import { tzOffset } from "../tzOffset/index.ts";
 
-export interface Interval {
+/**
+ * Time interval.
+ */
+export interface TZChangeInterval {
+  /** Start date. */
   start: Date;
+  /** End date. */
   end: Date;
 }
 
+/**
+ * Time zone change record.
+ */
 export interface TZChange {
+  /** Date time the change occurs */
   date: Date;
+  /** Offset change in minutes */
   change: number;
+  /** New UTC offset in minutes */
   offset: number;
 }
 
-export function tzScan(tz: string, interval: Interval): TZChange[] {
+/**
+ * The function scans the time zone for changes in the given interval.
+ *
+ * @param timeZone - Time zone name (IANA or UTC offset)
+ * @param interval - Time interval to scan for changes
+ *
+ * @returns Array of time zone changes
+ */
+export function tzScan(
+  timeZone: string,
+  interval: TZChangeInterval
+): TZChange[] {
   const changes: TZChange[] = [];
 
   const monthDate = new Date(interval.start);
@@ -21,39 +43,39 @@ export function tzScan(tz: string, interval: Interval): TZChange[] {
   endDate.setUTCSeconds(0, 0);
 
   const endMonthTime = +endDate;
-  let lastOffset = tzOffset(tz, monthDate);
+  let lastOffset = tzOffset(timeZone, monthDate);
   while (+monthDate < endMonthTime) {
     // Month forward
     monthDate.setUTCMonth(monthDate.getUTCMonth() + 1);
 
     // Find the month where the offset changes
-    const offset = tzOffset(tz, monthDate);
+    const offset = tzOffset(timeZone, monthDate);
     if (offset != lastOffset) {
       // Rewind a month back to find the day where the offset changes
       const dayDate = new Date(monthDate);
       dayDate.setUTCMonth(dayDate.getUTCMonth() - 1);
 
       const endDayTime = +monthDate;
-      lastOffset = tzOffset(tz, dayDate);
+      lastOffset = tzOffset(timeZone, dayDate);
       while (+dayDate < endDayTime) {
         // Day forward
         dayDate.setUTCDate(dayDate.getUTCDate() + 1);
 
         // Find the day where the offset changes
-        const offset = tzOffset(tz, dayDate);
+        const offset = tzOffset(timeZone, dayDate);
         if (offset != lastOffset) {
           // Rewind a day back to find the time where the offset changes
           const hourDate = new Date(dayDate);
           hourDate.setUTCDate(hourDate.getUTCDate() - 1);
 
           const endHourTime = +dayDate;
-          lastOffset = tzOffset(tz, hourDate);
+          lastOffset = tzOffset(timeZone, hourDate);
           while (+hourDate < endHourTime) {
             // Hour forward
             hourDate.setUTCHours(hourDate.getUTCHours() + 1);
 
             // Find the hour where the offset changes
-            const hourOffset = tzOffset(tz, hourDate);
+            const hourOffset = tzOffset(timeZone, hourDate);
             if (hourOffset !== lastOffset) {
               changes.push({
                 date: new Date(hourDate),

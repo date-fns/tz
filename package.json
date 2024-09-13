@@ -1,6 +1,6 @@
 {
   "name": "@date-fns/tz",
-  "version": "0.3.3",
+  "version": "1.0.0-alpha.1",
   "description": "date-fns timezone utils",
   "type": "module",
   "main": "index.cjs",
@@ -66,6 +66,16 @@
         "types": "./tz/index.d.ts",
         "default": "./tz/index.js"
       }
+    },
+    "./constants": {
+      "require": {
+        "types": "./constants/index.d.cts",
+        "default": "./constants/index.cjs"
+      },
+      "import": {
+        "types": "./constants/index.d.ts",
+        "default": "./constants/index.js"
+      }
     }
   },
   "scripts": {
@@ -90,6 +100,7 @@
   },
   "homepage": "https://github.com/date-fns/tz#readme",
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.16.2",
     "@babel/cli": "^7.24.1",
     "@babel/core": "^7.24.4",
     "@babel/plugin-transform-modules-commonjs": "^7.24.1",
@@ -101,10 +112,12 @@
     "@types/sinonjs__fake-timers": "^8.1.5",
     "babel-plugin-replace-import-extension": "^1.1.4",
     "bytes-iec": "^3.1.1",
+    "date-fns": "4.0.0-alpha.1",
     "glob": "^10.3.12",
     "picocolors": "^1.0.0",
     "tinybench": "^2.7.0",
     "typescript": "^5.5.4",
     "vitest": "^1.4.0"
-  }
+  },
+  "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c"
 }

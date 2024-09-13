@@ -129,67 +129,67 @@ describe("TZDate", () => {
     describe("TZ", () => {
       it("constructs now date in the timezone", () => {
         fakeNow();
-        const date = TZDate.TZ("Asia/Singapore");
+        const date = TZDate.tz("Asia/Singapore");
         expect(date.toISOString()).toBe("1987-02-11T08:00:00.000+08:00");
       });
 
       it("constructs a date in the timezone", () => {
         // Timestamp
         expect(
-          TZDate.TZ("Asia/Singapore", +new Date(defaultDateStr)).toISOString()
+          TZDate.tz("Asia/Singapore", +new Date(defaultDateStr)).toISOString()
         ).toBe("1987-02-11T08:00:00.000+08:00");
         expect(
-          TZDate.TZ("America/New_York", +new Date(defaultDateStr)).toISOString()
+          TZDate.tz("America/New_York", +new Date(defaultDateStr)).toISOString()
         ).toBe("1987-02-10T19:00:00.000-05:00");
         // Date string
-        expect(TZDate.TZ("Asia/Singapore", defaultDateStr).toISOString()).toBe(
+        expect(TZDate.tz("Asia/Singapore", defaultDateStr).toISOString()).toBe(
           "1987-02-11T08:00:00.000+08:00"
         );
         // Date
         expect(
-          TZDate.TZ("Asia/Singapore", new Date(defaultDateStr)).toISOString()
+          TZDate.tz("Asia/Singapore", new Date(defaultDateStr)).toISOString()
         ).toBe("1987-02-11T08:00:00.000+08:00");
         expect(
-          TZDate.TZ("America/New_York", defaultDateStr).toISOString()
+          TZDate.tz("America/New_York", defaultDateStr).toISOString()
         ).toBe("1987-02-10T19:00:00.000-05:00");
         // Month
-        expect(TZDate.TZ("Asia/Singapore", 2024, 1).toISOString()).toBe(
+        expect(TZDate.tz("Asia/Singapore", 2024, 1).toISOString()).toBe(
           "2024-02-01T00:00:00.000+08:00"
         );
-        expect(TZDate.TZ("America/New_York", 2024, 1).toISOString()).toBe(
+        expect(TZDate.tz("America/New_York", 2024, 1).toISOString()).toBe(
           "2024-02-01T00:00:00.000-05:00"
         );
         // Date
-        expect(TZDate.TZ("Asia/Singapore", 2024, 1, 11).toISOString()).toBe(
+        expect(TZDate.tz("Asia/Singapore", 2024, 1, 11).toISOString()).toBe(
           "2024-02-11T00:00:00.000+08:00"
         );
-        expect(TZDate.TZ("America/New_York", 2024, 1, 11).toISOString()).toBe(
+        expect(TZDate.tz("America/New_York", 2024, 1, 11).toISOString()).toBe(
           "2024-02-11T00:00:00.000-05:00"
         );
         // Hours
-        expect(TZDate.TZ("Asia/Singapore", 2024, 1, 11, 12).toISOString()).toBe(
+        expect(TZDate.tz("Asia/Singapore", 2024, 1, 11, 12).toISOString()).toBe(
           "2024-02-11T12:00:00.000+08:00"
         );
         expect(
-          TZDate.TZ("America/New_York", 2024, 1, 11, 12).toISOString()
+          TZDate.tz("America/New_York", 2024, 1, 11, 12).toISOString()
         ).toBe("2024-02-11T12:00:00.000-05:00");
         // Minutes
         expect(
-          TZDate.TZ("Asia/Singapore", 2024, 1, 11, 12, 30).toISOString()
+          TZDate.tz("Asia/Singapore", 2024, 1, 11, 12, 30).toISOString()
         ).toBe("2024-02-11T12:30:00.000+08:00");
         expect(
-          TZDate.TZ("America/New_York", 2024, 1, 11, 12, 30).toISOString()
+          TZDate.tz("America/New_York", 2024, 1, 11, 12, 30).toISOString()
         ).toBe("2024-02-11T12:30:00.000-05:00");
         // Seconds
         expect(
-          TZDate.TZ("Asia/Singapore", 2024, 1, 11, 12, 30, 45).toISOString()
+          TZDate.tz("Asia/Singapore", 2024, 1, 11, 12, 30, 45).toISOString()
         ).toBe("2024-02-11T12:30:45.000+08:00");
         expect(
-          TZDate.TZ("America/New_York", 2024, 1, 11, 12, 30, 45).toISOString()
+          TZDate.tz("America/New_York", 2024, 1, 11, 12, 30, 45).toISOString()
         ).toBe("2024-02-11T12:30:45.000-05:00");
         // Milliseconds
         expect(
-          TZDate.TZ(
+          TZDate.tz(
             "Asia/Singapore",
             2024,
             1,
@@ -201,7 +201,7 @@ describe("TZDate", () => {
           ).toISOString()
         ).toBe("2024-02-11T12:30:45.987+08:00");
         expect(
-          TZDate.TZ(
+          TZDate.tz(
             "America/New_York",
             2024,
             1,

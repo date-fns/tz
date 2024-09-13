@@ -1,25 +1,24 @@
 test:
-	@env TZ=Asia/Singapore npx vitest run
+	@env TZ=Asia/Singapore pnpm exec vitest run
 .PHONY: test
 
 test-watch:
-	@env TZ=Asia/Singapore npx vitest
+	@env TZ=Asia/Singapore pnpm exec vitest
 
 types:
-	@npx tsc --noEmit
+	@pnpm exec tsc --noEmit
 
 types-watch:
-	@npx tsc --noEmit --watch
+	@pnpm exec tsc --noEmit --watch
 
-test-types: install-attw build 
-	@cd lib && attw --pack
+test-types: build 
+	@pnpm exec attw --pack lib
 
 build: prepare-build
-	@npx tsc -p tsconfig.lib.json 
-	@env BABEL_ENV=esm npx babel src --config-file ./babel.config.lib.json --source-root src --out-dir lib --extensions .js,.ts --out-file-extension .js --quiet
-	@env BABEL_ENV=cjs npx babel src --config-file ./babel.config.lib.json --source-root src --out-dir lib --extensions .js,.ts --out-file-extension .cjs --quiet
+	@pnpm exec tsc -p tsconfig.lib.json 
+	@env BABEL_ENV=esm pnpm exec babel src --config-file ./babel.config.json --source-root src --out-dir lib --extensions .js,.ts --out-file-extension .js --quiet
+	@env BABEL_ENV=cjs pnpm exec babel src --config-file ./babel.config.json --source-root src --out-dir lib --extensions .js,.ts --out-file-extension .cjs --quiet
 	@node copy.mjs
-	# @rm -rf lib/types.*js
 	@make build-cts
 	
 build-cts:
@@ -33,15 +32,10 @@ prepare-build:
 	@mkdir -p lib
 
 publish: build
-	cd lib && npm publish --access public
+	cd lib && pnpm publish --access public
 
 publish-next: build
-	cd lib && npm publish --access public --tag next
+	cd lib && pnpm publish --access public --tag next
 
 link:
-	@cd lib && npm link
-
-install-attw:
-	@if ! command -v attw >/dev/null 2>&1; then \
-		npm i -g @arethetypeswrong/cli; \
-	fi
+	@cd lib && pnpm link

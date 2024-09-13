@@ -67,19 +67,19 @@ export class TZDate extends Date {
     timeZone?: string
   );
 
-  static TZ(tz: string): TZDate;
+  static tz(tz: string): TZDate;
 
-  static TZ(tz: string, timestamp: number): TZDate;
+  static tz(tz: string, timestamp: number): TZDate;
 
-  static TZ(tz: string, dateStr: string): TZDate;
+  static tz(tz: string, dateStr: string): TZDate;
 
-  static TZ(tz: string, date: Date): TZDate;
+  static tz(tz: string, date: Date): TZDate;
 
-  static TZ(tz: string, year: number, month: number): TZDate;
+  static tz(tz: string, year: number, month: number): TZDate;
 
-  static TZ(tz: string, year: number, month: number, date: number): TZDate;
+  static tz(tz: string, year: number, month: number, date: number): TZDate;
 
-  static TZ(
+  static tz(
     tz: string,
     year: number,
     month: number,
@@ -87,7 +87,7 @@ export class TZDate extends Date {
     hours: number
   ): TZDate;
 
-  static TZ(
+  static tz(
     tz: string,
     year: number,
     month: number,
@@ -96,7 +96,7 @@ export class TZDate extends Date {
     minutes: number
   ): TZDate;
 
-  static TZ(
+  static tz(
     tz: string,
     year: number,
     month: number,
@@ -106,7 +106,7 @@ export class TZDate extends Date {
     seconds: number
   ): TZDate;
 
-  static TZ(
+  static tz(
     tz: string,
     year: number,
     month: number,

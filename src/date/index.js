@@ -16,7 +16,7 @@ import { TZDateMini } from "./mini.js";
 export class TZDate extends TZDateMini {
   //#region static
 
-  static TZ(tz, ...args) {
+  static tz(tz, ...args) {
     return args.length ? new TZDate(...args, tz) : new TZDate(Date.now(), tz);
   }
 

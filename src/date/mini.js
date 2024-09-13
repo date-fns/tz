@@ -1,4 +1,4 @@
-import { tzOffset } from "../index.ts";
+import { tzOffset } from "../tzOffset/index.ts";
 
 export class TZDateMini extends Date {
   //#region static
