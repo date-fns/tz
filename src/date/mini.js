@@ -162,7 +162,6 @@ export class TZDateMini extends Date {
 
   setSeconds() {
     const args = arguments;
-
     Date.prototype.setUTCSeconds.apply(this.internal, args);
     this.syncFromInternal();
     return +this;
@@ -180,8 +179,8 @@ export class TZDateMini extends Date {
   //#region milliseconds
 
   setMilliseconds(ms) {
-    Date.prototype.setUTCMilliseconds.call(this, ms);
-    this.syncToInternal();
+    Date.prototype.setUTCMilliseconds.call(this.internal, ms);
+    this.syncFromInternal();
     return +this;
   }
 
@@ -216,8 +215,10 @@ export class TZDateMini extends Date {
 
   syncFromInternal() {
     this.setTime(+this.internal);
-    // [TODO] Shouldn't I use this.internal here?!
-    this.setUTCMinutes(this.getUTCMinutes() + this.getTimezoneOffset());
+    Date.prototype.setUTCMinutes.call(
+      this,
+      Date.prototype.getUTCMinutes.call(this) + this.getTimezoneOffset()
+    );
   }
 
   fixDST(update) {
