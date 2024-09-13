@@ -4,7 +4,7 @@ The package provides `Date` extensions `TZDate` and `TZDateMini` that perform al
 
 Using it makes [date-fns] operate in given time zone but can be also used without it.
 
-Like everything else in the date-fns ecosystem, the library is build-size aware. The smallest component, `TZDateMini,` is only `808 B`.
+Like everything else in the date-fns ecosystem, the library is build-size aware. The smallest component, `TZDateMini,` is only `761 B`.
 
 **Need only UTC?** See [@date-fns/utc](https://github.com/date-fns/utc) that provides lighter solution.
 
@@ -50,7 +50,7 @@ new TZDate(2022, 2, 13, "-2359");
 
 ### Difference between `TZDate` and `TZDateMini`
 
-The main difference between `TZDate` and `TZDateMini` is the build footprint. The `TZDateMini` is `808 B`, and the `TZDate` is `1.1 kB`. While the difference is slight, and `1.1 kB` is not significant by any means, it might be essential in some environments and use cases.
+The main difference between `TZDate` and `TZDateMini` is the build footprint. The `TZDateMini` is `761 B`, and the `TZDate` is `1 kB`. While the difference is slight, and `1 kB` is not significant by any means, it might be essential in some environments and use cases.
 
 Unlike `TZDateMini` which implements only getters, setters, and `getTimezoneOffset`, `TZDate` also provides formatter functions, mirroring all original `Date` functionality:
 

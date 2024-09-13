@@ -32,162 +32,13 @@ export class TZDateMini extends Date {
     }
 
     this.internal = new Date();
-    this.syncToInternal();
+    syncToInternal(this);
   }
 
-  static TZ(tz, ...args) {
+  static tz(tz, ...args) {
     return args.length
       ? new TZDateMini(...args, tz)
       : new TZDateMini(Date.now(), tz);
-  }
-
-  //#endregion
-
-  //#region year
-
-  getFullYear() {
-    return this.internal.getUTCFullYear();
-  }
-
-  setFullYear() {
-    const args = arguments;
-    Date.prototype.setUTCFullYear.apply(this.internal, args);
-    this.syncFromInternal();
-    return +this;
-  }
-
-  setUTCFullYear() {
-    const args = arguments;
-    this.fixDST(() => Date.prototype.setUTCFullYear.apply(this, args));
-    this.syncToInternal();
-    return +this;
-  }
-
-  //#endregion
-
-  //#region month
-
-  getMonth() {
-    return this.internal.getUTCMonth();
-  }
-
-  setMonth() {
-    Date.prototype.setUTCMonth.apply(this.internal, arguments);
-    this.syncFromInternal();
-    return +this;
-  }
-
-  setUTCMonth() {
-    const args = arguments;
-    this.fixDST(() => Date.prototype.setUTCMonth.apply(this, args));
-    this.syncToInternal();
-    return +this;
-  }
-
-  //#endregion
-
-  //#region date
-
-  getDate() {
-    return this.internal.getUTCDate();
-  }
-
-  setDate(date) {
-    Date.prototype.setUTCDate.call(this.internal, date);
-    this.syncFromInternal();
-    return +this;
-  }
-
-  setUTCDate(date) {
-    this.fixDST(() => Date.prototype.setUTCDate.call(this, date));
-    this.syncToInternal();
-    return +this;
-  }
-
-  //#endregion
-
-  //#region day
-
-  getDay() {
-    return this.internal.getUTCDay();
-  }
-
-  //#endregion
-
-  //#region hours
-
-  getHours() {
-    return this.internal.getUTCHours();
-  }
-
-  setHours() {
-    const args = arguments;
-    Date.prototype.setUTCHours.apply(this.internal, args);
-    this.syncFromInternal();
-    return +this;
-  }
-
-  setUTCHours() {
-    const args = arguments;
-    Date.prototype.setUTCHours.apply(this, args);
-    this.syncToInternal();
-    return +this;
-  }
-
-  //#endregion
-
-  //#region minutes
-
-  getMinutes() {
-    return this.internal.getUTCMinutes();
-  }
-
-  setMinutes() {
-    const args = arguments;
-    Date.prototype.setUTCMinutes.apply(this.internal, args);
-    this.syncFromInternal();
-    return +this;
-  }
-
-  setUTCMinutes() {
-    const args = arguments;
-    Date.prototype.setUTCMinutes.apply(this, args);
-    this.syncToInternal();
-    return +this;
-  }
-
-  //#endregion
-
-  //#region seconds
-
-  setSeconds() {
-    const args = arguments;
-    Date.prototype.setUTCSeconds.apply(this.internal, args);
-    this.syncFromInternal();
-    return +this;
-  }
-
-  setUTCSeconds() {
-    const args = arguments;
-    Date.prototype.setUTCSeconds.apply(this, args);
-    this.syncToInternal();
-    return +this;
-  }
-
-  //#endregion
-
-  //#region milliseconds
-
-  setMilliseconds(ms) {
-    Date.prototype.setUTCMilliseconds.call(this.internal, ms);
-    this.syncFromInternal();
-    return +this;
-  }
-
-  setUTCMilliseconds(ms) {
-    Date.prototype.setUTCMilliseconds.call(this, ms);
-    this.syncToInternal();
-    return +this;
   }
 
   //#endregion
@@ -204,34 +55,6 @@ export class TZDateMini extends Date {
 
   //#endregion
 
-  //#region private
-
-  syncToInternal() {
-    this.internal.setTime(+this);
-    this.internal.setUTCMinutes(
-      this.internal.getUTCMinutes() - this.getTimezoneOffset()
-    );
-  }
-
-  syncFromInternal() {
-    this.setTime(+this.internal);
-    Date.prototype.setUTCMinutes.call(
-      this,
-      Date.prototype.getUTCMinutes.call(this) + this.getTimezoneOffset()
-    );
-  }
-
-  fixDST(update) {
-    const offset = tzOffset(this.timeZone, this);
-    update();
-    const newOffset = tzOffset(this.timeZone, this);
-    const diff = newOffset - offset;
-    if (diff)
-      Date.prototype.setUTCMinutes.call(this, this.getUTCMinutes() - diff);
-  }
-
-  //#endregion
-
   //#region date-fns integration
 
   [Symbol.for("constructDateFrom")](date) {
@@ -239,4 +62,61 @@ export class TZDateMini extends Date {
   }
 
   //#endregion
+}
+
+// Assign getters and setters
+const re = /^(get|set)(?!UTC)/;
+Object.getOwnPropertyNames(Date.prototype).forEach((method) => {
+  if (!re.test(method)) return;
+
+  const utcMethod = method.replace(re, "$1UTC");
+  // Filter out methods without UTC counterparts
+  if (!TZDateMini.prototype[utcMethod]) return;
+
+  if (method.startsWith("get")) {
+    // Delegate to internal date's UTC method
+    TZDateMini.prototype[method] = function () {
+      return this.internal[utcMethod]();
+    };
+  } else {
+    // Assign regular setter
+    TZDateMini.prototype[method] = function () {
+      const args = arguments;
+      Date.prototype[utcMethod].apply(this.internal, args);
+      syncFromInternal(this);
+      return +this;
+    };
+
+    // Assign UTC setter
+    TZDateMini.prototype[utcMethod] = function () {
+      const args = arguments;
+      fixDST(this, () => Date.prototype[utcMethod].apply(this, args));
+      syncToInternal(date);
+      return +this;
+    };
+  }
+});
+
+function fixDST(date, update) {
+  const offset = tzOffset(date.timeZone, date);
+  update();
+  const newOffset = tzOffset(date.timeZone, date);
+  const diff = newOffset - offset;
+  if (diff)
+    Date.prototype.setUTCMinutes.call(date, date.getUTCMinutes() - diff);
+}
+
+function syncToInternal(date) {
+  date.internal.setTime(+date);
+  date.internal.setUTCMinutes(
+    date.internal.getUTCMinutes() - date.getTimezoneOffset()
+  );
+}
+
+function syncFromInternal(date) {
+  date.setTime(+date.internal);
+  Date.prototype.setUTCMinutes.call(
+    date,
+    Date.prototype.getUTCMinutes.call(date) + date.getTimezoneOffset()
+  );
 }
