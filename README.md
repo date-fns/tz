@@ -11,7 +11,7 @@ Like everything else in the date-fns ecosystem, the library is build-size aware.
 ## Installation
 
 ```bash
-npm install @date-fns/utc --save
+npm install @date-fns/tz --save
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ npm install @date-fns/utc --save
 `TZDate` and `TZDateMini` have API similar to `Date`, but perform all calculations in the given time zone, which might be essential when operating across different time zones, calculating dates for users in different regions, or rendering chart or calendar component:
 
 ```ts
-import { TZDate } from "@date-fns/utc";
+import { TZDate } from "@date-fns/tz";
 import { addHours } from "date-fns";
 
 // Given that the system time zone is America/Los_Angeles
@@ -55,7 +55,7 @@ The main difference between `TZDate` and `TZDateMini` is the build footprint. Th
 Unlike `TZDateMini` which implements only getters, setters, and `getTimezoneOffset`, `TZDate` also provides formatter functions, mirroring all original `Date` functionality:
 
 ```ts
-import { TZDateMini, TZDate } from "@date-fns/utc";
+import { TZDateMini, TZDate } from "@date-fns/tz";
 
 // TZDateMini will format date-time in the system time zone:
 new TZDateMini(2022, 2, 13).toString();
