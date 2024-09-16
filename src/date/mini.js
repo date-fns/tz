@@ -91,7 +91,7 @@ Object.getOwnPropertyNames(Date.prototype).forEach((method) => {
     TZDateMini.prototype[utcMethod] = function () {
       const args = arguments;
       fixDST(this, () => Date.prototype[utcMethod].apply(this, args));
-      syncToInternal(date);
+      syncToInternal(this);
       return +this;
     };
   }
