@@ -16,14 +16,18 @@ const offsetCache: Record<string, number> = {};
  * @returns UTC offset in minutes
  */
 export function tzOffset(timeZone: string | undefined, date: Date): number {
-  const format = (offsetFormatCache[timeZone!] ||= new Intl.DateTimeFormat(
-    "en-GB",
-    { timeZone, hour: "numeric", timeZoneName: "longOffset" }
-  ).format);
+  try {
+    const format = (offsetFormatCache[timeZone!] ||= new Intl.DateTimeFormat(
+      "en-GB",
+      { timeZone, hour: "numeric", timeZoneName: "longOffset" }
+    ).format);
 
-  const offsetStr = format(date).slice(6);
-  if (offsetStr in offsetCache) return offsetCache[offsetStr]!;
+    const offsetStr = format(date).slice(6);
+    if (offsetStr in offsetCache) return offsetCache[offsetStr]!;
 
-  const [hours, minutes] = offsetStr.split(":").map(Number);
-  return (offsetCache[offsetStr] = hours! * 60 + (minutes || 0));
+    const [hours, minutes] = offsetStr.split(":").map(Number);
+    return (offsetCache[offsetStr] = hours! * 60 + (minutes || 0));
+  } catch {
+    return NaN;
+  }
 }

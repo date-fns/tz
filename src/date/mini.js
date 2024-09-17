@@ -10,25 +10,30 @@ export class TZDateMini extends Date {
       this.timeZone = args.pop();
     }
 
-    if (!args.length) {
-      this.setTime(Date.now());
-    } else if (
-      typeof args[0] === "number" &&
-      (args.length === 1 || (args.length === 2 && typeof args[1] !== "number"))
-    ) {
-      this.setTime(args[0]);
-    } else if (typeof args[0] === "string") {
-      this.setTime(+new Date(args[0]));
-    } else if (args[0] instanceof Date) {
-      this.setTime(+args[0]);
+    if (isNaN(tzOffset(this.timeZone, this))) {
+      this.setTime(NaN);
     } else {
-      this.setTime(+new Date(...args));
-      const offset = tzOffset(this.timeZone, this);
-      const localOffset = -new Date(...args).getTimezoneOffset();
-      Date.prototype.setMinutes.call(
-        this,
-        Date.prototype.getMinutes.call(this) + (localOffset - offset)
-      );
+      if (!args.length) {
+        this.setTime(Date.now());
+      } else if (
+        typeof args[0] === "number" &&
+        (args.length === 1 ||
+          (args.length === 2 && typeof args[1] !== "number"))
+      ) {
+        this.setTime(args[0]);
+      } else if (typeof args[0] === "string") {
+        this.setTime(+new Date(args[0]));
+      } else if (args[0] instanceof Date) {
+        this.setTime(+args[0]);
+      } else {
+        this.setTime(+new Date(...args));
+        const offset = tzOffset(this.timeZone, this);
+        const localOffset = -new Date(...args).getTimezoneOffset();
+        Date.prototype.setMinutes.call(
+          this,
+          Date.prototype.getMinutes.call(this) + (localOffset - offset)
+        );
+      }
     }
 
     this.internal = new Date();
@@ -91,7 +96,7 @@ Object.getOwnPropertyNames(Date.prototype).forEach((method) => {
     TZDateMini.prototype[utcMethod] = function () {
       const args = arguments;
       fixDST(this, () => Date.prototype[utcMethod].apply(this, args));
-      syncToInternal(date);
+      syncToInternal(this);
       return +this;
     };
   }

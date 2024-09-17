@@ -124,6 +124,10 @@ describe("TZDate", () => {
           ).toISOString()
         ).toBe("2024-02-11T12:30:45.987-05:00");
       });
+
+      it("returns Invalid Date for invalid date values", () => {
+        expect(+new TZDate(NaN, "Asia/Singapore")).toBe(NaN);
+      });
     });
 
     describe("TZ", () => {
@@ -246,6 +250,11 @@ describe("TZDate", () => {
           +nativeDate
         );
       });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getTime()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getTime()).toBe(NaN);
+      });
     });
 
     describe("setTime", () => {
@@ -287,6 +296,11 @@ describe("TZDate", () => {
           new TZDate(2020, 0, 1, 0, "America/New_York").getFullYear()
         ).toBe(2020);
       });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getFullYear()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getFullYear()).toBe(NaN);
+      });
     });
 
     describe("getUTCFullYear", () => {
@@ -297,6 +311,13 @@ describe("TZDate", () => {
         expect(
           new TZDate(2020, 0, 1, 0, "America/New_York").getUTCFullYear()
         ).toBe(2020);
+      });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getUTCFullYear()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getUTCFullYear()).toBe(
+          NaN
+        );
       });
     });
 
@@ -443,6 +464,11 @@ describe("TZDate", () => {
         );
         expect(new TZDate(2020, 0, 1, 0, "Asia/Singapore").getMonth()).toBe(0);
       });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getMonth()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getMonth()).toBe(NaN);
+      });
     });
 
     describe("getUTCMonth", () => {
@@ -453,6 +479,11 @@ describe("TZDate", () => {
         expect(new TZDate(2020, 0, 1, 0, "Asia/Singapore").getUTCMonth()).toBe(
           11
         );
+      });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getUTCMonth()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getUTCMonth()).toBe(NaN);
       });
     });
 
@@ -599,6 +630,11 @@ describe("TZDate", () => {
         );
         expect(new TZDate(defaultDateStr, "Asia/Singapore").getDate()).toBe(11);
       });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getDate()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getDate()).toBe(NaN);
+      });
     });
 
     describe("getUTCDate", () => {
@@ -609,6 +645,11 @@ describe("TZDate", () => {
         expect(new TZDate(defaultDateStr, "Asia/Singapore").getUTCDate()).toBe(
           11
         );
+      });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getUTCDate()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getUTCDate()).toBe(NaN);
       });
     });
 
@@ -724,6 +765,11 @@ describe("TZDate", () => {
         expect(new TZDate(dateStr, "America/New_York").getDay()).toBe(2);
         expect(new TZDate(dateStr, "Asia/Singapore").getDay()).toBe(3);
       });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getDay()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getDay()).toBe(NaN);
+      });
     });
 
     describe("getUTCDay", () => {
@@ -736,6 +782,11 @@ describe("TZDate", () => {
         expect(new TZDate(dateStr, "America/New_York").getUTCDay()).toBe(3);
         expect(new TZDate(dateStr, "Asia/Singapore").getUTCDay()).toBe(3);
       });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getUTCDay()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getUTCDay()).toBe(NaN);
+      });
     });
   });
 
@@ -746,6 +797,11 @@ describe("TZDate", () => {
         expect(new TZDate(dateStr, "Asia/Singapore").getHours()).toBe(17);
         expect(new TZDate(dateStr, "America/New_York").getHours()).toBe(4);
       });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getHours()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getHours()).toBe(NaN);
+      });
     });
 
     describe("getUTCHours", () => {
@@ -753,6 +809,11 @@ describe("TZDate", () => {
         const dateStr = "1987-02-10T09:00:00.000Z";
         expect(new TZDate(dateStr, "Asia/Singapore").getUTCHours()).toBe(9);
         expect(new TZDate(dateStr, "America/New_York").getUTCHours()).toBe(9);
+      });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getUTCHours()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getUTCHours()).toBe(NaN);
       });
     });
 
@@ -906,6 +967,11 @@ describe("TZDate", () => {
         expect(new TZDate(dateStr, "America/New_York").getMinutes()).toBe(15);
         expect(new TZDate(dateStr, "Asia/Kolkata").getMinutes()).toBe(45);
       });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getMinutes()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getMinutes()).toBe(NaN);
+      });
     });
 
     describe("getUTCMinutes", () => {
@@ -915,6 +981,11 @@ describe("TZDate", () => {
           15
         );
         expect(new TZDate(dateStr, "Asia/Kolkata").getUTCMinutes()).toBe(15);
+      });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getUTCMinutes()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getUTCMinutes()).toBe(NaN);
       });
     });
 
@@ -1068,6 +1139,11 @@ describe("TZDate", () => {
         expect(new TZDate(dateStr, "America/New_York").getSeconds()).toBe(30);
         expect(new TZDate(dateStr, "Asia/Singapore").getSeconds()).toBe(30);
       });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getSeconds()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getSeconds()).toBe(NaN);
+      });
     });
 
     describe("getUTCSeconds", () => {
@@ -1077,6 +1153,11 @@ describe("TZDate", () => {
           30
         );
         expect(new TZDate(dateStr, "Asia/Singapore").getUTCSeconds()).toBe(30);
+      });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getUTCSeconds()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getUTCSeconds()).toBe(NaN);
       });
     });
 
@@ -1234,6 +1315,13 @@ describe("TZDate", () => {
           456
         );
       });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getMilliseconds()).toBe(NaN);
+        expect(new TZDate(Date.now(), "Etc/Invalid").getMilliseconds()).toBe(
+          NaN
+        );
+      });
     });
 
     describe("getUTCMilliseconds", () => {
@@ -1244,6 +1332,15 @@ describe("TZDate", () => {
         ).toBe(456);
         expect(new TZDate(dateStr, "Asia/Singapore").getUTCMilliseconds()).toBe(
           456
+        );
+      });
+
+      it("returns NaN when the date or time zone are invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getUTCMilliseconds()).toBe(
+          NaN
+        );
+        expect(new TZDate(Date.now(), "Etc/Invalid").getUTCMilliseconds()).toBe(
+          NaN
         );
       });
     });
@@ -1372,6 +1469,12 @@ describe("TZDate", () => {
         expect(
           new TZDate(defaultDateStr, "Asia/Singapore").getTimezoneOffset()
         ).toBe(-480);
+      });
+
+      it("returns NaN when the date is invalid", () => {
+        expect(new TZDate(NaN, "America/New_York").getTimezoneOffset()).toBe(
+          NaN
+        );
       });
     });
   });

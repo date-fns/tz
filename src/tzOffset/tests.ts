@@ -38,4 +38,9 @@ describe("tzOffset", () => {
     const date = new Date("2020-01-15T00:00:00Z");
     expect(tzOffset("Europe/London", date)).toBe(0);
   });
+
+  it("returns NaN if the offset the date or time zone are invalid", () => {
+    expect(tzOffset("Etc/Invalid", new Date("2020-01-15T00:00:00Z"))).toBe(NaN);
+    expect(tzOffset("America/New_York", new Date(NaN))).toBe(NaN);
+  });
 });
