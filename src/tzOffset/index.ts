@@ -25,8 +25,14 @@ export function tzOffset(timeZone: string | undefined, date: Date): number {
     const offsetStr = format(date).slice(6);
     if (offsetStr in offsetCache) return offsetCache[offsetStr]!;
 
-    const [hours, minutes] = offsetStr.split(":").map(Number);
-    return (offsetCache[offsetStr] = hours! * 60 + (minutes || 0));
+    const [hours, minutes = 0] = offsetStr.split(":").map(Number);
+    
+    // type-guard
+    if (hours === undefined) {
+      return NaN;
+    }
+
+    return (offsetCache[offsetStr] = hours > 0 ? hours * 60 + minutes : hours * 60 - minutes);
   } catch {
     return NaN;
   }
