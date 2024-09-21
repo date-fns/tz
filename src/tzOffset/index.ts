@@ -25,10 +25,23 @@ export function tzOffset(timeZone: string | undefined, date: Date): number {
     const offsetStr = format(date).slice(6);
     if (offsetStr in offsetCache) return offsetCache[offsetStr]!;
 
-    const [hours = NaN, minutes = 0] = offsetStr.split(":").map(Number);
-    return (offsetCache[offsetStr] =
-      hours > 0 ? hours * 60 + minutes : hours * 60 - minutes);
+    return calcOffset(offsetStr, offsetStr.split(":"));
   } catch {
+    // Fallback to manual parsing if the runtime doesn't support ±HH:MM/±HHMM/±HH
+    // See: https://github.com/nodejs/node/issues/53419
+    if (timeZone! in offsetCache) return offsetCache[timeZone!]!;
+    const captures = timeZone?.match(offsetRe);
+    if (captures) return calcOffset(timeZone!, captures.slice(1));
+
     return NaN;
   }
+}
+
+const offsetRe = /([+-]\d\d):?(\d\d)?/;
+
+function calcOffset(cacheStr: string, values: string[]): number {
+  const hours = +values[0]!;
+  const minutes = +(values[1] || 0);
+  return (offsetCache[cacheStr] =
+    hours > 0 ? hours * 60 + minutes : hours * 60 - minutes);
 }

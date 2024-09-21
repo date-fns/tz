@@ -8,13 +8,17 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
-## v1.0.3 - 2024-09-22
+## v1.1.0 - 2024-09-22
 
 This is yet another critical bug-fix release. Thank you to all the people who sent PRs and reported their issues. Special thanks to [@huextrat](https://github.com/huextrat) and [@allohamora](https://github.com/allohamora).
 
 ### Fixed
 
 - [Fixed negative fractional time zones like `America/St_Johns`](https://github.com/date-fns/tz/pull/7) [@allohamora](https://github.com/allohamora).
+
+### Added
+
+- Added support for `±HH:MM/±HHMM/±HH` time zone formats for Node.js below v22 (and other environments that has this problem) [#3](https://github.com/date-fns/tz/issues/3)
 
 ## v1.0.2 - 2024-09-14
 

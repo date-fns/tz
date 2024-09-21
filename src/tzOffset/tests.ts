@@ -44,6 +44,34 @@ describe("tzOffset", () => {
     expect(tzOffset("America/New_York", new Date(NaN))).toBe(NaN);
   });
 
+  describe("time zone name formats", () => {
+    const date = new Date("2020-01-15T00:00:00Z");
+
+    it("works with IANA time zone names", () => {
+      expect(tzOffset("America/New_York", date)).toBe(-300);
+      expect(tzOffset("Asia/Pyongyang", date)).toBe(540);
+    });
+
+    it("works with ±HH:MM", () => {
+      expect(tzOffset("-05:00", date)).toBe(-300);
+      expect(tzOffset("-02:30", date)).toBe(-150);
+      expect(tzOffset("+05:00", date)).toBe(300);
+      expect(tzOffset("+02:30", date)).toBe(150);
+    });
+
+    it("works with ±HHMM", () => {
+      expect(tzOffset("-0500", date)).toBe(-300);
+      expect(tzOffset("-0230", date)).toBe(-150);
+      expect(tzOffset("+0500", date)).toBe(300);
+      expect(tzOffset("+0230", date)).toBe(150);
+    });
+
+    it("works with ±HH", () => {
+      expect(tzOffset("-05", date)).toBe(-300);
+      expect(tzOffset("+05", date)).toBe(300);
+    });
+  });
+
   describe("fractional time zones", () => {
     it("works negative fractional time zones", () => {
       const dst = new Date("2023-03-15T18:00:00.000Z");
