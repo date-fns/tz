@@ -29,9 +29,11 @@ export class TZDateMini extends Date {
         this.setTime(+new Date(...args));
         const offset = tzOffset(this.timeZone, this);
         const localOffset = -new Date(...args).getTimezoneOffset();
-        Date.prototype.setMinutes.call(
-          this,
-          Date.prototype.getMinutes.call(this) + (localOffset - offset)
+        fixDST(this, () =>
+          Date.prototype.setMinutes.call(
+            this,
+            Date.prototype.getMinutes.call(this) + (localOffset - offset)
+          )
         );
       }
     }

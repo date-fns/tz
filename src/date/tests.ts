@@ -217,6 +217,29 @@ describe("TZDate", () => {
           ).toISOString()
         ).toBe("2024-02-11T12:30:45.987-05:00");
       });
+
+      it("constructs proper date around DST changes", () => {
+        expect(
+          new Date(
+            +new TZDate(2023, 2, 10, 3, 30, "America/New_York")
+          ).toISOString()
+        ).toBe("2023-03-10T08:30:00.000Z");
+        expect(
+          new Date(
+            +new TZDate(2023, 2, 11, 3, 30, "America/New_York")
+          ).toISOString()
+        ).toBe("2023-03-11T08:30:00.000Z");
+        expect(
+          new Date(
+            +new TZDate(2023, 2, 12, 3, 30, "America/New_York")
+          ).toISOString()
+        ).toBe("2023-03-12T07:30:00.000Z");
+        expect(
+          new Date(
+            +new TZDate(2023, 2, 13, 3, 30, "America/New_York")
+          ).toISOString()
+        ).toBe("2023-03-13T07:30:00.000Z");
+      });
     });
 
     describe("UTC", () => {

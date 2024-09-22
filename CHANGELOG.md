@@ -10,11 +10,13 @@ This change log follows the format documented in [Keep a CHANGELOG].
 
 ## v1.1.0 - 2024-09-22
 
-This is yet another critical bug-fix release. Thank you to all the people who sent PRs and reported their issues. Special thanks to [@huextrat](https://github.com/huextrat) and [@allohamora](https://github.com/allohamora).
+This is yet another critical bug-fix release. Thank you to all the people who sent PRs and reported their issues. Special thanks to [@huextrat](https://github.com/huextrat), [@allohamora](https://github.com/allohamora) and [@lhermann](https://github.com/lhermann).
 
 ### Fixed
 
 - [Fixed negative fractional time zones like `America/St_Johns`](https://github.com/date-fns/tz/pull/7) [@allohamora](https://github.com/allohamora).
+
+- Fixed the DST bug when creating a date in the DST transition hour.
 
 ### Added
 
