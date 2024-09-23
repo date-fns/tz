@@ -128,6 +128,38 @@ describe("TZDate", () => {
       it("returns Invalid Date for invalid date values", () => {
         expect(+new TZDate(NaN, "Asia/Singapore")).toBe(NaN);
       });
+
+      describe("DST", () => {
+        it("America/Los_Angeles", () => {
+          expect(utcStr(new TZDate(2020, 2, 8, 1, laName))).toBe(
+            "2020-03-08T09:00:00.000Z"
+          );
+          expect(utcStr(new TZDate(2020, 2, 8, 2, laName))).toBe(
+            "2020-03-08T10:00:00.000Z"
+          );
+          expect(utcStr(new TZDate(2020, 2, 8, 3, laName))).toBe(
+            "2020-03-08T10:00:00.000Z"
+          );
+          expect(utcStr(new TZDate(2020, 2, 8, 4, laName))).toBe(
+            "2020-03-08T11:00:00.000Z"
+          );
+        });
+
+        it("America/New_York", () => {
+          expect(utcStr(new TZDate(2020, 2, 8, 1, nyName))).toBe(
+            "2020-03-08T06:00:00.000Z"
+          );
+          expect(utcStr(new TZDate(2020, 2, 8, 2, nyName))).toBe(
+            "2020-03-08T07:00:00.000Z"
+          );
+          expect(utcStr(new TZDate(2020, 2, 8, 3, nyName))).toBe(
+            "2020-03-08T07:00:00.000Z"
+          );
+          expect(utcStr(new TZDate(2020, 2, 8, 4, nyName))).toBe(
+            "2020-03-08T08:00:00.000Z"
+          );
+        });
+      });
     });
 
     describe("TZ", () => {
@@ -904,6 +936,29 @@ describe("TZDate", () => {
           // = 1 day + 08:02:30
           expect(date.toISOString()).toBe("2019-12-30T15:57:30.000-05:00");
         }
+      });
+
+      it("constructs proper date around DST changes", () => {
+        const date10 = new TZDate(2023, 2, 10, "America/New_York");
+        date10.setHours(3, 30);
+        expect(new Date(+date10).toISOString()).toBe(
+          "2023-03-10T08:30:00.000Z"
+        );
+        const date11 = new TZDate(2023, 2, 11, "America/New_York");
+        date11.setHours(3, 30);
+        expect(new Date(+date11).toISOString()).toBe(
+          "2023-03-11T08:30:00.000Z"
+        );
+        const date12 = new TZDate(2023, 2, 12, "America/New_York");
+        date12.setHours(3, 30);
+        expect(new Date(+date12).toISOString()).toBe(
+          "2023-03-12T07:30:00.000Z"
+        );
+        const date13 = new TZDate(2023, 2, 13, "America/New_York");
+        date13.setHours(3, 30);
+        expect(new Date(+date13).toISOString()).toBe(
+          "2023-03-13T07:30:00.000Z"
+        );
       });
     });
 
@@ -1780,4 +1835,142 @@ describe("TZDate", () => {
       }
     });
   });
+
+  describe("DST", () => {
+    describe("setting the DST time", () => {
+      it("America/Los_Angeles", () => {
+        withDate(laName, (date) => {
+          expect(utcStr(date)).toBe("2020-03-08T08:00:00.000Z");
+        });
+
+        // Set on the DST hour
+        withDate(laName, (date) => {
+          date.setHours(2);
+          expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+        });
+
+        // Set on the hour DST moves to
+        withDate(laName, (date) => {
+          date.setHours(3);
+          expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+        });
+
+        // Set after the DST hour
+        withDate(laName, (date) => {
+          date.setHours(5);
+          expect(utcStr(date)).toBe("2020-03-08T12:00:00.000Z");
+        });
+      });
+
+      it("America/New_York", () => {
+        withDate(nyName, (date) => {
+          expect(utcStr(date)).toBe("2020-03-08T05:00:00.000Z");
+        });
+
+        // Set on the DST hour
+        withDate(nyName, (date) => {
+          date.setHours(2);
+          expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+        });
+
+        // Set on the hour DST moves to
+        withDate(nyName, (date) => {
+          date.setHours(3);
+          expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+        });
+
+        // Set after the DST hour
+        withDate(nyName, (date) => {
+          date.setHours(5);
+          expect(utcStr(date)).toBe("2020-03-08T09:00:00.000Z");
+        });
+      });
+    });
+
+    describe("updating to the DST time", () => {
+      it("America/Los_Angeles", () => {
+        withDate(laName, (date) => {
+          date.setHours(1);
+          date.setHours(1);
+          expect(utcStr(date)).toBe("2020-03-08T09:00:00.000Z");
+        });
+
+        // Update to the same DST hour
+        withDate(laName, (date) => {
+          date.setHours(2);
+          date.setHours(2);
+          expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+        });
+
+        // Update to the hour DST moves to
+        withDate(laName, (date) => {
+          date.setHours(2);
+          date.setHours(3);
+          expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+        });
+
+        // Update from after the DST hour
+        withDate(laName, (date) => {
+          date.setHours(5);
+          date.setHours(2);
+          expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+        });
+
+        // Update to another year with the same DST hour
+        withDate(laName, (date) => {
+          date.setHours(2);
+          date.setFullYear(2015);
+          expect(utcStr(date)).toBe("2015-03-08T10:00:00.000Z");
+        });
+      });
+
+      it("America/New_York", () => {
+        withDate(nyName, (date) => {
+          date.setHours(1);
+          date.setHours(1);
+          expect(utcStr(date)).toBe("2020-03-08T06:00:00.000Z");
+        });
+
+        // Update to the same DST hour
+        withDate(nyName, (date) => {
+          date.setHours(2);
+          date.setHours(2);
+          expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+        });
+
+        // Update to the hour DST moves to
+        withDate(nyName, (date) => {
+          date.setHours(2);
+          date.setHours(3);
+          expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+        });
+
+        // Update from after the DST hour
+        withDate(nyName, (date) => {
+          date.setHours(5);
+          date.setHours(2);
+          expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+        });
+
+        // Update to another year with the same DST hour
+        withDate(nyName, (date) => {
+          date.setHours(2);
+          date.setFullYear(2015);
+          expect(utcStr(date)).toBe("2015-03-08T07:00:00.000Z");
+        });
+      });
+    });
+  });
 });
+
+function withDate(tz: string, fn: (date: TZDate) => void) {
+  fn(new TZDate(2020, 2, 8, tz));
+}
+
+function utcStr(date: TZDate) {
+  return new Date(+date).toISOString();
+}
+
+const laName = "America/Los_Angeles";
+const nyName = "America/New_York";
+const sgName = "Asia/Singapore";
