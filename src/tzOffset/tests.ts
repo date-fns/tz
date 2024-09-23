@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { tzOffset } from "./index.ts";
 
 describe("tzOffset", () => {
@@ -87,4 +87,37 @@ describe("tzOffset", () => {
       expect(tzOffset("Australia/Adelaide", date)).toBe(570);
     });
   });
+
+  describe('Intl.DateTimeFormat format', () => {
+    let mockFormat = vi.fn();
+    beforeEach(() => {
+      mockFormat = vi.fn(() => '5 GMT+08:00');
+      const dtf = new Intl.DateTimeFormat();
+      vi.spyOn(Intl, 'DateTimeFormat').mockImplementation(() => {
+        return { ...dtf, format: mockFormat };
+      });
+    });
+
+    afterEach(() => {
+      vi.mocked(Intl.DateTimeFormat).mockRestore();
+    });
+
+    it("reads offset from expected format", () => {
+      mockFormat.mockReturnValue('5 GMT+08:00');
+      const date = new Date("2020-01-15T00:00:00Z");
+      expect(tzOffset("Asia/Manila", date)).toBe(480);
+    });
+
+    it("reads offset from polyfill", () => {
+      mockFormat.mockReturnValue('5:53 PM GMT-9:30');
+      const date = new Date("2020-01-15T00:00:00Z");
+      expect(tzOffset("Pacific/Marquesas", date)).toBe(-570);
+    });
+
+    it("reads offset from polyfill (without offset)", () => {
+      mockFormat.mockReturnValue('5:53 PM GMT');
+      const date = new Date("2020-01-15T00:00:00Z");
+      expect(tzOffset("UTC", date)).toBe(0);
+    });
+  })
 });

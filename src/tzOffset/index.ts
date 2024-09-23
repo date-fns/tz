@@ -22,7 +22,7 @@ export function tzOffset(timeZone: string | undefined, date: Date): number {
       { timeZone, hour: "numeric", timeZoneName: "longOffset" }
     ).format);
 
-    const offsetStr = format(date).slice(6);
+    const offsetStr = format(date).split('GMT')[1] || '';
     if (offsetStr in offsetCache) return offsetCache[offsetStr]!;
 
     return calcOffset(offsetStr, offsetStr.split(":"));
