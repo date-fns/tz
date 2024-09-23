@@ -10,6 +10,8 @@ export class TZDateMini extends Date {
       this.timeZone = args.pop();
     }
 
+    this.internal = new Date();
+
     if (isNaN(tzOffset(this.timeZone, this))) {
       this.setTime(NaN);
     } else {
@@ -27,18 +29,10 @@ export class TZDateMini extends Date {
         this.setTime(+args[0]);
       } else {
         this.setTime(+new Date(...args));
-        const offset = tzOffset(this.timeZone, this);
-        const localOffset = -new Date(...args).getTimezoneOffset();
-        fixDST(this, () =>
-          Date.prototype.setMinutes.call(
-            this,
-            Date.prototype.getMinutes.call(this) + (localOffset - offset)
-          )
-        );
+        adjustToSystemTZ(this, NaN);
       }
     }
 
-    this.internal = new Date();
     syncToInternal(this);
   }
 
@@ -88,31 +82,25 @@ Object.getOwnPropertyNames(Date.prototype).forEach((method) => {
   } else {
     // Assign regular setter
     TZDateMini.prototype[method] = function () {
-      const args = arguments;
-      Date.prototype[utcMethod].apply(this.internal, args);
+      Date.prototype[utcMethod].apply(this.internal, arguments);
       syncFromInternal(this);
       return +this;
     };
 
     // Assign UTC setter
     TZDateMini.prototype[utcMethod] = function () {
-      const args = arguments;
-      fixDST(this, () => Date.prototype[utcMethod].apply(this, args));
+      Date.prototype[utcMethod].apply(this, arguments);
       syncToInternal(this);
       return +this;
     };
   }
 });
 
-function fixDST(date, update) {
-  const offset = tzOffset(date.timeZone, date);
-  update();
-  const newOffset = tzOffset(date.timeZone, date);
-  const diff = newOffset - offset;
-  if (diff)
-    Date.prototype.setUTCMinutes.call(date, date.getUTCMinutes() - diff);
-}
-
+/**
+ * Function syncs time to internal date, applying the time zone offset.
+ *
+ * @param {Date} date - Date to sync
+ */
 function syncToInternal(date) {
   date.internal.setTime(+date);
   date.internal.setUTCMinutes(
@@ -120,10 +108,131 @@ function syncToInternal(date) {
   );
 }
 
+/**
+ * Function syncs the internal date UTC values to the date. It allows to get
+ * accurate timestamp value.
+ *
+ * @param {Date} date - The date to sync
+ */
 function syncFromInternal(date) {
-  date.setTime(+date.internal);
-  Date.prototype.setUTCMinutes.call(
+  // First we transpose the internal values
+  Date.prototype.setFullYear.call(
     date,
-    Date.prototype.getUTCMinutes.call(date) + date.getTimezoneOffset()
+    date.internal.getUTCFullYear(),
+    date.internal.getUTCMonth(),
+    date.internal.getUTCDate()
   );
+  Date.prototype.setHours.call(
+    date,
+    date.internal.getUTCHours(),
+    date.internal.getUTCMinutes(),
+    date.internal.getUTCSeconds(),
+    date.internal.getUTCMilliseconds()
+  );
+
+  // Now we have to adjust the date to the system time zone
+  adjustToSystemTZ(date);
+}
+
+/**
+ * Function adjusts the date to the system time zone. It uses the time zone
+ * differences to calculate the offset and adjust the date.
+ *
+ * @param {Date} date - Date to adjust
+ */
+function adjustToSystemTZ(date) {
+  // Save the time zone offset before all the adjustments
+  const offset = tzOffset(date.timeZone, date);
+
+  //#region System DST adjustment
+
+  // The biggest problem with using the system time zone is that when we create
+  // a date from internal values stored in UTC, the system time zone might end
+  // up on the DST hour:
+  //
+  //   $ TZ=America/New_York node
+  //   > new Date(2020, 2, 8, 1).toString()
+  //   'Sun Mar 08 2020 01:00:00 GMT-0500 (Eastern Standard Time)'
+  //   > new Date(2020, 2, 8, 2).toString()
+  //   'Sun Mar 08 2020 03:00:00 GMT-0400 (Eastern Daylight Time)'
+  //   > new Date(2020, 2, 8, 3).toString()
+  //   'Sun Mar 08 2020 03:00:00 GMT-0400 (Eastern Daylight Time)'
+  //   > new Date(2020, 2, 8, 4).toString()
+  //   'Sun Mar 08 2020 04:00:00 GMT-0400 (Eastern Daylight Time)'
+  //
+  // Here we get the same hour for both 2 and 3, because the system time zone
+  // has DST beginning at 8 March 2020, 2 a.m. and jumps to 3 a.m. So we have
+  // to adjust the internal date to reflect that.
+  //
+  // However we want to adjust only if that's the DST hour the change happenes,
+  // not the hour where DST moves to.
+
+  // We calculate the previous hour to see if the time zone offset has changed
+  // and we have landed on the DST hour.
+  const prevHour = new Date(+date);
+  // We use UTC methods here as we don't want to land on the same hour again
+  // in case of DST.
+  prevHour.setUTCHours(prevHour.getUTCHours() - 1);
+
+  // Calculate if we are on the system DST hour.
+  const systemOffset = -new Date(+date).getTimezoneOffset();
+  const prevHourSystemOffset = -new Date(+prevHour).getTimezoneOffset();
+  const systemDSTChange = systemOffset - prevHourSystemOffset;
+  // Detect the DST shift. System DST change will occur both on
+  const dstShift =
+    Date.prototype.getHours.apply(date) !== date.internal.getUTCHours();
+
+  // Move the internal date when we are on the system DST hour.
+  if (systemDSTChange && dstShift)
+    date.internal.setUTCMinutes(
+      date.internal.getUTCMinutes() + systemDSTChange
+    );
+
+  //#endregion
+
+  //#region System diff adjustment
+
+  // Now we need to adjust the date, since we just applied internal values.
+  // We need to calculate the difference between the system and date time zones
+  // and apply it to the date.
+
+  const offsetDiff = systemOffset - offset;
+  if (offsetDiff)
+    Date.prototype.setUTCMinutes.call(
+      date,
+      Date.prototype.getUTCMinutes.call(date) + offsetDiff
+    );
+
+  //#endregion
+
+  //#region Post-adjustment DST fix
+
+  const postOffset = tzOffset(date.timeZone, date);
+  const postSystemOffset = -new Date(+date).getTimezoneOffset();
+  const postOffsetDiff = postSystemOffset - postOffset;
+  const offsetChanged = postOffset !== offset;
+  const postDiff = postOffsetDiff - offsetDiff;
+
+  if (offsetChanged && postDiff) {
+    Date.prototype.setUTCMinutes.call(
+      date,
+      Date.prototype.getUTCMinutes.call(date) + postDiff
+    );
+
+    // Now we need to check if got offset change during the post-adjustment.
+    // If so, we also need both dates to reflect that.
+
+    const newOffset = tzOffset(date.timeZone, date);
+    const offsetChange = postOffset - newOffset;
+
+    if (offsetChange) {
+      date.internal.setUTCMinutes(date.internal.getUTCMinutes() + offsetChange);
+      Date.prototype.setUTCMinutes.call(
+        date,
+        Date.prototype.getUTCMinutes.call(date) + offsetChange
+      );
+    }
+  }
+
+  //#endregion
 }

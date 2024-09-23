@@ -442,14 +442,14 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "Asia/Singapore");
           // ... -> 2020-12-31 16:00:00 (UTC) ->
           date.setUTCFullYear(2020);
-          expect(date.toISOString()).toBe("2021-01-01T00:00:00.000+08:00");
+          expect(utcStr(date)).toBe("2020-12-31T16:00:00.000Z");
         }
         {
           // 2020-01-01 05:00:00 (UTC) -> ...
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2020-01-01 05:00:00 (UTC) ->
           date.setUTCFullYear(2020);
-          expect(date.toISOString()).toBe("2020-01-01T00:00:00.000-05:00");
+          expect(utcStr(date)).toBe("2020-01-01T05:00:00.000Z");
         }
       });
 
@@ -481,14 +481,14 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "Asia/Singapore");
           // ... -> 2021-04-14 16:00:00 (UTC) -> ...
           date.setUTCFullYear(2020, 14, 45);
-          expect(date.toISOString()).toBe("2021-04-15T00:00:00.000+08:00");
+          expect(utcStr(date)).toBe("2021-04-14T16:00:00.000Z");
         }
         {
           // 2020-01-01 05:00:00 (UTC) -> ...
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2021-04-14 05:00:00 (UTC) -> ...
           date.setUTCFullYear(2020, 14, 45);
-          expect(date.toISOString()).toBe("2021-04-14T00:00:00.000-04:00");
+          expect(utcStr(date)).toBe("2021-04-14T05:00:00.000Z");
         }
       });
 
@@ -608,14 +608,14 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "Asia/Singapore");
           // ... -> 2019-03-03 16:00:00 (UTC) -> ...
           date.setUTCMonth(1);
-          expect(date.toISOString()).toBe("2019-03-04T00:00:00.000+08:00");
+          expect(utcStr(date)).toBe("2019-03-03T16:00:00.000Z");
         }
         {
           // 2020-01-01 05:00:00 (UTC) -> ...
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2020-02-01 05:00:00 (UTC) -> ...
           date.setUTCMonth(1);
-          expect(date.toISOString()).toBe("2020-02-01T00:00:00.000-05:00");
+          expect(utcStr(date)).toBe("2020-02-01T05:00:00.000Z");
         }
       });
 
@@ -654,7 +654,7 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2021-08-14 05:00:00 (UTC) -> ...
           date.setUTCMonth(18, 45);
-          expect(date.toISOString()).toBe("2021-08-14T00:00:00.000-04:00");
+          expect(utcStr(date)).toBe("2021-08-14T05:00:00.000Z");
         }
       });
 
@@ -671,7 +671,7 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2018-05-01 05:00:00 (UTC) -> ...
           date.setUTCMonth(-18, -60);
-          expect(date.toISOString()).toBe("2018-05-01T00:00:00.000-04:00");
+          expect(utcStr(date)).toBe("2018-05-01T05:00:00.000Z");
         }
       });
     });
@@ -761,14 +761,14 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "Asia/Singapore");
           // ... -> 2019-12-11 16:00:00 (UTC) ->
           date.setUTCDate(11);
-          expect(date.toISOString()).toBe("2019-12-12T00:00:00.000+08:00");
+          expect(utcStr(date)).toBe("2019-12-11T16:00:00.000Z");
         }
         {
           // 2020-01-01 05:00:00 (UTC) -> ...
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2020-01-11 05:00:00 (UTC) ->
           date.setUTCDate(11);
-          expect(date.toISOString()).toBe("2020-01-11T00:00:00.000-05:00");
+          expect(utcStr(date)).toBe("2020-01-11T05:00:00.000Z");
         }
       });
 
@@ -790,7 +790,7 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2022-08-02 05:00:00 (UTC) ->
           date.setUTCDate(945);
-          expect(date.toISOString()).toBe("2022-08-02T00:00:00.000-04:00");
+          expect(utcStr(date)).toBe("2022-08-02T05:00:00.000Z");
         }
       });
 
@@ -800,14 +800,14 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "Asia/Singapore");
           // ... -> 2019-10-01 16:00:00 (UTC) ->
           date.setUTCDate(-60);
-          expect(date.toISOString()).toBe("2019-10-02T00:00:00.000+08:00");
+          expect(utcStr(date)).toBe("2019-10-01T16:00:00.000Z");
         }
         {
           // 2020-01-01 05:00:00 (UTC) -> ...
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2019-11-01 05:00:00 (UTC) ->
           date.setUTCDate(-60);
-          expect(date.toISOString()).toBe("2019-11-01T00:00:00.000-04:00");
+          expect(utcStr(date)).toBe("2019-11-01T05:00:00.000Z");
         }
       });
     });
@@ -969,14 +969,14 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "Asia/Singapore");
           // ... -> 2019-12-31 12:00:00 (UTC) ->
           date.setUTCHours(12);
-          expect(date.toISOString()).toBe("2019-12-31T20:00:00.000+08:00");
+          expect(utcStr(date)).toBe("2019-12-31T12:00:00.000Z");
         }
         {
           // 2020-01-01 05:00:00 (UTC) -> ...
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2020-01-01 12:00:00 (UTC) ->
           date.setUTCHours(12);
-          expect(date.toISOString()).toBe("2020-01-01T07:00:00.000-05:00");
+          expect(utcStr(date)).toBe("2020-01-01T12:00:00.000Z");
         }
       });
 
@@ -1141,14 +1141,14 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "Asia/Singapore");
           // ... -> 2019-12-31 16:34:00 (UTC) ->
           date.setUTCMinutes(34);
-          expect(date.toISOString()).toBe("2020-01-01T00:34:00.000+08:00");
+          expect(utcStr(date)).toBe("2019-12-31T16:34:00.000Z");
         }
         {
           // 2020-01-01 05:00:00 (UTC) -> ...
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2020-01-01 05:34:00 (UTC) ->
           date.setUTCMinutes(34);
-          expect(date.toISOString()).toBe("2020-01-01T00:34:00.000-05:00");
+          expect(utcStr(date)).toBe("2020-01-01T05:34:00.000Z");
         }
       });
 
@@ -1313,14 +1313,14 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "Asia/Singapore");
           // ... -> 2019-12-31 16:00:56 (UTC) ->
           date.setUTCSeconds(56);
-          expect(date.toISOString()).toBe("2020-01-01T00:00:56.000+08:00");
+          expect(utcStr(date)).toBe("2019-12-31T16:00:56.000Z");
         }
         {
           // 2020-01-01 05:00:00 (UTC) -> ...
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2020-01-01 05:00:56 (UTC) ->
           date.setUTCSeconds(56);
-          expect(date.toISOString()).toBe("2020-01-01T00:00:56.000-05:00");
+          expect(utcStr(date)).toBe("2020-01-01T05:00:56.000Z");
         }
       });
 
@@ -1476,14 +1476,14 @@ describe("TZDate", () => {
           const date = new TZDate(2020, 0, 1, "Asia/Singapore");
           // ... -> 2019-12-31 16:00:00 (UTC) ->
           date.setUTCMilliseconds(789);
-          expect(date.toISOString()).toBe("2020-01-01T00:00:00.789+08:00");
+          expect(utcStr(date)).toBe("2019-12-31T16:00:00.789Z");
         }
         {
           // 2020-01-01 05:00:00 (UTC) -> ...
           const date = new TZDate(2020, 0, 1, "America/New_York");
           // ... -> 2020-01-01 05:00:00 (UTC) ->
           date.setUTCMilliseconds(789);
-          expect(date.toISOString()).toBe("2020-01-01T00:00:00.789-05:00");
+          expect(utcStr(date)).toBe("2020-01-01T05:00:00.789Z");
         }
       });
 
@@ -1838,133 +1838,263 @@ describe("TZDate", () => {
 
   describe("DST", () => {
     describe("setting the DST time", () => {
-      it("America/Los_Angeles", () => {
-        withDate(laName, (date) => {
-          expect(utcStr(date)).toBe("2020-03-08T08:00:00.000Z");
+      describe("DST start", () => {
+        describe("default methods", () => {
+          it("America/Los_Angeles", () => {
+            withDSTStart(laName, (date) => {
+              expect(utcStr(date)).toBe("2020-03-08T08:00:00.000Z");
+            });
+
+            // Set on the DST hour
+            withDSTStart(laName, (date) => {
+              date.setHours(2);
+              expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+            });
+
+            // Set on the hour DST moves to
+            withDSTStart(laName, (date) => {
+              date.setHours(3);
+              expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+            });
+
+            // Set after the DST hour
+            withDSTStart(laName, (date) => {
+              date.setHours(5);
+              expect(utcStr(date)).toBe("2020-03-08T12:00:00.000Z");
+            });
+          });
+
+          it("America/New_York", () => {
+            withDSTStart(nyName, (date) => {
+              expect(utcStr(date)).toBe("2020-03-08T05:00:00.000Z");
+            });
+
+            // Set on the DST hour
+            withDSTStart(nyName, (date) => {
+              date.setHours(2);
+              expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+            });
+
+            // Set on the hour DST moves to
+            withDSTStart(nyName, (date) => {
+              date.setHours(3);
+              expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+            });
+
+            // Set after the DST hour
+            withDSTStart(nyName, (date) => {
+              date.setHours(5);
+              expect(utcStr(date)).toBe("2020-03-08T09:00:00.000Z");
+            });
+          });
         });
 
-        // Set on the DST hour
-        withDate(laName, (date) => {
-          date.setHours(2);
-          expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
-        });
+        describe("UTC methods", () => {
+          it("America/Los_Angeles", () => {
+            // Set on the DST hour
+            withDSTStart(laName, (date) => {
+              date.setUTCHours(10);
+              expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+            });
 
-        // Set on the hour DST moves to
-        withDate(laName, (date) => {
-          date.setHours(3);
-          expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
-        });
+            // Set after the DST hour
+            withDSTStart(laName, (date) => {
+              date.setUTCHours(12);
+              expect(utcStr(date)).toBe("2020-03-08T12:00:00.000Z");
+            });
+          });
 
-        // Set after the DST hour
-        withDate(laName, (date) => {
-          date.setHours(5);
-          expect(utcStr(date)).toBe("2020-03-08T12:00:00.000Z");
-        });
-      });
+          it("America/New_York", () => {
+            // Set on the DST hour
+            withDSTStart(nyName, (date) => {
+              date.setUTCHours(7);
+              expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+            });
 
-      it("America/New_York", () => {
-        withDate(nyName, (date) => {
-          expect(utcStr(date)).toBe("2020-03-08T05:00:00.000Z");
-        });
-
-        // Set on the DST hour
-        withDate(nyName, (date) => {
-          date.setHours(2);
-          expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
-        });
-
-        // Set on the hour DST moves to
-        withDate(nyName, (date) => {
-          date.setHours(3);
-          expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
-        });
-
-        // Set after the DST hour
-        withDate(nyName, (date) => {
-          date.setHours(5);
-          expect(utcStr(date)).toBe("2020-03-08T09:00:00.000Z");
+            // Set after the DST hour
+            withDSTStart(nyName, (date) => {
+              date.setUTCHours(9);
+              expect(utcStr(date)).toBe("2020-03-08T09:00:00.000Z");
+            });
+          });
         });
       });
     });
 
     describe("updating to the DST time", () => {
-      it("America/Los_Angeles", () => {
-        withDate(laName, (date) => {
-          date.setHours(1);
-          date.setHours(1);
-          expect(utcStr(date)).toBe("2020-03-08T09:00:00.000Z");
+      describe("DST start", () => {
+        describe("default methods", () => {
+          it("America/Los_Angeles", () => {
+            withDSTStart(laName, (date) => {
+              date.setHours(1);
+              date.setHours(1);
+              expect(utcStr(date)).toBe("2020-03-08T09:00:00.000Z");
+            });
+
+            // Update to the same DST hour
+            withDSTStart(laName, (date) => {
+              date.setHours(2);
+              date.setHours(2);
+              expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+            });
+
+            // Update to the hour DST moves to
+            withDSTStart(laName, (date) => {
+              date.setHours(2);
+              date.setHours(3);
+              expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+            });
+
+            // Update to same DST hour
+            withDSTStart(laName, (date) => {
+              date.setHours(2);
+              date.setHours(date.getHours());
+              expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+            });
+
+            // Update to same hour DST moves to
+            withDSTStart(laName, (date) => {
+              date.setHours(3);
+              date.setHours(date.getHours());
+              expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+            });
+
+            // Update from after the DST hour
+            withDSTStart(laName, (date) => {
+              date.setHours(5);
+              date.setHours(2);
+              expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+            });
+
+            // Update to another year with the same DST hour
+            withDSTStart(laName, (date) => {
+              date.setHours(2);
+              date.setFullYear(2015);
+              expect(utcStr(date)).toBe("2015-03-08T10:00:00.000Z");
+            });
+          });
+
+          it("America/New_York", () => {
+            withDSTStart(nyName, (date) => {
+              date.setHours(1);
+              date.setHours(1);
+              expect(utcStr(date)).toBe("2020-03-08T06:00:00.000Z");
+            });
+
+            // Update to the same DST hour
+            withDSTStart(nyName, (date) => {
+              date.setHours(2);
+              date.setHours(2);
+              expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+            });
+
+            // Update to the hour DST moves to
+            withDSTStart(nyName, (date) => {
+              date.setHours(2);
+              date.setHours(3);
+              expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+            });
+
+            // Update to same DST hour
+            withDSTStart(nyName, (date) => {
+              date.setHours(2);
+              date.setHours(date.getHours());
+              expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+            });
+
+            // Update to same hour DST moves to
+            withDSTStart(nyName, (date) => {
+              date.setHours(3);
+              date.setHours(date.getHours());
+              expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+            });
+
+            // Update from after the DST hour
+            withDSTStart(nyName, (date) => {
+              date.setHours(5);
+              date.setHours(2);
+              expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+            });
+
+            // Update to another year with the same DST hour
+            withDSTStart(nyName, (date) => {
+              date.setHours(2);
+              date.setFullYear(2015);
+              expect(utcStr(date)).toBe("2015-03-08T07:00:00.000Z");
+            });
+          });
         });
 
-        // Update to the same DST hour
-        withDate(laName, (date) => {
-          date.setHours(2);
-          date.setHours(2);
-          expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
-        });
+        describe("UTC methods", () => {
+          it("America/Los_Angeles", () => {
+            withDSTStart(laName, (date) => {
+              date.setUTCHours(9);
+              date.setUTCHours(9);
+              expect(utcStr(date)).toBe("2020-03-08T09:00:00.000Z");
+            });
 
-        // Update to the hour DST moves to
-        withDate(laName, (date) => {
-          date.setHours(2);
-          date.setHours(3);
-          expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
-        });
+            // Update to the same DST hour
+            withDSTStart(laName, (date) => {
+              date.setUTCHours(10);
+              date.setUTCHours(10);
+              expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+            });
 
-        // Update from after the DST hour
-        withDate(laName, (date) => {
-          date.setHours(5);
-          date.setHours(2);
-          expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
-        });
+            // Update from after the DST hour
+            withDSTStart(laName, (date) => {
+              date.setUTCHours(12);
+              date.setUTCHours(10);
+              expect(utcStr(date)).toBe("2020-03-08T10:00:00.000Z");
+            });
 
-        // Update to another year with the same DST hour
-        withDate(laName, (date) => {
-          date.setHours(2);
-          date.setFullYear(2015);
-          expect(utcStr(date)).toBe("2015-03-08T10:00:00.000Z");
-        });
-      });
+            // Update to another year with the same DST hour
+            withDSTStart(laName, (date) => {
+              date.setUTCHours(10);
+              date.setUTCFullYear(2015);
+              expect(utcStr(date)).toBe("2015-03-08T10:00:00.000Z");
+            });
+          });
 
-      it("America/New_York", () => {
-        withDate(nyName, (date) => {
-          date.setHours(1);
-          date.setHours(1);
-          expect(utcStr(date)).toBe("2020-03-08T06:00:00.000Z");
-        });
+          it("America/New_York", () => {
+            withDSTStart(nyName, (date) => {
+              date.setUTCHours(6);
+              date.setUTCHours(6);
+              expect(utcStr(date)).toBe("2020-03-08T06:00:00.000Z");
+            });
 
-        // Update to the same DST hour
-        withDate(nyName, (date) => {
-          date.setHours(2);
-          date.setHours(2);
-          expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
-        });
+            // Update to the same DST hour
+            withDSTStart(nyName, (date) => {
+              date.setUTCHours(7);
+              date.setUTCHours(7);
+              expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+            });
 
-        // Update to the hour DST moves to
-        withDate(nyName, (date) => {
-          date.setHours(2);
-          date.setHours(3);
-          expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
-        });
+            // Update from after the DST hour
+            withDSTStart(nyName, (date) => {
+              date.setUTCHours(10);
+              date.setUTCHours(7);
+              expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
+            });
 
-        // Update from after the DST hour
-        withDate(nyName, (date) => {
-          date.setHours(5);
-          date.setHours(2);
-          expect(utcStr(date)).toBe("2020-03-08T07:00:00.000Z");
-        });
-
-        // Update to another year with the same DST hour
-        withDate(nyName, (date) => {
-          date.setHours(2);
-          date.setFullYear(2015);
-          expect(utcStr(date)).toBe("2015-03-08T07:00:00.000Z");
+            // Update to another year with the same DST hour
+            withDSTStart(nyName, (date) => {
+              date.setUTCHours(7);
+              date.setUTCFullYear(2015);
+              expect(utcStr(date)).toBe("2015-03-08T07:00:00.000Z");
+            });
+          });
         });
       });
     });
   });
 });
 
-function withDate(tz: string, fn: (date: TZDate) => void) {
+function withDSTStart(tz: string, fn: (date: TZDate) => void) {
   fn(new TZDate(2020, 2, 8, tz));
+}
+
+function withDSTEnd(tz: string, fn: (date: TZDate) => void) {
+  fn(new TZDate(2020, 10, 1, tz));
 }
 
 function utcStr(date: TZDate) {
