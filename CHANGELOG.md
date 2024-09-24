@@ -8,6 +8,12 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## v1.1.2 - 2024-09-24
+
+### Fixed
+
+- Improved compatability with FormatJS Intl polifyll [#8](https://github.com/date-fns/tz/issues/8). Thanks to [@kevin-abiera](https://github.com/kevin-abiera).
+
 ## v1.1.1 - 2024-09-23
 
 ### Fixed
