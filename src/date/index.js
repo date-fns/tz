@@ -1,17 +1,20 @@
 import { TZDateMini } from "./mini.js";
 
 /**
- * UTC date class. It maps getters and setters to corresponding UTC methods,
- * forcing all calculations in the UTC time zone.
+ * Time zone date class. It overrides original Date functions making them
+ * to perform all the calculations in the given time zone.
+ *
+ * It also provides new functions useful when working with time zones.
  *
  * Combined with date-fns, it allows using the class the same way as
  * the original date class.
  *
- * This complete version provides not only getters, setters,
- * and `getTimezoneOffset`, but also the formatter functions, mirroring
- * all original `Date` functionality. Use this version when you need to format
- * a string or in an environment you don't fully control (a library).
- * For a minimal version, see `UTCDateMini`.
+ * This complete version provides formatter functions, mirroring all original
+ * methods of the `Date` class. It's build-size-heavier than `TZDateMini` and
+ * should be used when you need to format a string or in an environment you
+ * don't fully control (a library).
+ *
+ * For the minimal version, see `TZDateMini`.
  */
 export class TZDate extends TZDateMini {
   //#region static
