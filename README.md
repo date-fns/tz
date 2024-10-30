@@ -2,7 +2,7 @@
 
 The package provides `Date` extensions `TZDate` and `TZDateMini` that perform all calculations in the given time zone rather than the system time zone.
 
-Using it makes [date-fns] operate in given time zone but can be also used without it.
+Using it makes [date-fns](https://github.com/date-fns/date-fns) operate in given time zone but can be also used without it.
 
 Like everything else in the date-fns ecosystem, the library is build-size aware. The smallest component, `TZDateMini,` is only `916 B`.
 
