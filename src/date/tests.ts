@@ -328,12 +328,13 @@ describe("TZDate", () => {
       });
 
       it("updated time is reflected in ISO timestamp", () => {
-        const nativeDate = new Date(2020, 0, 1);
+        const nativeDate = new Date("2020-01-01T06:00:00.000+08:00");
 
         const date = new TZDate(defaultDateStr, "Asia/Singapore");
         expect(date.toISOString()).toEqual("1987-02-11T08:00:00.000+08:00");
 
         date.setTime(+nativeDate);
+        expect(+date).toBe(+nativeDate);
         expect(date.toISOString()).toEqual("2020-01-01T06:00:00.000+08:00");
       });
     });

@@ -30,10 +30,9 @@ export class TZDateMini extends Date {
       } else {
         this.setTime(+new Date(...args));
         adjustToSystemTZ(this, NaN);
+        syncToInternal(this);
       }
     }
-
-    syncToInternal(this);
   }
 
   static tz(tz, ...args) {
@@ -52,6 +51,16 @@ export class TZDateMini extends Date {
 
   getTimezoneOffset() {
     return -tzOffset(this.timeZone, this);
+  }
+
+  //#endregion
+
+  //#region time
+
+  setTime(time) {
+    Date.prototype.setTime.apply(this, arguments);
+    syncToInternal(this);
+    return +this;
   }
 
   //#endregion

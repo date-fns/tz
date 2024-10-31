@@ -8,6 +8,12 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## v1.2.0 - 2024-10-31
+
+### Fixed
+
+- Fixed issue with `setTime` not syncing the value to the internal date resulting in incorrect behavior [#16](https://github.com/date-fns/tz/issues/16), [#24](https://github.com/date-fns/tz/issues/24).
+
 ## v1.1.2 - 2024-09-24
 
 ### Fixed
