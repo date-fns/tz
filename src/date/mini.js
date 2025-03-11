@@ -50,7 +50,10 @@ export class TZDateMini extends Date {
   }
 
   getTimezoneOffset() {
-    return -tzOffset(this.timeZone, this);
+    const offset = -tzOffset(this.timeZone, this);
+    // Remove the seconds offset
+    // use Math.floor for negative GMT timezones and Math.ceil for positive GMT timezones.
+    return offset > 0 ? Math.floor(offset) : Math.ceil(offset);
   }
 
   //#endregion
@@ -112,8 +115,9 @@ Object.getOwnPropertyNames(Date.prototype).forEach((method) => {
  */
 function syncToInternal(date) {
   date.internal.setTime(+date);
-  date.internal.setUTCMinutes(
-    date.internal.getUTCMinutes() - date.getTimezoneOffset(),
+  date.internal.setUTCSeconds(
+    date.internal.getUTCSeconds() -
+      Math.round(-tzOffset(date.timeZone, date) * 60),
   );
 }
 
@@ -151,8 +155,11 @@ function syncFromInternal(date) {
  */
 function adjustToSystemTZ(date) {
   // Save the time zone offset before all the adjustments
-  const offset = tzOffset(date.timeZone, date);
-
+  const baseOffset = tzOffset(date.timeZone, date);
+  // Remove the seconds offset
+  // use Math.floor for negative GMT timezones and Math.ceil for positive GMT timezones.
+  const offset =
+    baseOffset > 0 ? Math.floor(baseOffset) : Math.ceil(baseOffset);
   //#region System DST adjustment
 
   // The biggest problem with using the system time zone is that when we create
@@ -214,9 +221,39 @@ function adjustToSystemTZ(date) {
 
   //#endregion
 
+  //#region Seconds System diff adjustment
+
+  const systemDate = new Date(+date);
+  // Set the UTC seconds to 0 to isolate the timezone offset in seconds.
+  systemDate.setUTCSeconds(0);
+  // For negative systemOffset, invert the seconds.
+  const systemSecondsOffset =
+    systemOffset > 0
+      ? systemDate.getSeconds()
+      : (systemDate.getSeconds() - 60) % 60;
+
+  // Calculate the seconds offset based on the timezone offset.
+  const secondsOffset = Math.round(-(tzOffset(date.timeZone, date) * 60)) % 60;
+
+  if (secondsOffset || systemSecondsOffset) {
+    date.internal.setUTCSeconds(date.internal.getUTCSeconds() + secondsOffset);
+    Date.prototype.setUTCSeconds.call(
+      date,
+      Date.prototype.getUTCSeconds.call(date) +
+        secondsOffset +
+        systemSecondsOffset,
+    );
+  }
+
+  //#endregion
+
   //#region Post-adjustment DST fix
 
-  const postOffset = tzOffset(date.timeZone, date);
+  const postBaseOffset = tzOffset(date.timeZone, date);
+  // Remove the seconds offset
+  // use Math.floor for negative GMT timezones and Math.ceil for positive GMT timezones.
+  const postOffset =
+    postBaseOffset > 0 ? Math.floor(postBaseOffset) : Math.ceil(postBaseOffset);
   const postSystemOffset = -new Date(+date).getTimezoneOffset();
   const postOffsetDiff = postSystemOffset - postOffset;
   const offsetChanged = postOffset !== offset;
@@ -231,7 +268,11 @@ function adjustToSystemTZ(date) {
     // Now we need to check if got offset change during the post-adjustment.
     // If so, we also need both dates to reflect that.
 
-    const newOffset = tzOffset(date.timeZone, date);
+    const newBaseOffset = tzOffset(date.timeZone, date);
+    // Remove the seconds offset
+    // use Math.floor for negative GMT timezones and Math.ceil for positive GMT timezones.
+    const newOffset =
+      newBaseOffset > 0 ? Math.floor(newBaseOffset) : Math.ceil(newBaseOffset);
     const offsetChange = postOffset - newOffset;
 
     if (offsetChange) {
