@@ -317,12 +317,12 @@ describe("TZDate", () => {
         const nativeDate = new Date(2020, 0, 1);
         {
           const date = new TZDate(defaultDateStr, "Asia/Singapore");
-          date.setTime(+nativeDate);
+          date.setCustomTime(+nativeDate);
           expect(+date).toBe(+nativeDate);
         }
         {
           const date = new TZDate(defaultDateStr, "America/New_York");
-          date.setTime(+nativeDate);
+          date.setCustomTime(+nativeDate);
           expect(+date).toBe(+nativeDate);
         }
       });
@@ -333,7 +333,7 @@ describe("TZDate", () => {
         const date = new TZDate(defaultDateStr, "Asia/Singapore");
         expect(date.toISOString()).toEqual("1987-02-11T08:00:00.000+08:00");
 
-        date.setTime(+nativeDate);
+        date.setCustomTime(+nativeDate);
         expect(+date).toBe(+nativeDate);
         expect(date.toISOString()).toEqual("2020-01-01T06:00:00.000+08:00");
       });
