@@ -29,7 +29,7 @@ for version in "${versions[@]}"; do
   printf "✅ Package ESM is ok!\n"
 
   printf "👷 Running unit tests\n"
-  TZ=Asia/Singapore mise x $cmd -- pnpm exec vitest run
+  TZ=Asia/Singapore mise x $cmd -- pnpm vitest run
 
   printf "\n✅ Node.js v$version is ok!\n"
 done
