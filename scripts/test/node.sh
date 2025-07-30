@@ -24,7 +24,7 @@ for version in "${versions_array[@]}"; do
   mise x "${version}" -- node scripts/test/node/esm.js
   printf "✅ Package ESM is ok!\n"
 
-  TZ=Asia/Singapore mise x "${version}" -- pnpm exec vitest run
+  TZ=Asia/Singapore mise x "${version}" -- pnpm vitest run
 done
 
 printf "✅ All Node.js tests passed\n"
