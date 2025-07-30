@@ -1,5 +1,7 @@
 # Node.js
 node_modules/
 .pnpm-store/
+# TypeScript
+.ts/
 # Dist
 /lib/
