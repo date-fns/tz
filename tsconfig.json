@@ -17,7 +17,7 @@
     // Project References setup
     "composite": true,
     "incremental": true,
-    "tsBuildInfoFile": "${configDir}/.ts/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": ".ts/tsconfig.tsbuildinfo"
   },
   "exclude": []
 }
