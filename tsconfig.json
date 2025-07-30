@@ -7,12 +7,17 @@
     "allowImportingTsExtensions": true,
     "emitDeclarationOnly": true,
     "declaration": true,
+    "declarationMap": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "exactOptionalPropertyTypes": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
-    "allowJs": true
+    "allowJs": true,
+    // Project References setup
+    "composite": true,
+    "incremental": true,
+    "tsBuildInfoFile": "${configDir}/.ts/tsconfig.tsbuildinfo"
   },
   "exclude": []
 }
