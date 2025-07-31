@@ -18,7 +18,7 @@ const offsetCache: Record<string, number> = {};
 export function tzOffset(timeZone: string | undefined, date: Date): number {
   try {
     const format = (offsetFormatCache[timeZone!] ||= new Intl.DateTimeFormat(
-      "en-GB",
+      "en-US",
       { timeZone, hour: "numeric", timeZoneName: "longOffset" }
     ).format);
 
