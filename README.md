@@ -238,6 +238,27 @@ tzName("Asia/Singapore", new Date("2020-01-01T00:00:00Z"));
 //=> "Singapore Standard Time"
 ```
 
+It is possible to specify the format as the third argument using one of the following options:
+
+- `"short"`e.g., `"EDT"` or "GMT+8"`.
+- `"long"`: e.g., `"Eastern Daylight Time"` or `"Singapore Standard Time"`.
+- `"shortGeneric"`: e.g., `"ET"` or `"Singapore Time"`.
+- `"longGeneric"`: e.g., `"Eastern Time"` or `"Singapore Standard Time"`.
+
+These options correspond to [TR35 tokens](https://www.unicode.org/reports/tr35/tr35-dates.html#dfst-zone) `z..zzz`, `zzzz`, `v`, and `vvvv` respectively.
+
+```ts
+import { tzName } from "@date-fns/tz";
+
+const date = new Date("2020-01-01T00:00:00.000Z");
+
+tzName("America/New_York", date, "short");
+//=> "EST"
+
+tzName("America/New_York", date, "shortGeneric");
+//=> "ET"
+```
+
 ## Changelog
 
 See [the changelog](./CHANGELOG.md).
