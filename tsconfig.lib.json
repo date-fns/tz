@@ -6,7 +6,9 @@
     "outDir": "lib",
     "skipLibCheck": true,
     "declaration": true,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "composite": false,
+    "incremental": false
   },
   "include": ["src/**/*.ts"],
   "exclude": ["**/tysts.ts", "**/tests.ts"]

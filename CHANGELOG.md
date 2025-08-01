@@ -8,6 +8,12 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## v1.3.1 - 2025-08-01
+
+### Fixed
+
+- Fixed TypeScript definitions missing in `@date-fns@1.3.0`.
+
 ## v1.3.0 - 2025-08-01
 
 ### Fixed
