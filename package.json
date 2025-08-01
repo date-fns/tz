@@ -37,6 +37,16 @@
         "default": "./tzScan/index.js"
       }
     },
+    "./tzName": {
+      "require": {
+        "types": "./tzName/index.d.cts",
+        "default": "./tzName/index.cjs"
+      },
+      "import": {
+        "types": "./tzName/index.d.ts",
+        "default": "./tzName/index.js"
+      }
+    },
     "./date": {
       "require": {
         "types": "./date/index.d.cts",

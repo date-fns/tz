@@ -1,3 +1,4 @@
+import { tzName } from "../tzName/index.ts";
 import { TZDateMini } from "./mini.js";
 
 /**
@@ -99,17 +100,4 @@ export class TZDate extends TZDateMini {
   }
 
   //#endregion
-}
-
-function tzName(tz, date) {
-  return new Intl.DateTimeFormat("en-US", {
-    // Enforces engine to render the time. Without the option JavaScriptCore omits it.
-    hour: "numeric",
-    timeZone: tz,
-    timeZoneName: "long",
-  })
-    .format(date)
-    .split(/\s/g) // Format.JS uses non-breaking spaces
-    .slice(2) // Skip the hour and AM/PM parts
-    .join(" ");
 }

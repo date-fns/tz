@@ -2,7 +2,7 @@
 
 The package provides `Date` extensions `TZDate` and `TZDateMini` that perform all calculations in the given time zone rather than the system time zone.
 
-Using it makes [date-fns](https://github.com/date-fns/date-fns) operate in given time zone but can be also used without it.
+Using it makes [date-fns](https://github.com/date-fns/date-fns) operate in given time zone but can also be used without it.
 
 Like everything else in the date-fns ecosystem, the library is build-size aware. The smallest component, `TZDateMini,` is only `916 B`.
 
@@ -225,6 +225,17 @@ tzScan("America/New_York", {
 //=>   { date: 2023-03-12T07:00:00.000Z, change: 60, offset: -240 },
 //=>   { date: 2023-11-05T06:00:00.000Z, change: -60, offset: -300 }
 //=> ]
+```
+
+### `tzName`
+
+The function returns time zone name in human-readable format, e.g. `"Singapore Standard Time"` in the give date and time.
+
+```ts
+import { tzName } from "@date-fns/tz";
+
+tzName("Asia/Singapore", new Date("2020-01-01T00:00:00Z"));
+//=> "Singapore Standard Time"
 ```
 
 ## Changelog
