@@ -1,5 +1,6 @@
 [tools]
 node = "lts"
+"npm:jsvu" = "latest"
 
 [hooks]
-postinstall = 'npx corepack enable'
+postinstall = 'npx corepack enable && ./scripts/install/engines.sh'

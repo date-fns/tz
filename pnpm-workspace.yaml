@@ -1,3 +1,7 @@
+packages:
+  - "."
+  - "test/engines"
+
 onlyBuiltDependencies:
-  - '@swc/core'
+  - "@swc/core"
   - esbuild
