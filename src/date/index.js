@@ -102,10 +102,14 @@ export class TZDate extends TZDateMini {
 }
 
 function tzName(tz, date) {
-  return new Intl.DateTimeFormat("en-GB", {
+  return new Intl.DateTimeFormat("en-US", {
+    // Enforces engine to render the time. Without the option JavaScriptCore omits it.
+    hour: "numeric",
     timeZone: tz,
     timeZoneName: "long",
   })
     .format(date)
-    .slice(12);
+    .split(/\s/g) // Format.JS uses non-breaking spaces
+    .slice(2) // Skip the hour and AM/PM parts
+    .join(" ");
 }

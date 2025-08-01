@@ -30,10 +30,12 @@ for engine in "${engines[@]}"; do
   if [[ "$engine" == "hermes" ]]; then
     name="Hermes"
     bundle_cmd="pnpm exec metro build $code --out $bundle --minify false"
+    engine_cmd="hermes -w"
 
   elif [[ "$engine" == "javascriptcore" ]]; then
     name="JavaScriptCore"
     bundle_cmd="pnpm exec rolldown --no-treeshake --file=$bundle $code"
+    engine_cmd="javascriptcore"
 
   else
     echo "🛑 Unknown engine $engine"
@@ -50,7 +52,7 @@ for engine in "${engines[@]}"; do
   }
 
   printf "👷 Running tests\n"
-  $engine $bundle || {
+  $engine_cmd $bundle || {
     printf "\n🛑 $name engine tests failed\n"
     failed=1
     continue

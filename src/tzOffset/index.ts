@@ -18,11 +18,11 @@ const offsetCache: Record<string, number> = {};
 export function tzOffset(timeZone: string | undefined, date: Date): number {
   try {
     const format = (offsetFormatCache[timeZone!] ||= new Intl.DateTimeFormat(
-      "en-GB",
-      { timeZone, hour: "numeric", timeZoneName: "longOffset" }
+      "en-US",
+      { timeZone, timeZoneName: "longOffset" }
     ).format);
 
-    const offsetStr = format(date).split('GMT')[1] || '';
+    const offsetStr = format(date).split("GMT")[1]!;
     if (offsetStr in offsetCache) return offsetCache[offsetStr]!;
 
     return calcOffset(offsetStr, offsetStr.split(":"));
@@ -40,7 +40,7 @@ export function tzOffset(timeZone: string | undefined, date: Date): number {
 const offsetRe = /([+-]\d\d):?(\d\d)?/;
 
 function calcOffset(cacheStr: string, values: string[]): number {
-  const hours = +values[0]!;
+  const hours = +(values[0] || 0);
   const minutes = +(values[1] || 0);
   return (offsetCache[cacheStr] =
     hours > 0 ? hours * 60 + minutes : hours * 60 - minutes);
