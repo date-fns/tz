@@ -4,27 +4,34 @@
 
 set -e
 
-# First, make sure the library is built
-make build
+printf "🤖 Running Node.js versions tests\n"
 
-versions_array=(
-  "node@18"
-  "node@20"
-  "node@22"
-  "node@23"
-  "node@24"
+# First, make sure the library is built
+printf "👷 Building the package\n"
+make build > /dev/null
+
+versions=(
+  "18"
+  "20"
+  "22"
+  "23"
+  "24"
 )
 
-for version in "${versions_array[@]}"; do
-  printf "\n🚧 Running tests in $version\n"
+for version in "${versions[@]}"; do
+  printf "\n🚧 Running tests in Node.js v$version\n\n"
+  cmd="node@${version}"
 
-  mise x "${version}" -- node --eval 'require("./lib")'
+  mise x $cmd -- node test/node/commonjs.cjs
   printf "✅ Package CommonJS is ok!\n"
 
-  mise x "${version}" -- node scripts/test/node/esm.js
+  mise x $cmd -- node test/node/esm.js
   printf "✅ Package ESM is ok!\n"
 
-  TZ=Asia/Singapore mise x "${version}" -- pnpm exec vitest run
+  printf "👷 Running unit tests\n"
+  TZ=Asia/Singapore mise x $cmd -- pnpm exec vitest run
+
+  printf "\n✅ Node.js v$version is ok!\n"
 done
 
-printf "✅ All Node.js tests passed\n"
+printf "\n✅ All Node.js tests passed\n"
