@@ -68,6 +68,25 @@ new TZDate(2022, 2, 13).toString();
 
 Even though `TZDate` has a complete API, developers rarely use the formatter functions outside of debugging, so we recommend you pick the more lightweight `TZDateMini` for internal use. However, in environments you don't control, i.e., when you expose the date from a library, using `TZDate` will be a safer choice.
 
+### React Native / Hermes JS Engine
+
+Starting with [v1.3.0](https://github.com/date-fns/tz/releases/tag/v1.3.0), `@date-fns/tz` supports [Format.JS polyfills](https://formatjs.github.io/docs/polyfills/intl-datetimeformat/) that are required for [Hermes JS Engine](https://github.com/facebook/hermes/blob/main/README.md) powering React Native runtime to work correctly.
+
+To use it, you need to import the following polyfills in your entry point:
+
+```ts
+import "@formatjs/intl-getcanonicallocales/polyfill";
+import "@formatjs/intl-locale/polyfill";
+import "@formatjs/intl-pluralrules/polyfill";
+import "@formatjs/intl-numberformat/polyfill";
+import "@formatjs/intl-numberformat/locale-data/en";
+import "@formatjs/intl-datetimeformat/polyfill";
+import "@formatjs/intl-datetimeformat/locale-data/en";
+import "@formatjs/intl-datetimeformat/add-golden-tz"; // or: "@formatjs/intl-datetimeformat/add-all-tz"
+```
+
+[The JavaScriptCore engine](https://github.com/apple-opensource/JavaScriptCore) is also supported and tested but does not require any polyfills.
+
 ## API
 
 - [`TZDate`](#tzdate)
