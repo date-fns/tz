@@ -31,7 +31,7 @@ describe("tzOffset", () => {
 
   it("returns the local timezone offset when the timezone is undefined", () => {
     const date = new Date("2020-01-15T05:00:00Z");
-    expect(tzOffset(undefined, date)).toBe(-date.getTimezoneOffset());
+    expect(tzOffset(undefined, date)).toBe(-date.getTimezoneOffset() || 0);
   });
 
   it("returns 0 if the offset is 0", () => {
