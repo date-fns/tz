@@ -27,7 +27,7 @@ build: prepare-build
 build-cts:
 	@find lib -name '*.d.ts' | while read file; do \
 		new_file=$${file%.d.ts}.d.cts; \
-		cp $$file $$new_file; \
+		sed 's/\.js"/\.cjs"/g; s/\.ts"/\.cts"/g' $$file > $$new_file; \
 	done
 
 prepare-build:
