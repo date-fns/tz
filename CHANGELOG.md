@@ -20,8 +20,6 @@ This change log follows the format documented in [Keep a CHANGELOG].
 
 - Added `tzName` function that formats time zone name in given date time and format. It supports `"short"`, `"long"`, `"shortGeneric"`, and `"longGeneric"` formats, corresponding to TR35 tokens `z..zzz`, `zzzz`, `v`, and `vvvv` respectively. See [README](./README.md) for more details.
 
-### Added
-
 ## v1.2.0 - 2024-10-31
 
 ### Fixed
