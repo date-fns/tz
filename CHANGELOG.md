@@ -8,6 +8,20 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## v1.3.0 - 2025-08-01
+
+### Fixed
+
+- Fixed Format.JS support when running in Hermes engine (React Native). Ensured compatibility with JavaScriptCore engine (Safari).
+
+- Fixed TypeScript `node16` module resolution [#59](https://github.com/date-fns/tz/pull/59). Thanks to [@samchungy](https://github.com/samchungy).
+
+### Added
+
+- Added `tzName` function that formats time zone name in given date time and format. It supports `"short"`, `"long"`, `"shortGeneric"`, and `"longGeneric"` formats, corresponding to TR35 tokens `z..zzz`, `zzzz`, `v`, and `vvvv` respectively. See [README](./README.md) for more details.
+
+### Added
+
 ## v1.2.0 - 2024-10-31
 
 ### Fixed
@@ -18,7 +32,7 @@ This change log follows the format documented in [Keep a CHANGELOG].
 
 ### Fixed
 
-- Improved compatability with FormatJS Intl polifyll [#8](https://github.com/date-fns/tz/issues/8). Thanks to [@kevin-abiera](https://github.com/kevin-abiera).
+- Improved compatibility with FormatJS Intl polifyll [#8](https://github.com/date-fns/tz/issues/8). Thanks to [@kevin-abiera](https://github.com/kevin-abiera).
 
 ## v1.1.1 - 2024-09-23
 
@@ -57,3 +71,7 @@ This release fixes a couple of critical bugs in the previous release.
 ## v1.0.1 - 2024-09-13
 
 Initial version
+
+```
+
+```
