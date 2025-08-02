@@ -3,17 +3,16 @@
   "version": "1.4.1",
   "description": "date-fns timezone utils",
   "type": "module",
-  "main": "./src/index.ts",
-  "module": "./src/index.ts",
+  "module": "src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./tzOffset": "./src/tzOffset/index.ts",
-    "./tzScan": "./src/tzScan/index.ts",
-    "./tzName": "./src/tzName/index.ts",
-    "./date": "./src/date/index.js",
-    "./date/mini": "./src/date/mini.js",
-    "./tz": "./src/tz/index.ts",
-    "./constants": "./src/constants/index.ts"
+    "./tzOffset": "./tzOffset/index.ts",
+    "./tzScan": "./tzScan/index.ts",
+    "./tzName": "./tzName/index.ts",
+    "./date": "./date/index.ts",
+    "./date/mini": "./date/mini.ts",
+    "./tz": "./tz/index.ts",
+    "./constants": "./constants/index.ts"
   },
   "publishConfig": {
     "main": "index.cjs",
