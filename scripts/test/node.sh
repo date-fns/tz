@@ -11,6 +11,7 @@ printf "👷 Building the package\n"
 make build > /dev/null
 
 versions=(
+  "16"
   "18"
   "20"
   "22"
@@ -28,8 +29,15 @@ for version in "${versions[@]}"; do
   mise x $cmd -- node test/node/esm.js
   printf "✅ Package ESM is ok!\n"
 
-  printf "👷 Running unit tests\n"
-  TZ=Asia/Singapore mise x $cmd -- pnpm vitest run
+  # pnpm doesn't support Node.js v16, so we run smoke tests instead
+  if [[ "$version" == "16" ]]; then
+    printf "👷 Running legacy version smoke tests"
+    mise x $cmd -- node test/node/legacy.cjs
+  else
+    printf "👷 Running unit tests\n"
+    TZ=Asia/Singapore mise x $cmd -- pnpm vitest run
+  fi
+
 
   printf "\n✅ Node.js v$version is ok!\n"
 done
