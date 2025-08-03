@@ -13,22 +13,22 @@ export class TZDateMini extends Date {
     this.internal = new Date();
 
     if (isNaN(tzOffset(this.timeZone, this))) {
-      this.setTime(NaN);
+      this.setCustomTime(NaN);
     } else {
       if (!args.length) {
-        this.setTime(Date.now());
+        this.setCustomTime(Date.now());
       } else if (
         typeof args[0] === "number" &&
         (args.length === 1 ||
           (args.length === 2 && typeof args[1] !== "number"))
       ) {
-        this.setTime(args[0]);
+        this.setCustomTime(args[0]);
       } else if (typeof args[0] === "string") {
-        this.setTime(+new Date(args[0]));
+        this.setCustomTime(+new Date(args[0]));
       } else if (args[0] instanceof Date) {
-        this.setTime(+args[0]);
+        this.setCustomTime(+args[0]);
       } else {
-        this.setTime(+new Date(...args));
+        this.setCustomTime(+new Date(...args));
         adjustToSystemTZ(this, NaN);
         syncToInternal(this);
       }
@@ -57,7 +57,8 @@ export class TZDateMini extends Date {
 
   //#region time
 
-  setTime(time) {
+  // NOTE: we can't directly override the native `setTime` method here, because it will be invoked internally in many of other native `Date` object methods, if we do, then it's possible to cause hidden bugs
+  setCustomTime(time) {
     Date.prototype.setTime.apply(this, arguments);
     syncToInternal(this);
     return +this;
