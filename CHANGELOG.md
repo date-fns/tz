@@ -8,6 +8,12 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## v1.4.0 - 2025-08-12
+
+### Added
+
+- [Added support for time zones with seconds offset](https://github.com/date-fns/tz/pull/47). It allows to handle dates before the implementation of the GMT system in 1883. Huge kudos to [@GianlucaWassermeyer](https://github.com/GianlucaWassermeyer)!
+
 ## v1.3.1 - 2025-08-01
 
 ### Fixed
