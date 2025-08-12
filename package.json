@@ -3,88 +3,100 @@
   "version": "1.3.1",
   "description": "date-fns timezone utils",
   "type": "module",
-  "main": "index.cjs",
-  "module": "index.js",
   "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "require": {
-        "types": "./index.d.cts",
-        "default": "./index.cjs"
+    ".": "./src/index.ts",
+    "./tzOffset": "./src/tzOffset/index.ts",
+    "./tzScan": "./src/tzScan/index.ts",
+    "./tzName": "./src/tzName/index.ts",
+    "./date": "./src/date/index.js",
+    "./date/mini": "./src/date/mini.js",
+    "./tz": "./src/tz/index.ts",
+    "./constants": "./src/constants/index.ts"
+  },
+  "publishConfig": {
+    "main": "index.cjs",
+    "module": "index.js",
+    "exports": {
+      "./package.json": "./package.json",
+      ".": {
+        "require": {
+          "types": "./index.d.cts",
+          "default": ""
+        },
+        "import": {
+          "types": "./index.d.ts",
+          "default": "./index.js"
+        }
       },
-      "import": {
-        "types": "./index.d.ts",
-        "default": "./index.js"
-      }
-    },
-    "./tzOffset": {
-      "require": {
-        "types": "./tzOffset/index.d.cts",
-        "default": "./tzOffset/index.cjs"
+      "./tzOffset": {
+        "require": {
+          "types": "./tzOffset/index.d.cts",
+          "default": "./tzOffset/index.cjs"
+        },
+        "import": {
+          "types": "./tzOffset/index.d.ts",
+          "default": "./tzOffset/index.js"
+        }
       },
-      "import": {
-        "types": "./tzOffset/index.d.ts",
-        "default": "./tzOffset/index.js"
-      }
-    },
-    "./tzScan": {
-      "require": {
-        "types": "./tzScan/index.d.cts",
-        "default": "./tzScan/index.cjs"
+      "./tzScan": {
+        "require": {
+          "types": "./tzScan/index.d.cts",
+          "default": "./tzScan/index.cjs"
+        },
+        "import": {
+          "types": "./tzScan/index.d.ts",
+          "default": "./tzScan/index.js"
+        }
       },
-      "import": {
-        "types": "./tzScan/index.d.ts",
-        "default": "./tzScan/index.js"
-      }
-    },
-    "./tzName": {
-      "require": {
-        "types": "./tzName/index.d.cts",
-        "default": "./tzName/index.cjs"
+      "./tzName": {
+        "require": {
+          "types": "./tzName/index.d.cts",
+          "default": "./tzName/index.cjs"
+        },
+        "import": {
+          "types": "./tzName/index.d.ts",
+          "default": "./tzName/index.js"
+        }
       },
-      "import": {
-        "types": "./tzName/index.d.ts",
-        "default": "./tzName/index.js"
-      }
-    },
-    "./date": {
-      "require": {
-        "types": "./date/index.d.cts",
-        "default": "./date/index.cjs"
+      "./date": {
+        "require": {
+          "types": "./date/index.d.cts",
+          "default": "./date/index.cjs"
+        },
+        "import": {
+          "types": "./date/index.d.ts",
+          "default": "./date/index.js"
+        }
       },
-      "import": {
-        "types": "./date/index.d.ts",
-        "default": "./date/index.js"
-      }
-    },
-    "./date/mini": {
-      "require": {
-        "types": "./date/mini.d.cts",
-        "default": "./date/mini.cjs"
+      "./date/mini": {
+        "require": {
+          "types": "./date/mini.d.cts",
+          "default": "./date/mini.cjs"
+        },
+        "import": {
+          "types": "./date/mini.d.ts",
+          "default": "./date/mini.js"
+        }
       },
-      "import": {
-        "types": "./date/mini.d.ts",
-        "default": "./date/mini.js"
-      }
-    },
-    "./tz": {
-      "require": {
-        "types": "./tz/index.d.cts",
-        "default": "./tz/index.cjs"
+      "./tz": {
+        "require": {
+          "types": "./tz/index.d.cts",
+          "default": "./tz/index.cjs"
+        },
+        "import": {
+          "types": "./tz/index.d.ts",
+          "default": "./tz/index.js"
+        }
       },
-      "import": {
-        "types": "./tz/index.d.ts",
-        "default": "./tz/index.js"
-      }
-    },
-    "./constants": {
-      "require": {
-        "types": "./constants/index.d.cts",
-        "default": "./constants/index.cjs"
-      },
-      "import": {
-        "types": "./constants/index.d.ts",
-        "default": "./constants/index.js"
+      "./constants": {
+        "require": {
+          "types": "./constants/index.d.cts",
+          "default": "./constants/index.cjs"
+        },
+        "import": {
+          "types": "./constants/index.d.ts",
+          "default": "./constants/index.js"
+        }
       }
     }
   },
