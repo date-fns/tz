@@ -1,4 +1,4 @@
-import type { TZDate } from "./index.ts";
+import type { TZDate } from "./index.js";
 
 /**
  * Time zone date class. It overrides original Date functions making them

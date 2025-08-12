@@ -1,5 +1,5 @@
 import { Bench } from "tinybench";
-import { tzOffset, tzScan } from "./src/index.js";
+import { tzOffset, tzScan } from "./src/index.ts";
 
 const bench = new Bench({ time: 3000 });
 
