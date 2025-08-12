@@ -24,8 +24,8 @@ describe("tz", () => {
     );
     expect(
       tz("America/New_York")(
-        new Date("1880-01-01T00:00:00.000Z")
-      ).toISOString()
-    ).toBe("2019-12-31T19:00:00.000-05:00");
+        new Date("1880-01-01T00:00:00.000Z"),
+      ).toISOString(),
+    ).toBe("1879-12-31T19:03:58.000-04:56");
   });
 });

@@ -8,7 +8,7 @@ describe("tzOffset", () => {
     expect(tzOffset("Asia/Pyongyang", date)).toBe(9 * 60);
     expect(tzOffset("Asia/Kathmandu", date)).toBe(345);
     expect(tzOffset("America/New_York", new Date("1880-01-15T00:00:00Z"))).toBe(
-      -296.0333333333333
+      -296.03333333333336,
     );
   });
 
@@ -18,7 +18,7 @@ describe("tzOffset", () => {
     expect(tzOffset("Asia/Pyongyang", date)).toBe(9 * 60);
     expect(tzOffset("Asia/Kathmandu", date)).toBe(345);
     expect(tzOffset("America/New_York", new Date("1880-01-15T23:59:59Z"))).toBe(
-      -296.0333333333333
+      -296.03333333333336,
     );
   });
 
@@ -28,7 +28,7 @@ describe("tzOffset", () => {
     expect(tzOffset("Asia/Pyongyang", date)).toBe(9 * 60);
     expect(tzOffset("Asia/Kathmandu", date)).toBe(345);
     expect(tzOffset("America/New_York", new Date("1880-01-31T23:59:59Z"))).toBe(
-      -296.0333333333333
+      -296.03333333333336,
     );
   });
 
@@ -37,7 +37,7 @@ describe("tzOffset", () => {
       -5 * 60,
     );
     expect(tzOffset("America/New_York", new Date("1880-01-15T05:00:00Z"))).toBe(
-      -296.0333333333333
+      -296.03333333333336,
     );
   });
 
