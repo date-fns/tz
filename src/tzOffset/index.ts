@@ -19,7 +19,7 @@ export function tzOffset(timeZone: string | undefined, date: Date): number {
   try {
     const format = (offsetFormatCache[timeZone!] ||= new Intl.DateTimeFormat(
       "en-US",
-      { timeZone, timeZoneName: "longOffset" }
+      { timeZone, timeZoneName: "longOffset" },
     ).format);
 
     const offsetStr = format(date).split("GMT")[1]!;

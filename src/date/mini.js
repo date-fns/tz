@@ -113,7 +113,7 @@ Object.getOwnPropertyNames(Date.prototype).forEach((method) => {
 function syncToInternal(date) {
   date.internal.setTime(+date);
   date.internal.setUTCMinutes(
-    date.internal.getUTCMinutes() - date.getTimezoneOffset()
+    date.internal.getUTCMinutes() - date.getTimezoneOffset(),
   );
 }
 
@@ -129,14 +129,14 @@ function syncFromInternal(date) {
     date,
     date.internal.getUTCFullYear(),
     date.internal.getUTCMonth(),
-    date.internal.getUTCDate()
+    date.internal.getUTCDate(),
   );
   Date.prototype.setHours.call(
     date,
     date.internal.getUTCHours(),
     date.internal.getUTCMinutes(),
     date.internal.getUTCSeconds(),
-    date.internal.getUTCMilliseconds()
+    date.internal.getUTCMilliseconds(),
   );
 
   // Now we have to adjust the date to the system time zone
@@ -194,7 +194,7 @@ function adjustToSystemTZ(date) {
   // Move the internal date when we are on the system DST hour.
   if (systemDSTChange && dstShift)
     date.internal.setUTCMinutes(
-      date.internal.getUTCMinutes() + systemDSTChange
+      date.internal.getUTCMinutes() + systemDSTChange,
     );
 
   //#endregion
@@ -209,7 +209,7 @@ function adjustToSystemTZ(date) {
   if (offsetDiff)
     Date.prototype.setUTCMinutes.call(
       date,
-      Date.prototype.getUTCMinutes.call(date) + offsetDiff
+      Date.prototype.getUTCMinutes.call(date) + offsetDiff,
     );
 
   //#endregion
@@ -225,7 +225,7 @@ function adjustToSystemTZ(date) {
   if (offsetChanged && postDiff) {
     Date.prototype.setUTCMinutes.call(
       date,
-      Date.prototype.getUTCMinutes.call(date) + postDiff
+      Date.prototype.getUTCMinutes.call(date) + postDiff,
     );
 
     // Now we need to check if got offset change during the post-adjustment.
@@ -238,7 +238,7 @@ function adjustToSystemTZ(date) {
       date.internal.setUTCMinutes(date.internal.getUTCMinutes() + offsetChange);
       Date.prototype.setUTCMinutes.call(
         date,
-        Date.prototype.getUTCMinutes.call(date) + offsetChange
+        Date.prototype.getUTCMinutes.call(date) + offsetChange,
       );
     }
   }

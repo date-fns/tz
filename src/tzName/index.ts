@@ -29,7 +29,7 @@ export type TZNameFormat = "short" | "long" | "shortGeneric" | "longGeneric";
 export function tzName(
   timeZone: string,
   date: Date,
-  format: TZNameFormat = "long"
+  format: TZNameFormat = "long",
 ): string {
   return new Intl.DateTimeFormat("en-US", {
     // Enforces engine to render the time. Without the option JavaScriptCore omits it.

@@ -126,6 +126,7 @@
     "glob": "^10.3.12",
     "minimatch": "^10.0.1",
     "picocolors": "^1.0.0",
+    "prettier": "^3.6.2",
     "tinybench": "^2.7.0",
     "typescript": "5.9.2",
     "vitest": "^3.2.4"

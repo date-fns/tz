@@ -32,7 +32,7 @@ export interface TZChange {
  */
 export function tzScan(
   timeZone: string,
-  interval: TZChangeInterval
+  interval: TZChangeInterval,
 ): TZChange[] {
   const changes: TZChange[] = [];
 

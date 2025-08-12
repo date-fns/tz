@@ -6,47 +6,47 @@ describe("tzName", () => {
 
   it("returns time zone name", () => {
     expect(tzName("Asia/Singapore", new Date(dateStr))).toBe(
-      "Singapore Standard Time"
+      "Singapore Standard Time",
     );
     expect(tzName("America/New_York", new Date(dateStr))).toBe(
-      "Eastern Standard Time"
+      "Eastern Standard Time",
     );
   });
 
   describe("with format", () => {
     it("short", () => {
       expect(tzName("Asia/Singapore", new Date(dateStr), "short")).toBe(
-        "GMT+8"
+        "GMT+8",
       );
       expect(tzName("America/New_York", new Date(dateStr), "short")).toBe(
-        "EST"
+        "EST",
       );
     });
 
     it("long", () => {
       expect(tzName("Asia/Singapore", new Date(dateStr), "long")).toBe(
-        "Singapore Standard Time"
+        "Singapore Standard Time",
       );
       expect(tzName("America/New_York", new Date(dateStr), "long")).toBe(
-        "Eastern Standard Time"
+        "Eastern Standard Time",
       );
     });
 
     it("shortGeneric", () => {
       expect(tzName("Asia/Singapore", new Date(dateStr), "shortGeneric")).toBe(
-        "Singapore Time"
+        "Singapore Time",
       );
       expect(
-        tzName("America/New_York", new Date(dateStr), "shortGeneric")
+        tzName("America/New_York", new Date(dateStr), "shortGeneric"),
       ).toBe("ET");
     });
 
     it("longGeneric", () => {
       expect(tzName("Asia/Singapore", new Date(dateStr), "longGeneric")).toBe(
-        "Singapore Standard Time"
+        "Singapore Standard Time",
       );
       expect(tzName("America/New_York", new Date(dateStr), "longGeneric")).toBe(
-        "Eastern Time"
+        "Eastern Time",
       );
     });
   });

@@ -81,7 +81,7 @@ export class TZDate extends Date {
     month: number,
     date: number,
     hours: number,
-    timeZone?: string
+    timeZone?: string,
   );
 
   /**
@@ -101,7 +101,7 @@ export class TZDate extends Date {
     date: number,
     hours: number,
     minutes: number,
-    timeZone?: string
+    timeZone?: string,
   );
 
   /**
@@ -123,7 +123,7 @@ export class TZDate extends Date {
     hours: number,
     minutes: number,
     seconds: number,
-    timeZone?: string
+    timeZone?: string,
   );
 
   /**
@@ -147,7 +147,7 @@ export class TZDate extends Date {
     minutes: number,
     seconds: number,
     milliseconds: number,
-    timeZone?: string
+    timeZone?: string,
   );
 
   /**
@@ -219,7 +219,7 @@ export class TZDate extends Date {
     year: number,
     month: number,
     date: number,
-    hours: number
+    hours: number,
   ): TZDate;
 
   /**
@@ -239,7 +239,7 @@ export class TZDate extends Date {
     month: number,
     date: number,
     hours: number,
-    minutes: number
+    minutes: number,
   ): TZDate;
 
   /**
@@ -261,7 +261,7 @@ export class TZDate extends Date {
     date: number,
     hours: number,
     minutes: number,
-    seconds: number
+    seconds: number,
   ): TZDate;
 
   /**
@@ -285,7 +285,7 @@ export class TZDate extends Date {
     hours: number,
     minutes: number,
     seconds: number,
-    milliseconds: number
+    milliseconds: number,
   ): TZDate;
 
   /**

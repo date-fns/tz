@@ -37,7 +37,7 @@ export class TZDate extends TZDateMini {
     // "07:42:23 GMT+0800 (Singapore Standard Time)"
     return `${time} GMT${sign}${hours}${minutes} (${tzName(
       this.timeZone,
-      this
+      this,
     )})`;
   }
 

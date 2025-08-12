@@ -25,7 +25,7 @@ describe("tzOffset", () => {
 
   it("works at midnight", () => {
     expect(tzOffset("America/New_York", new Date("2020-01-15T05:00:00Z"))).toBe(
-      -5 * 60
+      -5 * 60,
     );
   });
 
