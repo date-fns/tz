@@ -7,6 +7,9 @@ describe("tzOffset", () => {
     expect(tzOffset("America/New_York", date)).toBe(-5 * 60);
     expect(tzOffset("Asia/Pyongyang", date)).toBe(9 * 60);
     expect(tzOffset("Asia/Kathmandu", date)).toBe(345);
+    expect(tzOffset("America/New_York", new Date("1880-01-15T00:00:00Z"))).toBe(
+      -296.03333333333336,
+    );
   });
 
   it("works at the end of the day", () => {
@@ -14,6 +17,9 @@ describe("tzOffset", () => {
     expect(tzOffset("America/New_York", date)).toBe(-5 * 60);
     expect(tzOffset("Asia/Pyongyang", date)).toBe(9 * 60);
     expect(tzOffset("Asia/Kathmandu", date)).toBe(345);
+    expect(tzOffset("America/New_York", new Date("1880-01-15T23:59:59Z"))).toBe(
+      -296.03333333333336,
+    );
   });
 
   it("works at the end of a month", () => {
@@ -21,11 +27,17 @@ describe("tzOffset", () => {
     expect(tzOffset("America/New_York", date)).toBe(-5 * 60);
     expect(tzOffset("Asia/Pyongyang", date)).toBe(9 * 60);
     expect(tzOffset("Asia/Kathmandu", date)).toBe(345);
+    expect(tzOffset("America/New_York", new Date("1880-01-31T23:59:59Z"))).toBe(
+      -296.03333333333336,
+    );
   });
 
   it("works at midnight", () => {
     expect(tzOffset("America/New_York", new Date("2020-01-15T05:00:00Z"))).toBe(
       -5 * 60,
+    );
+    expect(tzOffset("America/New_York", new Date("1880-01-15T05:00:00Z"))).toBe(
+      -296.03333333333336,
     );
   });
 
@@ -57,6 +69,7 @@ describe("tzOffset", () => {
       expect(tzOffset("-02:30", date)).toBe(-150);
       expect(tzOffset("+05:00", date)).toBe(300);
       expect(tzOffset("+02:30", date)).toBe(150);
+      expect(tzOffset("+05:00", new Date("1880-01-15T00:00:00Z"))).toBe(300);
     });
 
     it("works with ±HHMM", () => {
@@ -64,11 +77,13 @@ describe("tzOffset", () => {
       expect(tzOffset("-0230", date)).toBe(-150);
       expect(tzOffset("+0500", date)).toBe(300);
       expect(tzOffset("+0230", date)).toBe(150);
+      expect(tzOffset("+0230", new Date("1880-01-15T00:00:00Z"))).toBe(150);
     });
 
     it("works with ±HH", () => {
       expect(tzOffset("-05", date)).toBe(-300);
       expect(tzOffset("+05", date)).toBe(300);
+      expect(tzOffset("+05", new Date("1880-01-15T00:00:00Z"))).toBe(300);
     });
   });
 
