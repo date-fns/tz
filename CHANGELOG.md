@@ -8,6 +8,12 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## v1.4.1 - 2025-08-12
+
+### Fixed
+
+- Fixed incorrect `package.json` published with `@date-fns/tz@1.4.0`.
+
 ## v1.4.0 - 2025-08-12
 
 ### Added
