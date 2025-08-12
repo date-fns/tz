@@ -15,7 +15,8 @@ types-watch:
 	@pnpm tsc --noEmit --watch
 
 test-types: build
-	@pnpm attw --pack lib
+	@cd lib && pnpm pack --out ../tmp/lib.tgz
+	@pnpm attw tmp/lib.tgz
 
 build: prepare-build
 	@pnpm tsc -p tsconfig.lib.json

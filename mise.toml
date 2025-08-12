@@ -1,6 +1,10 @@
 [tools]
-node = "lts"
+## Stack
+node = { version = "lts", postinstall = "corepack enable" }
+
+## Tools
 "npm:jsvu" = "latest"
 
-[hooks]
-postinstall = 'npx corepack enable && ./scripts/install/engines.sh'
+[settings]
+# Enable extra features
+experimental = true

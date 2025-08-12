@@ -3,6 +3,8 @@
   "version": "1.4.0",
   "description": "date-fns timezone utils",
   "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
     "./tzOffset": "./src/tzOffset/index.ts",
@@ -21,7 +23,7 @@
       ".": {
         "require": {
           "types": "./index.d.cts",
-          "default": ""
+          "default": "./index.cjs"
         },
         "import": {
           "types": "./index.d.ts",

@@ -45,7 +45,7 @@ for engine in "${engines[@]}"; do
   printf "\n🚧 Running tests with $name engine\n\n"
 
   printf "👷 Building engine bundle $bundle\n"
-  eval $bundle_cmd > /dev/null || {
+  eval $bundle_cmd 1> /dev/null || {
     printf "\n🛑 $name engine bundle build failed\n"
     failed=1
     continue
