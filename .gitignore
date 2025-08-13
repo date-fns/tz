@@ -7,3 +7,7 @@ node_modules/
 /lib/
 # Temporary
 /tmp/
+# Secrets
+.env
+.env.*
+!.env.example
