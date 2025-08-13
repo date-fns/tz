@@ -16,6 +16,8 @@ const offsetCache: Record<string, number> = {};
  * @returns UTC offset in minutes
  */
 export function tzOffset(timeZone: string | undefined, date: Date): number {
+  if (timeZone! in offsetCache) return offsetCache[timeZone!]!;
+
   try {
     const format = (offsetFormatCache[timeZone!] ||= new Intl.DateTimeFormat(
       "en-US",
@@ -29,7 +31,6 @@ export function tzOffset(timeZone: string | undefined, date: Date): number {
   } catch {
     // Fallback to manual parsing if the runtime doesn't support ±HH:MM/±HHMM/±HH
     // See: https://github.com/nodejs/node/issues/53419
-    if (timeZone! in offsetCache) return offsetCache[timeZone!]!;
     const captures = timeZone?.match(offsetRe);
     if (captures) return calcOffset(timeZone!, captures.slice(1));
 
