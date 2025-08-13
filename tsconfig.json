@@ -18,6 +18,5 @@
     "composite": true,
     "incremental": true,
     "tsBuildInfoFile": ".ts/tsconfig.tsbuildinfo"
-  },
-  "exclude": []
+  }
 }
