@@ -1,3 +1,5 @@
+🚨🚨🚨 `@date-fns/tz` has [moved to the date-fns monorepo](https://github.com/date-fns/date-fns/tree/main/pkgs/tz) 🚨🚨🚨
+
 # @date-fns/tz
 
 The package provides `Date` extensions `TZDate` and `TZDateMini` that perform all calculations in the given time zone rather than the system time zone.
