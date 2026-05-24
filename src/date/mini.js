@@ -4,13 +4,13 @@ export class TZDateMini extends Date {
   //#region static
 
   constructor(...args) {
-    super();
+    super(0);
 
     if (args.length > 1 && typeof args[args.length - 1] === "string") {
       this.timeZone = args.pop();
     }
 
-    this.internal = new Date();
+    this.internal = new Date(0);
 
     if (isNaN(tzOffset(this.timeZone, this))) {
       this.setTime(NaN);
