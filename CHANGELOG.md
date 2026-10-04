@@ -8,6 +8,12 @@ This change log follows the format documented in [Keep a CHANGELOG].
 [semantic versioning]: http://semver.org/
 [keep a changelog]: http://keepachangelog.com/
 
+## Unreleased
+
+### Fixed
+
+- Fixed `TZDate` constructor and setters producing different results depending on the system time zone around DST transitions [#13](https://github.com/date-fns/tz/issues/13). Ambiguous time now consistently resolves to the earlier moment, and nonexistent time moves forward, mirroring the native `Date` behavior.
+
 ## v1.4.1 - 2025-08-12
 
 ### Fixed

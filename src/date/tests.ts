@@ -1347,12 +1347,12 @@ describe("TZDate", () => {
         {
           const date = new TZDate(1880, 0, 1, "Asia/Singapore");
           date.setSeconds(56);
-          expect(date.toISOString()).toBe("1880-01-01T00:00:31.000+06:55"); // 56s - 25s = 31s
+          expect(date.toISOString()).toBe("1880-01-01T00:00:56.000+06:55");
         }
         {
           const date = new TZDate(1880, 0, 1, "America/New_York");
           date.setSeconds(56);
-          expect(date.toISOString()).toBe("1880-01-01T00:00:58.000-04:56"); // 56s + 2s = 58s
+          expect(date.toISOString()).toBe("1880-01-01T00:00:56.000-04:56");
         }
       });
 
@@ -2351,8 +2351,92 @@ describe("TZDate", () => {
         });
       });
     });
+
+    describe("system time zone independence", () => {
+      // See: https://github.com/date-fns/tz/issues/13
+      const systemTZs = [
+        "America/Los_Angeles",
+        "America/New_York",
+        "Europe/Prague",
+        "Australia/Sydney",
+        "Asia/Kolkata",
+        "UTC",
+      ];
+
+      it("constructs the same date regardless of the system time zone", () => {
+        for (const systemTZ of systemTZs) {
+          withSystemTZ(systemTZ, () => {
+            const iso = (...args: [number, number, number, number, number]) =>
+              new TZDate(...args, "Europe/Prague").toISOString();
+
+            // Day of DST end
+            expect(iso(2024, 9, 27, 0, 0)).toBe(
+              "2024-10-27T00:00:00.000+02:00",
+            );
+            expect(iso(2024, 9, 27, 1, 30)).toBe(
+              "2024-10-27T01:30:00.000+02:00",
+            );
+            // Ambiguous time resolves to the earlier moment
+            expect(iso(2024, 9, 27, 2, 30)).toBe(
+              "2024-10-27T02:30:00.000+02:00",
+            );
+            expect(iso(2024, 9, 27, 3, 0)).toBe(
+              "2024-10-27T03:00:00.000+01:00",
+            );
+            // Day of DST start, nonexistent time moves forward
+            expect(iso(2024, 2, 31, 2, 30)).toBe(
+              "2024-03-31T03:30:00.000+02:00",
+            );
+            // System DST transitions don't affect the date
+            expect(iso(2024, 2, 10, 2, 30)).toBe(
+              "2024-03-10T02:30:00.000+01:00",
+            );
+            expect(iso(2024, 10, 3, 1, 30)).toBe(
+              "2024-11-03T01:30:00.000+01:00",
+            );
+            expect(iso(2024, 9, 6, 2, 30)).toBe(
+              "2024-10-06T02:30:00.000+02:00",
+            );
+            expect(iso(2024, 3, 7, 2, 30)).toBe(
+              "2024-04-07T02:30:00.000+02:00",
+            );
+          });
+        }
+      });
+
+      it("sets the same time regardless of the system time zone", () => {
+        for (const systemTZ of systemTZs) {
+          withSystemTZ(systemTZ, () => {
+            const date = new TZDate(2024, 9, 27, 12, "Europe/Prague");
+            date.setHours(0);
+            expect(date.toISOString()).toBe("2024-10-27T00:00:00.000+02:00");
+            date.setHours(2, 30);
+            expect(date.toISOString()).toBe("2024-10-27T02:30:00.000+02:00");
+
+            const sydney = new TZDate(2024, 9, 5, 2, 30, "Australia/Sydney");
+            sydney.setDate(6);
+            expect(sydney.toISOString()).toBe("2024-10-06T03:30:00.000+11:00");
+
+            const ny = new TZDate(2024, 2, 9, 2, 30, nyName);
+            ny.setDate(10);
+            expect(ny.toISOString()).toBe("2024-03-10T03:30:00.000-04:00");
+          });
+        }
+      });
+    });
   });
 });
+
+function withSystemTZ(tz: string, fn: () => void) {
+  const prevTZ = process.env.TZ;
+  process.env.TZ = tz;
+  try {
+    fn();
+  } finally {
+    if (prevTZ === undefined) delete process.env.TZ;
+    else process.env.TZ = prevTZ;
+  }
+}
 
 function withDSTStart(tz: string, fn: (date: TZDate) => void) {
   fn(new TZDate(2020, 2, 8, tz));
