@@ -76,7 +76,7 @@ export function tzScan(
 
             // Find the hour where the offset changes
             const hourOffset = tzOffset(timeZone, hourDate);
-            if (hourOffset !== lastOffset) {
+            if (hourOffset !== lastOffset && +hourDate <= endMonthTime) {
               changes.push({
                 date: new Date(hourDate),
                 change: hourOffset - lastOffset,

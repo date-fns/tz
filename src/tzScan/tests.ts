@@ -2,6 +2,67 @@ import { describe, expect, it } from "vitest";
 import { tzScan } from "./index.ts";
 
 describe("tzScan", () => {
+  it.each([
+    ["America/New_York", "2012-02-12T00:00:00Z", "2012-02-13T00:00:00Z"],
+    ["Europe/London", "2025-10-01T00:00:00Z", "2025-10-02T00:00:00Z"],
+    ["America/New_York", "2012-03-11T00:00:00Z", "2012-03-11T06:59:59.999Z"],
+  ])(
+    "does not return changes after the interval in %s",
+    (timeZone, start, end) => {
+      expect(
+        tzScan(timeZone, { start: new Date(start), end: new Date(end) }),
+      ).toEqual([]);
+    },
+  );
+
+  it.each([
+    "2012-03-11T07:00:00Z",
+    "2012-03-11T07:00:00.001Z",
+    "2012-03-12T00:00:00Z",
+  ])("includes a change at or before the end %s", (end) => {
+    expect(
+      tzScan("America/New_York", {
+        start: new Date("2012-03-10T00:00:00Z"),
+        end: new Date(end),
+      }),
+    ).toEqual([
+      {
+        date: new Date("2012-03-11T07:00:00Z"),
+        change: 60,
+        offset: -240,
+      },
+    ]);
+  });
+
+  it("does not rediscover the offset already in effect at the start", () => {
+    expect(
+      tzScan("America/New_York", {
+        start: new Date("2012-03-11T07:00:00Z"),
+        end: new Date("2012-03-12T00:00:00Z"),
+      }),
+    ).toEqual([]);
+  });
+
+  it.each(["2012-03-10T00:00:00Z", "2012-03-11T07:00:00Z"])(
+    "returns no changes for an empty interval at %s",
+    (date) => {
+      expect(
+        tzScan("America/New_York", {
+          start: new Date(date),
+          end: new Date(date),
+        }),
+      ).toEqual([]);
+    },
+  );
+
+  it("does not mutate the interval dates", () => {
+    const start = new Date("2012-02-12T00:00:12.345Z");
+    const end = new Date("2012-02-13T00:00:45.678Z");
+    tzScan("America/New_York", { start, end });
+    expect(start.toISOString()).toBe("2012-02-12T00:00:12.345Z");
+    expect(end.toISOString()).toBe("2012-02-13T00:00:45.678Z");
+  });
+
   it("searches for DST changes in the given period", () => {
     const changes = tzScan("America/New_York", {
       start: new Date("2020-01-01T00:00:00Z"),
