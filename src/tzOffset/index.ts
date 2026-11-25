@@ -40,12 +40,12 @@ export function tzOffset(timeZone: string | undefined, date: Date): number {
 const offsetRe = /([+-]\d\d):?(\d\d)?/;
 
 function calcOffset(cacheStr: string, values: string[]): number {
-  const hours = +(values[0] || 0);
+  // Take the sign from the offset string as the hours lose it when they are
+  // zero (i.e. -00:44:30).
+  const sign = values[0]?.startsWith("-") ? -1 : 1;
+  const hours = Math.abs(+(values[0] || 0));
   const minutes = +(values[1] || 0);
   // Convert seconds to minutes by dividing by 60 to keep the function return in minutes.
   const seconds = +(values[2] || 0) / 60;
-  return (offsetCache[cacheStr] =
-    hours * 60 + minutes > 0
-      ? hours * 60 + minutes + seconds
-      : hours * 60 - minutes - seconds);
+  return (offsetCache[cacheStr] = sign * (hours * 60 + minutes + seconds));
 }

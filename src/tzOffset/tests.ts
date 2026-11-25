@@ -88,6 +88,17 @@ describe("tzOffset", () => {
   });
 
   describe("fractional time zones", () => {
+    it("keeps the sign of negative sub-hour offsets", () => {
+      // Africa/Monrovia was UTC-00:44:30 until 1972
+      expect(tzOffset("Africa/Monrovia", new Date("1970-01-01T12:00:00Z"))).toBe(
+        -44.5,
+      );
+      // Europe/Dublin was UTC-00:25:21 until 1916
+      expect(tzOffset("Europe/Dublin", new Date("1900-01-01T12:00:00Z"))).toBe(
+        -25.35,
+      );
+    });
+
     it("works negative fractional time zones", () => {
       const dst = new Date("2023-03-15T18:00:00.000Z");
       const date = new Date("2023-03-03T18:00:00.000Z");
