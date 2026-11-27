@@ -2,6 +2,28 @@ import { describe, expect, it } from "vitest";
 import { tzScan } from "./index.ts";
 
 describe("tzScan", () => {
+  it("reports the transition instant independently of the scan start minute", () => {
+    expect(
+      tzScan("America/New_York", {
+        start: new Date("2020-03-01T00:45:00Z"),
+        end: new Date("2020-03-31T00:45:00Z"),
+      }),
+    ).toEqual([
+      { date: new Date("2020-03-08T07:00:00Z"), change: 60, offset: -240 },
+    ]);
+  });
+
+  it("finds transitions on the half hour", () => {
+    expect(
+      tzScan("Australia/Lord_Howe", {
+        start: new Date("2020-10-01T00:00:00Z"),
+        end: new Date("2020-10-31T00:00:00Z"),
+      }),
+    ).toEqual([
+      { date: new Date("2020-10-03T15:30:00Z"), change: 30, offset: 660 },
+    ]);
+  });
+
   it("searches for DST changes in the given period", () => {
     const changes = tzScan("America/New_York", {
       start: new Date("2020-01-01T00:00:00Z"),

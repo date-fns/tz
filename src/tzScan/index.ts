@@ -78,7 +78,7 @@ export function tzScan(
             const hourOffset = tzOffset(timeZone, hourDate);
             if (hourOffset !== lastOffset) {
               changes.push({
-                date: new Date(hourDate),
+                date: findChange(timeZone, +hourDate, lastOffset),
                 change: hourOffset - lastOffset,
                 offset: hourOffset,
               });
@@ -96,4 +96,24 @@ export function tzScan(
   }
 
   return changes;
+}
+
+// The offsets at the ends of this hour differ. Zone transitions have
+// second precision and need not fall on a whole UTC hour.
+function findChange(
+  timeZone: string,
+  end: number,
+  previousOffset: number,
+): Date {
+  let high = end / 1000;
+  let low = high - 3600;
+  while (high - low > 1) {
+    const mid = Math.floor((low + high) / 2);
+    if (tzOffset(timeZone, new Date(mid * 1000)) === previousOffset) {
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+  return new Date(high * 1000);
 }
